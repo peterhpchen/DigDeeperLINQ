@@ -43,7 +43,7 @@
 
 ### Expression
 * **使用場景**: 演練某個剛認識的Method時、要以LINQ取得想要的資料時...
-* **使用方式**: 以單行程式碼的方式撰寫，最後不用`;`
+* **使用方式**: 以單行程式碼的方式撰寫，最後不用加分號(`;`)
 * **範例**:
 1. 想要輸出期望的日期格式時([範例取自此](https://www.linqpad.net/CodeSnippetIDE.aspx))
 ```C#
@@ -53,7 +53,7 @@ DateTime.Now.ToString("yyyy/MM/dd")
 
 可以看到Result直接輸出結果，在測試或學習Method時很好用。
 
-2. 以LINQ查詢一段句子每個字的長度時(範例取自LINQPad>Samples>A simple query expression)
+2. 以LINQ查詢一段句子每個字的長度時(範例取自LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>A simple query expression)
 ```C#
 from word in "The quick brown fox jumps over the lazy dog".Split()
 orderby word.Length
@@ -64,11 +64,53 @@ select word
 就算是分成多行，只要還是一個陳述式就算是Expression。對於要找出期望的資料很好用。
 
 ### Statement(s)
-### Program
+* **使用場景**: 有段程式碼需要做測試，或是順一下程式的邏輯時...
+* **使用方式**: 不用加上`class`，直接寫入程式碼片段，每行程式碼結束時要加上分號(`;`)
+1. 一個以上的LINQ查詢所組成的資料時(範例取自LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>Multiple statements)
+```C#
+var words =
+	from word in "The quick brown fox jumps over the lazy dog".Split()
+	orderby word.ToUpper()
+	select word;
+	
+var duplicates =
+	from word in words
+	group word.ToUpper() by word.ToUpper() into g
+	where g.Count() > 1
+	select new { g.Key, Count = g.Count() };	
+```
 
+![Multiple Statements](image/MultipleStatements.PNG)
+
+### Program
+* **使用場景**: 需要演示Method、Function或是Class
+* **使用方式**: 跟寫Console App一樣的方式
+1. 有個Method/Class要做測試時
+```C#
+void Main()
+{
+	Test t = new Test();
+	t.Hello().Dump();
+	World().Dump();
+}
+
+string World(){
+	return "World";
+}
+
+class Test{
+	public string Hello(){
+		return "Hello";
+	}
+}
+```
+
+![Program](image/Program.PNG)
+
+你沒看錯!!一般來說`Main()`是在`Program Class`內的，而LINQPad可以忽略且直接在外面寫上Class或是Method。
 
 ## 小撇步
-* 儲存可參考的程式碼片段
+### 儲存可參考的程式碼片段
 
 有時候我們會常常參考某些好用的程式碼，這時就會想要找個地方存起來等要的時候再拿出來。
 
@@ -78,6 +120,10 @@ select word
 
 ![Save](image/Save.PNG)
 
+### 快捷鍵表
+在`Help>Keyboard/Mouse Shortcuts`可以打開快捷鍵表
 
-快捷鍵: Help>Keyboard/Mouse Shortcuts
-execution selection
+### 執行選取的程式碼
+選取想要執行的片段按下`執行`或是`F5`就可以執行片段程式碼
+
+![Execution Selection](image/ExecutionSelection.PNG)
