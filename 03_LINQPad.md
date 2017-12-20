@@ -216,3 +216,6 @@ Extension Methods的好處在於你可以擴充自己的Infrastructure，來縮�
 
 ### LINQPad extension methods
 LINQPad自己有提供Dump，讓開發者可以更產出更清楚的結果，關於Dump的詳細說明可以參考作者自己在StackOverflow的回答: [LINQPad extension methods](https://stackoverflow.com/a/3562160)。
+
+## 結論
+LINQPad是一個**麻雀雖小，五臟俱全**的開發工具，在這個章節中我們學到了如何運用這功能強大的工具，下個章節我們要來找尋`foreach`中所隱藏的秘密。
