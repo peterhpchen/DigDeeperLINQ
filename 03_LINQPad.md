@@ -8,8 +8,8 @@
 * 用途
 * 介面
 * 用法: Expression、Statement(s)及Program
-* Extension Methods
 * 與資料庫連線
+* Extension Methods
 * 小撇步
 
 ## 用途
@@ -22,7 +22,7 @@
 接下來我們來看看要怎麼使用LINQPad吧。
 
 ## 介面
-![LINQPad Interface](image/LINQPadInterface.PNG)
+![LINQPad Interface](image/03_LINQPad/LINQPadInterface.PNG)
 
 介面分為四個部分: 
 * 伺服器連線瀏覽: 跟SSMS的Object Explorer一樣，連線後可以看到各個Database的相關資訊
@@ -49,7 +49,7 @@
 ```C#
 DateTime.Now.ToString("yyyy/MM/dd")
 ```
-![Expression Ex1](image/ExpressionEx1.PNG)
+![Expression Ex1](image/03_LINQPad/ExpressionEx1.PNG)
 
 可以看到Result直接輸出結果，在測試或學習Method時很好用。
 
@@ -59,7 +59,7 @@ from word in "The quick brown fox jumps over the lazy dog".Split()
 orderby word.Length
 select word
 ```
-![Expression Ex2](image/ExpressionEx2.PNG)
+![Expression Ex2](image/03_LINQPad/ExpressionEx2.PNG)
 
 就算是分成多行，只要還是一個陳述式就算是Expression。對於要找出期望的資料很好用。
 
@@ -80,7 +80,7 @@ var duplicates =
 	select new { g.Key, Count = g.Count() };	
 ```
 
-![Multiple Statements](image/MultipleStatements.PNG)
+![Multiple Statements](image/03_LINQPad/MultipleStatements.PNG)
 
 ### Program
 * **使用場景**: 需要演示Method、Function或是Class
@@ -105,9 +105,95 @@ class Test{
 }
 ```
 
-![Program](image/Program.PNG)
+![Program](image/03_LINQPad/Program.PNG)
 
 你沒看錯!!一般來說`Main()`是在`Program Class`內的，而LINQPad可以忽略且直接在外面寫上Class或是Method。
+
+## 與資料庫連線
+在沒有LINQPad的幫助下，我們要測試用LINQ抓取的資料庫資料是否正確時，我們需要做下面兩件事:
+1. 取得連線字串
+1. 開啟連線
+
+接著我們才能開始撰寫LINQ，這一來一往間就耗掉了許多的時間，這時就該是LINQPad出場的時候了。
+
+### 設定連線
+現在我們要幫LINQ設定好DB的連線方式。
+
+1. 左上方區塊裡按下Add connection，跳出的視窗裡直接按下next
+
+![Add Connection 1](image/03_LINQPad/AddConnection1.PNG)
+
+2. 進入下一個頁面，這裡跟連線SSMS的設定相同，設定好後按下OK(也可以按Test測試連線是否正確)
+
+![Add Connection 2](image/03_LINQPad/AddConnection2.PNG)
+
+3. 連線完成後就可以在左上的區塊看到Database，我們的**Northwind**出現了~
+
+![Add Connection 3](image/03_LINQPad/AddConnection3.PNG)
+
+### 使用資料庫資料做LINQ演練
+這小節要來利用上一節取得的資料庫來做LINQ演練。
+
+1. 在上一節取到的**Northwind**按右鍵`Use in Current Query`
+
+![Use in Current Query](image/03_LINQPad/UseInCurrentQuery.PNG)
+
+2. 連線成功後可以看到程式碼區塊上的Connection變成**Northwind**
+
+![Connection Success](image/03_LINQPad/UseDatabaseSuccess.PNG)
+
+3. 接著我們來寫個LINQ(此範例為LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>What about querying a database!)，執行後我們可以看到我們夢寐一求的資料了~~
+
+```C#
+from p in Products
+let spanishOrders = p.OrderDetails.Where (o => o.Order.ShipCountry == "Spain")
+where spanishOrders.Any()
+orderby p.ProductName
+select new
+{
+	p.ProductName,
+	p.Category.CategoryName,
+	Orders = spanishOrders.Count(),	
+	TotalValue = spanishOrders.Sum (o => o.UnitPrice * o.Quantity)
+}
+```
+
+![Query a Database](image/03_LINQPad/QueryDatabase.PNG)
+
+## Extension Methods
+有時候我們會想要寫個可以在全部的程式碼片段使用的通用Method，這時LINQPad的Extension Method就派上用場了，在`MyExtensions`這個Class中撰寫Method就可以在每個程式碼片段中做使用(就像是LINQPad內建的Dump一樣)。
+
+1. 在左下的區塊中的**My Queries**的Tab>My Extensions，程式碼區塊會出現`MyExtensions`的Class
+
+![MyExtensions](image/03_LINQPad/MyExtensions.PNG)
+
+2. 接著我們來加入`Hello`到`MyExtensions`中
+```C#
+public static void Hello()
+{
+	Console.Write("Hello");
+}
+```
+
+3. 新開一個Query執行Method
+```C#
+MyExtensions.Hello();
+```
+
+4. 現在我們再加一個`ConsoleWriteLine`
+```C#
+public static void ConsoleWriteLine(this string str)
+{
+	Console.WriteLine(str);
+}
+```
+
+5. 在剛剛的Query中呼叫`ConsoleWriteLine`，最後就會像下圖一樣
+
+![Extensions](image/03_LINQPad/Extensions.PNG)
+
+### 小節
+Extension Methods的好處在於你可以擴充自己的Infrastructure，來縮減每個程式碼片段有可能重複的處理。
 
 ## 小撇步
 ### 儲存可參考的程式碼片段
@@ -118,7 +204,7 @@ class Test{
 1. 在要儲存的片段的Tab上按右鍵>Save(或ctrl+s)。
 1. 儲存後在左下角MyQueries就會看到剛剛儲存的檔案了。
 
-![Save](image/Save.PNG)
+![Save](image/03_LINQPad/Save.PNG)
 
 ### 快捷鍵表
 在`Help>Keyboard/Mouse Shortcuts`可以打開快捷鍵表
@@ -126,4 +212,7 @@ class Test{
 ### 執行選取的程式碼
 選取想要執行的片段按下`執行`或是`F5`就可以執行片段程式碼
 
-![Execution Selection](image/ExecutionSelection.PNG)
+![Execution Selection](image/03_LINQPad/ExecutionSelection.PNG)
+
+### LINQPad extension methods
+LINQPad自己有提供Dump，讓開發者可以更產出更清楚的結果，關於Dump的詳細說明可以參考作者自己在StackOverflow的回答: [LINQPad extension methods](https://stackoverflow.com/a/3562160)。
