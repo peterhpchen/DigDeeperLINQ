@@ -35,14 +35,14 @@ LINQPad有付費版本，個人覺得付費版本很實用的功能有:
 
 目前我是用免費版本的，用起來就很好用了，如果有上述需求也可以考慮付費的版本。
 
-在[官網的購買頁](https://www.linqpad.net/Purchase.aspx)有更詳細的資訊。
+在[官網的購買頁面](https://www.linqpad.net/Purchase.aspx)有更詳細的資訊。
 
 ## 介面
 ![LINQPad Interface](image/03_LINQPad/LINQPadInterface.PNG)
 
 介面分為四個部分: 
 * 伺服器連線瀏覽: 跟SSMS的Object Explorer一樣，連線後可以看到各個Database的相關資訊
-* 片段瀏覽器: 個人儲存的程式碼片段及LINQPad提供的範例程式片段
+* 片段瀏覽器: 個人儲存的程式碼片段及LINQPad提供的範例程式片段(本章會用到Samples中的範例)
 * 程式撰寫: 撰寫程式片段
 * 執行結果
     * Result: 查詢結果(LINQPad提供Dump來得到較好的顯示品質)
@@ -69,7 +69,7 @@ DateTime.Now.ToString("yyyy/MM/dd")
 
 可以看到Result直接輸出結果，在測試或學習Method時很好用。
 
-2. 以LINQ查詢一段句子的每個字的長度時(範例取自LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>A simple query expression)
+2. 以LINQ查詢一段句子的每個字的長度時(範例取自*LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>A simple query expression*)
 ```C#
 from word in "The quick brown fox jumps over the lazy dog".Split()
 orderby word.Length
@@ -82,7 +82,7 @@ select word
 ### Statement(s)
 * **使用場景**: 有段程式碼需要做測試或是順一下程式的邏輯時...
 * **使用方式**: 不用加上`class`，直接寫入程式碼片段，每行程式碼結束時要加上分號(`;`)
-1. 用多個LINQ查詢資料時(範例取自LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>Multiple statements)
+1. 用多個LINQ查詢資料時(範例取自*LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>Multiple statements*)
 ```C#
 var words =
 	from word in "The quick brown fox jumps over the lazy dog".Split()
@@ -126,7 +126,9 @@ class Test{
 
 ![Program](image/03_LINQPad/Program.PNG)
 
-你沒看錯!!最外面是不需要再一層Class的，可以直接寫所需的程式碼。
+你沒看錯!!最外面是不需要再一層Class的，可以直接寫所需的程式碼，是不是很方便阿。
+
+當然如果你外面還是想要包Class的話也可以，請參考*LINQPad>Samples>LINQPad Tutorial & Reference>Scratchpad Features>Basic Features>Pasting in programs from the outside world*。
 
 ## 引入參考
 在LINQPad上如果有需要引入參考的話有兩個方式: 
@@ -161,7 +163,7 @@ class Test{
 
 ### 使用資料庫資料做LINQ演練
 
-1. 對**Northwind**按右鍵**Use in Current Query**
+1. 對**Northwind**按**右鍵>Use in Current Query**
 
 ![Use in Current Query](image/03_LINQPad/UseInCurrentQuery.PNG)
 
@@ -169,7 +171,7 @@ class Test{
 
 ![Connection Success](image/03_LINQPad/UseDatabaseSuccess.PNG)
 
-3. 接著我們來寫個LINQ(此範例為LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>What about querying a database!)，執行後我們可以看到我們夢寐以求的資料了~~
+3. 接著我們來寫個LINQ(此範例為*LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>What about querying a database!*)，執行後我們可以看到我們夢寐以求的資料了~~
 
 ```C#
 from p in Products
@@ -203,7 +205,7 @@ order by UnitPrice desc
 
 ![SQL](image/03_LINQPad/SQL.PNG)
 
-上述的範例如果還看不過癮的話，在**LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>But I don't have NORTHWIND!**中展示了`Create Table`、`Insert Data`的演練，可以參考一下。
+上述的範例如果還看不過癮的話，在*LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>But I don't have NORTHWIND!* 中展示了`Create Table`、`Insert Data`的演練，可以參考一下。
 
 ## Extension Methods
 有時候我們會想要寫個可以在全部的程式碼片段使用的通用Method，這時LINQPad的Extension Method就派上用場了，在`MyExtensions`這個Class中撰寫Method就可以在每個程式碼片段中做使用(就像是LINQPad內建的Dump一樣)。
