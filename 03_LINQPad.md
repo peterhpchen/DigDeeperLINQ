@@ -6,6 +6,7 @@
 ## 本篇目標
 介紹LINQPad的以下主題: 
 * 用途
+* 安裝
 * 介面
 * 用法: Expression、Statement(s)及Program
 * 與資料庫連線
@@ -13,13 +14,16 @@
 * 小撇步
 
 ## 用途
-如果上面的故(廢)事(文)所說的，LINQPad之於Visual Studio就像是跑車之於戰車一樣，Visual Studio的功能強大，要做任何事情都難不倒它，但缺點就是太笨重了，消耗的資源太多，如果我們只是要做一些程式片段的驗證測試或是學習還要開啟Visual Studio然後創建專案，光是想到就會讓人卻步，這時候LINQPad就派上用場了，它有下列的優點: 
+如上面的故(廢)事(文)所說的，LINQPad之於Visual Studio就像是跑車之於戰車一樣，Visual Studio的功能強大，要做任何事情都難不倒它，但缺點就是太笨重了，消耗的資源太多，如果我們只是要做一些程式片段的驗證測試或是學習還要開啟Visual Studio然後創建專案，光是想到就會讓人卻步，這時候LINQPad就派上用場了，它有下列的優點: 
 * 它很輕盈(15MB)
 * 有Portalble版本不用安裝可以帶著走，想在哪寫就在哪寫
 * 可以不用建立專案甚至只要寫你想要測試的程式碼即可(Expression、Statement)
 * 可以把程式碼片段(snippet)存起來當作範例使用
 
 接下來我們來看看要怎麼使用LINQPad吧。
+
+## 安裝
+
 
 ## 介面
 ![LINQPad Interface](image/03_LINQPad/LINQPadInterface.PNG)
