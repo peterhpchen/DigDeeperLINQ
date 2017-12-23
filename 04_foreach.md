@@ -247,7 +247,7 @@ foreach (V v in x) embedded_statement
 從這裡就可以明顯的看出來`foreach`其實就會被轉譯為`Iterator Pattern`的場景物件(Client)。
 
 ## 結語
-終於把謎題解開了，為什麼我們使用了LINQ就會減少使用`foreach`，就是因為它們都是做同樣的事情，所以本來我們需要用`foreach`處理資料集時，用LINQ也可以處理，自然而然好用的LINQ就變成我們的主角啦。
+終於把謎題解開了，為什麼我們使用了LINQ就會減少使用`foreach`，就是因為它們都是對`IEnumerable`做事情，所以本來我們需要用`foreach`處理資料集時，用LINQ也可以處理，自然而然好用的LINQ就變成我們的主角啦。
 
 ## 範例程式
 [GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/04_foreach/demo/04_foreach)
