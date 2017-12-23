@@ -23,7 +23,7 @@ foreach (int integer in integers)
 Console.WriteLine($"Is Array: {integerArray is Array}"); //Is Array: true
 ```
 
-**因為`integers`是`Array`!!**，嗯...這個答案是對也是不對，因為其實有其他非Array的物件也是可以用    `foreach`來做巡覽的，例如我改為下面這樣子: 
+**因為`integers`是`Array`!!**，嗯...這個答案是對也是不對，因為其實有其他非Array的物件也是可以用`foreach`來做巡覽的，例如我改為下面這樣子: 
 
 ```C#
 String integers = "123456789";
@@ -39,7 +39,7 @@ foreach (char integer in integers)
 把`integers`從`int[]`改為`String`照樣還是可以做巡覽，這是為什麼呢?
 
 ## 從錯誤中學習
-**失敗為成功之母**這句話在寫程式時一直在應證，我們總是在**Try and error**下成長，現在我們要再來嘗試這個解決之道了。
+**失敗為成功之母**這句話在寫程式時一直在應證，我們總是在**Trial and error**下成長，現在我們要再來嘗試這個解決之道了。
 
 首先要想辦法讓`foreach`出錯，我們先塞個`int`給它看看會發生什麼事: 
 
@@ -156,9 +156,9 @@ public class Integers
 ![640px-Iterator_UML_class_diagram.svg.PNG](image/04_foreach/640px-Iterator_UML_class_diagram.svg.PNG)
 
 在範例程式中分別對應: 
-* **ConcreteAggregate**: Integers
-    * **Iterator()**: GetEnumerator()
-* **ConcreteIterator**: IntegerEnum
+* **ConcreteAggregate**: `Integers`
+    * **Iterator()**: `GetEnumerator()`
+* **ConcreteIterator**: `IntegerEnum`
     * **next()**: 傳回下一個元素，在C#中是以`Current`來抓出目前元素
     * **hasNext()**: 確認是否有下一個元素，在C#中是由`MoveNext()`做確認
 
@@ -214,7 +214,7 @@ public class Integers : IEnumerable
 這也是為什麼`String`、`Array`、`List`...等物件可以被foreach所解譯，因為這些物件都有繼承`IEnumerable`。
 
 ## 運作
-依照[C# Spec](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/statements)的foreach statement說明，我們可以知道一段foreach的程式碼會被定義為下面這樣: 
+依照[C# Spec](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/statements)的foreach statement說明，我們可以知道一段`foreach`的程式碼會被定義為下面這樣: 
 ```C#
 foreach (V v in x) embedded_statement
 ```
@@ -247,7 +247,7 @@ foreach (V v in x) embedded_statement
 從這裡就可以明顯的看出來`foreach`其實就會被轉譯為`Iterator Pattern`的場景物件(Client)。
 
 ## 結語
-終於把謎題解開了，為什麼我們使用了LINQ就會減少使用foreach，就是因為它們都是做同樣的事情，所以本來我們需要用foreach處理資料集時，用LINQ也可以處理，自然而然好用的LINQ就變成我們的主角啦。
+終於把謎題解開了，為什麼我們使用了LINQ就會減少使用`foreach`，就是因為它們都是做同樣的事情，所以本來我們需要用`foreach`處理資料集時，用LINQ也可以處理，自然而然好用的LINQ就變成我們的主角啦。
 
 ## 範例程式
 [GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/04_foreach/demo/04_foreach)
