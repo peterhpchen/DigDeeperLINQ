@@ -178,17 +178,9 @@ public class Integers
 ```C#
 public class IntegerEnum : IEnumerator
 {
-    private int _integers;
-    private int _index;
-    private int _maxDigit;
-    public object Current { get; private set; }
+    ...
 
-    public IntegerEnum(int integers)
-    {
-        _integers = integers;
-        _index = 0;
-        _maxDigit = (int)Math.Log10(integers);
-    }
+    public object Current { get; private set; }
 
     public bool MoveNext()
     {
@@ -200,28 +192,17 @@ public class IntegerEnum : IEnumerator
         return true;
     }
 
-    private int getCurrent()
-    {
-        int currentDigit = _maxDigit - _index;
-        int result = (_integers / (int)Math.Pow(10, currentDigit)) % 10;  //Get first digit
-
-        return result;
-    }
-
     public void Reset()
     {
         _index = 0;
     }
+
+    ...
 }
 
 public class Integers : IEnumerable
 {
-    private int _integers;
-
-    public Integers(int integers)
-    {
-        _integers = integers;
-    }
+    ...
 
     public IEnumerator GetEnumerator()
     {
@@ -229,6 +210,8 @@ public class Integers : IEnumerable
     }
 }
 ```
+
+這也是為什麼`String`、`Array`、`List`...等物件可以被foreach所解譯，因為這些物件都有繼承`IEnumerable`。
 
 ## 運作
 依照[C# Spec](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/statements)的foreach statement說明，我們可以知道一段foreach的程式碼會被定義為下面這樣: 
@@ -265,6 +248,9 @@ foreach (V v in x) embedded_statement
 
 ## 結語
 終於把謎題解開了，為什麼我們使用了LINQ就會減少使用foreach，就是因為它們都是做同樣的事情，所以本來我們需要用foreach處理資料集時，用LINQ也可以處理，自然而然好用的LINQ就變成我們的主角啦。
+
+## 範例程式
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/04_foreach/demo/04_foreach)
 
 ## 參考
 * [twmht-Iterator Pattern](http://twmht.github.io/blog/posts/design-pattern/iterator.html)
