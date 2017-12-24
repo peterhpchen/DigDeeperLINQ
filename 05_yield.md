@@ -246,7 +246,7 @@ PS: 本節可以搭配上一篇介紹的`foreach`來做學習，會比較好懂�
 說到這裡我們的旅程也告一段落了，今天用比較的方式了解`yield`的原貌，`for`到`List`再到`yield`，我們的開發過程也越來越輕鬆，但在使用這些**語法糖**時，也不要忽略了它們背後的意義，因為這往往是它們最有價值的部分。
 
 ## 範例程式
-[GitHub]()
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/develop/demo/05_yield)
 
 ## 參考
 * [C# spec-statements#the-yield-statement](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/statements#the-yield-statement)
