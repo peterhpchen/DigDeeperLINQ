@@ -47,7 +47,7 @@ for (int currentNum = 1; currentNum <= maxNum; currentNum++)
 Console.WriteLine();
 ```
 
-注意到問題了嗎?我們在改變顯示方式及運算邏輯時都動到了這段程式碼，違反了[Single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)。。
+注意到問題了嗎?我們在改變顯示方式及運算邏輯時都動到了這段程式碼，違反了[Single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle)。
 
 既然這樣，那先取得運算後的陣列存入`List`中，再用迴圈去顯示總可以了吧: 
 
