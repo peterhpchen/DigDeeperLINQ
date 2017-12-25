@@ -43,17 +43,59 @@ private static void output(Func<string, string> stringGetter, string input)
 * **Lambda**: `arguments => expression | block`
     * arguments: 傳入參數的宣告，可以多個參數(以,隔開)。
         * 只有一個參數時可以不用括號，**複數個參數都要加上括號**
-        * 可以不用明確指定型別(Ex: `x => x`)
-        * 可以明確指定型別，明確指定型別時一定要加上括號(Ex: `(string x) => x`)
-        * 沒有傳入參數時用空括號`()`表示(Ex: `() => Console.WriteLine()`)
+        * 可以不用明確指定型別
+        * 可以明確指定型別，明確指定型別時一定要加上括號
+        * 沒有傳入參數時用空括號`()`表示
     * expression: 運算式，不括大括號`{}`，只能單行程式碼，代表回傳值
     * block: `{ statements }`: 程式碼區塊，`statement`為此函式執行的程式碼片段
+
+## Lambda語法
+在上面的範例說明有用文字描述了Lambda的格式，現在我們將每一個格式以例子的方式介紹，藉以加深印象。
+
+格式: `arguments => expression | block`
+
+### `arguments`
+* 只有一個傳入參數時可以省略小括弧`()`
+```C#
+//Only one input parameter
+x => x * x  //legal
+(x) => x * x    //legal
+
+//Two or more input parameters
+x, y => x * y   //illegal
+(x, y) => x * y //legal
+
+```
+* 可以明確指定型別，明確指定型別時一定要加上括號，不明確指定型別也可以
+```C#
+string x => x * x   //illegal
+(string x) => x * x //legal
+x => x * x
+```
+* 沒有傳入參數時以空括號`()`表示
+```C#
+() => Console.WriteLine("Hello Lambda")
+```
+
+### `expression`
+* 只有單行程式碼時為`expression`，可以不用`{}`包住程式，程式行的最後也不用加`;`，其程式碼所代表的是回傳值
+```C#
+x => x * x  //== delegate (int x) { return x * x; }
+```
+* 使用`expression`格式的Lambda稱為**Lambda運算式**(Lambda Expressions)
+
+### `block`
+* 一般的程式碼區塊，可以多行程式碼，每行最後要加`;`
+```C#
+x => { return x * x; }
+```
+* 使用`block`格式的Lambda稱為**Lambda陳述式**(Lambda Statements)
 
 ## 結語
 這章我們學到了各種函式，**具名函式**、**匿名函式**及**Lambda**，從寫法上來觀察，一個比一個還要簡潔，需要撰寫的程式碼也越來越少，到了Lambda更是能省的都已經省了的地步，再次地體會到`懶惰是人類進步的原動力`這樣的概念。
 
 ## 範例程式
-(GitHub)[]
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/06_Lambda/demo/06_Lambda)
 
 ## 參考
 * [Microsoft Docs-Lambda 運算式](https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/statements-expressions-operators/lambda-expressions)
