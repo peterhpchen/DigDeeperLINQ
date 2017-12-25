@@ -15,24 +15,24 @@ static string nameMethod(string output)
 static void Main()
 {
     // Instantiate delegate with named method:
-    output(nameMethod, "name method");
+    consoleWriteLine(nameMethod, "name method");
 
     // Instantiate delegate with anonymous method:
-    output(delegate (string output) { return output; }, "anonymous method");
+    consoleWriteLine(delegate (string output) { return output; }, "anonymous method");
 
     // Instantiate delegate with lambda expression
-    output(output => output, "lambda method");
+    consoleWriteLine(output => output, "lambda method");
 }
 
 //public delegate TResult Func<in T, out TResult>(T arg);
-private static void output(Func<string, string> stringGetter, string input)
+private static void consoleWriteLine(Func<string, string> stringGetter, stringinput)
 {
     Console.WriteLine(stringGetter(input));
 }
 ```
 
 上面的程式碼帶出以下的重點
-* `output`的第一個參數`Func`的定義寫於上方註解，它其實是一個有`input`及`output`的委派
+* `consoleWriteLine`的第一個參數`Func`的定義寫於上方註解，它其實是一個有`input`及`output`的委派
 * 委派的方式有三種**具名函式**、**匿名函式**、**Lambda運算式**
 * **具名函式**: 將已宣告的方法(`nameMethod`)指給委派
 * **匿名函式**: `delegate (arguments) { statements }`
@@ -50,7 +50,7 @@ private static void output(Func<string, string> stringGetter, string input)
     * block: `{ statements }`: 程式碼區塊，`statement`為此函式執行的程式碼片段
 
 ## Lambda語法
-在上面的範例說明有用文字描述了Lambda的格式，現在我們將每一個格式以例子的方式介紹，藉以加深印象。
+在上面的範例說明有用文字描述了Lambda的格式規範，現在我們將每一個格式以例子的方式介紹，藉以加深印象。
 
 格式: `arguments => expression | block`
 
@@ -66,7 +66,7 @@ x, y => x * y   //illegal
 (x, y) => x * y //legal
 
 ```
-* 可以明確指定型別，明確指定型別時一定要加上括號，不明確指定型別也可以
+* 可以明確指定型別，明確指定型別時一定要加上括號`()`，不明確指定型別也可以
 ```C#
 string x => x * x   //illegal
 (string x) => x * x //legal
@@ -80,7 +80,7 @@ x => x * x
 ### `expression`
 * 只有單行程式碼時為`expression`，可以不用`{}`包住程式，程式行的最後也不用加`;`，其程式碼所代表的是回傳值
 ```C#
-x => x * x  //== delegate (int x) { return x * x; }
+x => x * x  //delegate (int x) { return x * x; }
 ```
 * 使用`expression`格式的Lambda稱為**Lambda運算式**(Lambda Expressions)
 

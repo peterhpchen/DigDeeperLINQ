@@ -14,17 +14,17 @@ namespace _06_Lambda
         static void Main()
         {
             // Instantiate delegate with named method:
-            output(nameMethod, "name method");
+            consoleWriteLine(nameMethod, "name method");
 
             // Instantiate delegate with anonymous method:
-            output(delegate (string output) { return output; }, "anonymous method");
+            consoleWriteLine(delegate (string output) { return output; }, "anonymous method");
 
             // Instantiate delegate with lambda expression
-            output(output => output, "lambda method");
+            consoleWriteLine(output => output, "lambda method");
         }
 
         //public delegate TResult Func<in T, out TResult>(T arg);
-        private static void output(Func<string, string> stringGetter, string input)
+        private static void consoleWriteLine(Func<string, string> stringGetter, string input)
         {
             Console.WriteLine(stringGetter(input));
         }
