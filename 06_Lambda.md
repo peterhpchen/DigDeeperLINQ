@@ -70,7 +70,7 @@ x, y => x * y   //illegal
 ```C#
 string x => x * x   //illegal
 (string x) => x * x //legal
-x => x * x
+x => x * x  //legal
 ```
 * 沒有傳入參數時以空括號`()`表示
 ```C#
