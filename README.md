@@ -3,6 +3,9 @@
 1. [踏上探索的旅途: 前言](01_Preface.md)
 1. [探索的準備: 使用工具及資源說明](02_Prepare.md)
 1. [每個.NET工程師都要有的一隻箭: LINQPad介紹](03_LINQPad.md)
+1. [藏在`foreach`下的秘密: `foreach`原理說明](04_foreach.md)
+1. [仔細體會`yield`的甜美: `yield`介紹](05_yield.md)
+1. [Lambda運算式介紹](06_Lambda.md)
 1. 在LINQ之前
 1. 什麼是LINQ
 1. IEnumerable
@@ -24,11 +27,6 @@
 1. Distinct的應用
 1. Distinct的原理
 1. Yeild跟Iterator Pattern
-1. 
-1. 
-1. 
-1. 
-1. 
 1. 
 1. 
 1. 旅程的結尾
