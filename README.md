@@ -6,6 +6,7 @@
 1. [藏在`foreach`下的秘密: `foreach`原理說明](04_foreach.md)
 1. [仔細體會`yield`的甜美: `yield`介紹](05_yield.md)
 1. [Lambda運算式介紹](06_Lambda.md)
+1. [變來變去的Generic Type: 泛型介紹](07_Generics.md)
 1. 在LINQ之前
 1. 什麼是LINQ
 1. IEnumerable
@@ -27,6 +28,5 @@
 1. Distinct的應用
 1. Distinct的原理
 1. Yeild跟Iterator Pattern
-1. 
 1. 
 1. 旅程的結尾
