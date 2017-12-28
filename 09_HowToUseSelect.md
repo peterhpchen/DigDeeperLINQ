@@ -24,7 +24,7 @@ public static IEnumerable<TResult> Select<TSource, TResult>(this IEnumerable<TSo
 
 `Select`只有一個傳入參數`Selector`，這個參數是一個[委派](06_Lambda.md)參數，而傳入的方法其實就是你想要對每一個元素什麼樣的事情。
 
-兩種方法的差別在於第二個委派參數`Selector`，兩個委派方法差了一個`int`傳入參數，這個`int`其實就是集合的index，工程師可以利用這個傳入參數取得目前元素在集合中的位置。
+兩種方法的差別在於第二個委派參數`Selector`，兩個委派方法差了一個`int`傳入參數，這個`int`其實就是集合的`index`，工程師可以利用這個傳入參數取得目前元素在集合中的位置。
 
 ## 查詢運算式
 依照[C# Spec](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/expressions#query-expressions)上的語法定義如下: 
@@ -94,7 +94,7 @@ foreach (var obj in query)
  * { index = 4, item = No5 }
 */
 ```
-我們可以看到這個index的資訊也會進入每一個元素中，對於需要知道元素位置的處理很有幫助。
+我們可以看到這個`index`的資訊也會進入每一個元素中，對於需要知道元素位置的處理很有幫助。
 
 ## 特別之處
 Select這個看似平凡的語法其實也藏有一些玄機及特色，接下來我們就來看看吧。
@@ -116,14 +116,14 @@ foreach(var result in afterSelect){}
 
 ![foreach](image/09_HowToUseSelect/foreach.PNG)
 
-Select少了很多對吧，其實Select它有**延遲執行**的特性，意思是說你叫用它時，它不會馬上去巡覽所有的元素，而是會等到你叫用`GetEnumerator()`或是`foreach`時才會去變動集合，詳細的原理我們留到下章再深入討論。
+Select少了很多對吧，其實Select它有**延遲執行**的特性，意思是說你叫用它時，它不會馬上去巡覽所有的元素，而是會等到你叫用`GetEnumerator()`或是`foreach`時才會去變動集合，詳細的原理我們留到之後再深入討論。
 
 ### Select是所有查詢都必備的語法嗎?
 記得以前在看LINQ的相關介紹時，第一章出現的幾乎都是Select，所以我一直以為它是一個Query Expressions的基本，就像是`from`一樣，你是不是也跟我的想法一樣呢? 如果是的話請繼續往下看。
 
 現在我們來想想: 一段查詢語法它的基本要件是什麼? 是什麼可以讓這段文字產生查詢的能力? 首先我們會想到的是**選取資料來源**，沒有資料來源根本也不用做查詢了，那有了資料來源後還欠缺什麼呢? 最直覺的就是**目標資料的結構**了，所以`Select`它是一個最直覺的查詢功能，從SQL的查詢與法也可以看出來。
 
-所以**Select幾乎都會再文章的開頭出現**的謎底揭開了，因為人習慣以最直覺的開始講起，這樣的講述方式會讓人比較快熟悉並且進入狀況，所以`Select`自然變成每個作者筆下的第一頭牌了。
+所以**Select幾乎都會在文章的開頭出現**的謎底揭開了，因為人習慣以最直覺的開始講起，這樣的講述方式會讓人比較快熟悉並且進入狀況，所以`Select`自然變成每個作者筆下的第一頭牌了。
 
 那另一個問題浮現了: **它是一個Query Expressions的必備語法嗎?** 其實Select在LINQ的語法中其實**不一定需要出現**，讓我們來看看下面的例子: 
 ```C#
@@ -141,7 +141,7 @@ group x by x.CategoryID
 上面的定義是在說**查詢運算式**，在**標準查詢運算子**上的規則又更為寬鬆了，因為它本身的回傳值是`IEnumerable`所以你只要是對其做事的方法都可以使用，也不用一定要先執行某個方法才能做查詢。
 
 ## 結語
-這章講述了Select的Query及Method的用法，下一章我們來深入的探討Select的運作。
+這章講述了Select的Query及Method的用法，在下一章學習如何建置**corefx**後就可以來看看`Select`內到底在做什麼了。
 
 ## 參考
 * [Microsoft Docs-system.linq.enumerable.select](https://docs.microsoft.com/en-us/dotnet/api/system.linq.enumerable.select?view=netframework-4.7.1)
