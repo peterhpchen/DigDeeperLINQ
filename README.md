@@ -8,7 +8,7 @@
 1. [Lambda運算式介紹](06_Lambda.md)
 1. [變來變去的Generic Type: 泛型介紹](07_Generics.md)
 1. [所以什麼是LINQ?](08_WhatIsLINQ.md)
-1. Select的應用
+1. [Select的應用](09_HowToUseSelect.md)
 1. Select的原理
 1. Where的應用
 1. Where的原理
