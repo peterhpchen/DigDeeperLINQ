@@ -40,8 +40,8 @@ select_clause
 from x in Products
 select x.ProductName
 ```
-* 第一行的`from`是將產品(Products)這個集合上的每一個元素以`x`來表示
-* 第二行的`select`代表說要將每一個元素(x)的產品名稱(ProductName)輸出
+* 第一行的`from`是將產品(`Products`)這個集合上的每一個元素以`x`來表示
+* 第二行的`select`代表說要將每一個元素(`x`)的產品名稱(`ProductName`)輸出
 
 當有多個資料想要藉由`select`輸出時，也可以用**Anonymous types和Object Initializer**來達到此目的: 
 ```C#
