@@ -11,22 +11,22 @@
 
 ![install](image/10_BuildCoreFX/install.PNG)
 
-1. 安裝[CMake](https://cmake.org/download/)
+2. 安裝[CMake](https://cmake.org/download/)
 
 ### 開始建置
 開發團隊很貼心地幫我們準備了建置相關的script，我們只要執行相對應的script就可以完成建置，主要有以下幾個scripts: 
 
-* clean:  清空建置所產生的相關檔案，跟Visual Studio中的*Clean Solution*相似
-* sync:  取得在建置過程中需要的檔案，像是build tools、xunit、coreclr...等等
-* build: 建置**corefx**
-* build-tests: 建置及執行測試案例
+* **clean**:  清空建置所產生的相關檔案，跟Visual Studio中的*Clean Solution*相似
+* **sync**:  取得在建置過程中需要的檔案，像是build tools、xunit、coreclr...等等
+* **build**: 建置**corefx**
+* **build-tests**: 建置及執行測試案例
 
 我們先執行build: 
 * 開啟**cmd**或是**PowerShell**，移至存放corefx原始碼的資料夾後鍵入`build`
 
 執行完之後在Visual Studio上打開*corefx/src/System.Linq.sln*: 
-1. 在Solution Explorer對Solution按右鍵點擊*Clean Solution*
-1. 在Solution Explorer對Solution按右鍵點擊*Build Solution*
+1. 在Solution Explorer中對Solution按右鍵點擊*Clean Solution*
+1. 在Solution Explorer中對Solution按右鍵點擊*Build Solution*
 
 這樣我們的建置就完成了。
 
@@ -50,9 +50,9 @@ public void IndexOverflows()
 #### 執行單個Class的測試案例
 前面的執行方式會執行這個方案下所有的測試案例，可是我們通常只會對一個Class做修改，測試案例也只需要執行這個Class的就好，透過接下來的操作可以達到此目的。
 
-1. 在System.Linq.Tests按右鍵*Properties*
-1. 打開Debug的Tab
-1. 在Command line arguments的字串後面加上`-class System.Linq.Tests.SelectTests`(這邊以`SelectTests`為例)，格式為*namspace.class*
+1. 在*System.Linq.Tests*按右鍵*Properties*
+1. 打開**Debug**的Tab
+1. 在**Command line arguments**的字串後面加上`-class System.Linq.Tests.SelectTests`(這邊以`SelectTests`為例)，格式為*namspace.class*
 
 ![class](image/10_BuildCoreFX/class.PNG)
 
