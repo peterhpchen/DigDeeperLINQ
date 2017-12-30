@@ -7,7 +7,7 @@
 * *corefx/src/System.Linq/tests/{語法名稱}Tests.cs*: 語法的測試案例
 
 ## 文章結構
-在原碼探險的章節中主要會有下面幾個主題: 
+在原碼探險的章節中主要會有下面兩個主題: 
 * 原始碼分析: 語法的原始碼來做觀察及學習
 * 測試案例賞析: 從語法的測試案例挑幾個比較特別的來做介紹
 
@@ -24,7 +24,7 @@ public static IEnumerable<TResult> Select<TSource, TResult>(
     this IEnumerable<TSource> source, Func<TSource, int, TResult> selector);
 ```
 
-我們先來看`selector`有`Index`參數的方法: 
+我們先來看`selector`有`Index`參數方法的原始碼: 
 ```C#
 public static IEnumerable<TResult> Select<TSource, TResult>(
     this IEnumerable<TSource> source, Func<TSource, int, TResult> selector)
@@ -66,7 +66,7 @@ foreach (TSource element in source)
 * 每一個元素會較前一個元素的`index`多加**1**
 * 每個元素的資料會是執行完委派方法`selector`後的結果
 
-到這裡就是`index`的Select全部的原始碼了，實作主要是基於`yield`的應用，`yield`會擴展為**Iterator Pattern**，在巡覽時藉由叫用`MoveNext()`來對**index加1**以及**將`Selector`執行後的值給予`Cuurent`**，看到這裡也可以知道`index`的Select確定是擁有延遲執行的功能的。
+到這裡就是有`index`的Select全部的原始碼了，實作主要是基於`yield`的應用，`yield`會擴展為**Iterator Pattern**，在巡覽時藉由叫用`MoveNext()`來對**index加1**以及**將`Selector`執行後的值給予`Cuurent`**，也因為是`Iterator Pattern`所以可以知道有`index`的Select確定是擁有延遲執行的功能的。
 
 接著我們來觀察沒有`index`的Select原始碼如下: 
 ```C#
@@ -118,7 +118,7 @@ public static IEnumerable<TResult> Select<TSource, TResult>(
 * 在`source`或是`selector`傳入`null`時會丟出`ArgumentNull`的Exception
 * 判斷傳入值的型別，分別實作不同的`Iterator`
 
-之前的有`index`的Select因為是用借助`yield`來實作，所以我們並不清楚它實作`Iterator`的細節，但從這個Select的原始碼我們就可以清楚的知道實作的`Iterator`長什麼樣子了。
+之前的有`index`的Select因為是借助`yield`來實作，所以我們並不清楚它實作`Iterator`的細節，但從這個Select的原始碼我們就可以清楚的知道實作的`Iterator`長什麼樣子了。
 
 從這段程式中我們可以觀察到一些有趣的事實: 
 * `IList`、`Array`、`List`雖然是`IEnumerable`但並不是`Iterator`
@@ -163,7 +163,7 @@ TElement TryGetLast(out bool found);
 ```
 
 ## 測試案例分析
-我們剛剛自己走了一輪原碼，現在來看看別人是怎麼去觀察程式碼的，如果說自己去觀察程式碼是自己在玩遊戲，那看測試案例就像在看精彩重播一樣，會讓人學到更多的技巧，我會挑幾個覺得有趣的案例來說明。
+我們剛剛自己走了一輪原碼，現在來看看別人是怎麼去觀察程式碼的，如果說自己去觀察程式碼是自己在闖關，那看測試案例就像在看精彩重播一樣，會讓人學到更多的技巧，我會挑幾個覺得有趣的案例來說明。
 
 1. Select_SourceIsAnArray_ExecutionIsDeferred
 ```C#
@@ -198,7 +198,7 @@ public void Select_SourceListGetsModifiedDuringIteration_ExceptionIsPropagated()
     Assert.True(enumerator.MoveNext());
     Assert.Equal(2 /* 1 + 1 */, enumerator.Current);
 
-    source.Add(6);
+    source.Add(6);  // 新增元素會使Iterator拋錯誤
     Assert.Throws<InvalidOperationException>(() => enumerator.MoveNext());
 }
 ```
@@ -215,8 +215,8 @@ public void Select_GetEnumeratorCalledTwice_DifferentInstancesReturned()
     var enumerator1 = query.GetEnumerator();
     var enumerator2 = query.GetEnumerator();
 
-    Assert.Same(query, enumerator1);
-    Assert.NotSame(enumerator1, enumerator2);
+    Assert.Same(query, enumerator1);    // 第一次的GetEnumerator()會是原本的
+    Assert.NotSame(enumerator1, enumerator2);   // 第二次或更多會以Clone()複製實體化
 
     enumerator1.Dispose();
     enumerator2.Dispose();
@@ -258,7 +258,7 @@ public virtual void Dispose()
     _state = -1;
 }
 ```
-可以看到`Dispose()`只有將_current及_state調回初始值，所以再次叫用`MoveNext()`時就會`return false`。
+可以看到`Dispose()`只有將`_current`及`_state`調回初始值，所以再次叫用`MoveNext()`時就會`return false`。
 
 ## 結語
 我們自己一步一步的了解原始碼，經由對原始碼的初步了解去觀察測試案例，在觀看時又進一步的加深對原始碼的了解，有個相輔相成的效果，接下來我們都會依照這樣的方式去講解其他的LINQ方法。
