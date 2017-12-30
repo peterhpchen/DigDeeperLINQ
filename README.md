@@ -10,7 +10,7 @@
 1. [所以什麼是LINQ?](08_WhatIsLINQ.md)
 1. [Select的應用](09_HowToUseSelect.md)
 1. [建置dotnet/corefx](10_BuildCoreFX.md)
-1. Select的原理
+1. [Select的原碼探險](11_InsideOfSelect.md)
 1. Where的應用
 1. Where的原理
 1. SelectMany的應用
@@ -26,4 +26,5 @@
 1. Distinct的應用
 1. Distinct的原理
 1. First Class Language Construct
+1. Lambda變數範圍
 1. 旅程的結尾
