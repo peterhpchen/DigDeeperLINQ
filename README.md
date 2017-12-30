@@ -11,9 +11,9 @@
 1. [Select的應用](09_HowToUseSelect.md)
 1. [建置dotnet/corefx](10_BuildCoreFX.md)
 1. [Select的原碼探險](11_InsideOfSelect.md)
+1. [SelectMany的應用](12_HowToUseSelectMany.md)
 1. Where的應用
 1. Where的原理
-1. SelectMany的應用
 1. SelectMany的原理
 1. OrderBy的應用
 1. OrderBy的原理
