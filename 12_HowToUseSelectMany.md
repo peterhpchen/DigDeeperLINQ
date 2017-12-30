@@ -1,5 +1,5 @@
 # SelectMany的應用
-這次我們要來說一個跟`Select`相似的語法-`SelectMany`，這個語法在處理**Master/Details**的資料時非常的有用，在沒有`SelectMany`前，我們處理有明細的資料時需要用複數層迴圈才能查找資料，現在我們只要用`SelectMany`就搞定了。
+這次我們要來說一個跟`Select`相似的語法-`SelectMany`，這個語法在處理**Master/Details**的資料時非常的有用，在沒有`SelectMany`前，我們處理有明細的資料都需要用複數層迴圈才能查找資料，現在我們只要用`SelectMany`就搞定了。
 
 ## 功能說明
 `SelectMany`可以將集合中每個元素內的子集合合併為一個新的集合。
@@ -19,22 +19,22 @@ class 元素
     new 元素() { 子集合 = new List<string>() { "j", "k", "l" } }
 };
 ```
-下圖顯示在相同的結構下執行`SelectMany`及`Select`的差異: 
+下圖顯示執行`SelectMany`及`Select`的差異: 
 
 ![SelectMany vs Select](image/12_HowToUseSelectMany/SelectManyVSSelect.png)
 
-各別執行`Select`及`SelectMany`後會變成下面這樣，可以注意兩個型別的不同之處: 
+各別執行`Select`及`SelectMany`後會變成下面這樣，可以注意兩個**回傳型別**的不同之處: 
 ```C#
 IEnumerable<List<string>> afterSelect = 集合.Select(元素 => 元素.子集合);
 
 IEnumerable<string> afterSelect = 集合.SelectMany(元素 => 元素.子集合);
 ```
 
-* Select: 將資料經由Selector轉換後放入`IEnumerable`中，其結果的數量跟原本相同
-* SelectMany: SelectMany會將`Selector`的結果扁平化，輸出在同一集合中，其結果的數量會跟原本的不同
+* Select: 將資料經由`Selector`轉換後放入`IEnumerable`中，其**結果的數量跟原本相同**
+* SelectMany: `SelectMany`會將`Selector`的結果扁平化，輸出在同一集合中，其**結果的數量會跟原本的不同**
 
 ## 方法定義
-首先來看只有一個`Selector`的方法: 
+`SelectMany`有兩組方法，首先來看只有一個`Selector`的方法: 
 ```C#
 public static IEnumerable<TResult> SelectMany<TSource, TResult>(
     this IEnumerable<TSource> source, 
@@ -45,7 +45,7 @@ public static IEnumerable<TResult> SelectMany<TSource, TResult>(
     Func<TSource, int, IEnumerable<TResult>> selector);
 ```
 * 這兩個多載的差異點跟`Select`一樣都是`selector`多了一個`int`的傳入參數，這個`int`就是每個元素的`index`
-* 跟`Select`的不同之處在於`selector`的回傳值是一個帶有`TResult`型別元素的`IEnumerable`
+* 跟`Select`的不同之處在於`SelectMany`的`selector`的回傳值是一個帶有`TResult`型別元素的`IEnumerable`
 * 雖然`Selector`吐回來的型別是`IEnumerable<TResult>`，可是回傳值依然是`IEnumerable<TResult>`，由此我們可以知道`SelectMany`有做扁平化的處理。
 
 另外`SelectMany`還有兩個`Selector`的方法: 
@@ -89,7 +89,7 @@ from * in ( e1 ) . SelectMany( x1 => e2 , ( x1 , x2 ) => new { x1 , x2 } )
 ```
 
 ## 方法範例
-下面是一個商店的物件: 
+下面是一個**商店的物件**: 
 ```C#
 class Store
 {
@@ -98,7 +98,7 @@ class Store
 }
 ```
 
-資料如下，有兩間商店*App Store*跟*Google Store*: 
+**資料**如下，有兩間商店*App Store*跟*Google Store*: 
 ```C#
 Store[] stores = new Store[] 
 {
@@ -208,7 +208,7 @@ from c in product
 select c;
 ```
 
-我們來想想剛剛講的運算式定義，當最後接的不是`select`時會由這樣: 
+我們來想想剛剛講的運算式定義，當最後接的不是`select`時會是下面這樣的型式: 
 ```C#
 from x1 in e1
 from x2 in e2
@@ -221,7 +221,7 @@ from * in ( e1 ) . SelectMany( x1 => e2 , ( x1 , x2 ) => new { x1 , x2 } )
 ...
 ```
 
-那我們就按照位置把上面的範例填上，會變下面這樣: 
+那我們就按照位置把上面的範例填入，會變下面這樣: 
 ```C#
 from * in ( stores ) . SelectMany( store => store.Products , ( store , product ) => new { store , product } )
 from c in product
@@ -247,7 +247,7 @@ select v
 終於答案揭曉: 它會跑兩次`SelectMany`，範例結果會是`Product`因為在被做了一次`SelectMany`而被分割為**字母**。
 
 ### 第二個`from`的後面接的跟第一個`from`無關
-前面的範例在第二個from都很乖的用了第一個from的屬性，那如果我偏不放第一個from的屬性呢? 例如說像下面這樣: 
+前面的範例在第二個`from`都很乖的用了第一個`from`的屬性，那如果我偏不放第一個`from`的屬性呢? 例如說像下面這樣: 
 ```C#
 string[] PCs = new string[] { "ASUS", "ACER", "DELL" };
 
@@ -255,7 +255,7 @@ var query = from store in stores
             from PC in PCs
             select PC;
 ```
-答案如下: 
+結果如下: 
 ```
 ASUS
 ACER
@@ -264,12 +264,13 @@ ASUS
 ACER
 DELL
 ```
-它會跑兩次第二個`from`得到的資料，為什麼?
+它會跑兩次第二個`from`得到的資料，為什麼? 我們來依照定義將對應的變數放上去: 
 ```C#
 ( stores ) . SelectMany( store => PCs , ( store , PC ) => PC )
 ```
+* PCs是外部變數，Lambda運算式可以吃到外部變數
 
-有點難懂對吧? 我們來看方法定義: 
+有點難懂對吧? 那我們在對照方法定義來觀察: 
 ```C#
 public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(
     this IEnumerable<TSource> source, 
@@ -277,10 +278,13 @@ public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(
     Func<TSource, TCollection, TResult> resultSelector);
 ```
 
-重點是在`collectionSelector`，我們可以看到每個`TSource`會輸出一次`IEnumerable<TCollection>`，啊哈，我有**兩間**(App Store、Google Store)商店阿，所以`PCs`的資料會被重複輸出。
+重點是在`collectionSelector`，我們可以看到每個`TSource`會輸出一次`IEnumerable<TCollection>`，啊哈，我有**兩間**(*App Store*、*Google Store*)商店阿，所以`PCs`的資料會被重複輸出。
 
 ## 結語
-SelectMany在物件的資料處理中很常會需要使用，在看到Master/Details時就先想想它吧。
+SelectMany在物件的資料處理中很常會需要使用，在看到**Master/Details**時就先想想它吧。
+
+## 範例程式
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/12_HowToUseSelectMany/demo/12_HowToUseSelectMany)
 
 ## 參考
 * [C# Spec-expressions#query-expressions](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions)
