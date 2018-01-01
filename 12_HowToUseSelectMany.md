@@ -1,5 +1,5 @@
 # SelectMany的應用
-這次我們要來說一個跟`Select`相似的語法-`SelectMany`，這個語法在處理**Master/Details**的資料時非常的有用，在沒有`SelectMany`前，我們處理有明細的資料都需要用複數層迴圈才能查找資料，現在我們只要用`SelectMany`就搞定了。
+這次我們要來說一個跟`Select`相似的語法-`SelectMany`，這個語法在處理**Master/Details**(主檔/明細檔)的資料時非常的有用，在沒有`SelectMany`前，我們處理有明細的資料都需要用複數層迴圈才能查找資料，現在我們只要用`SelectMany`就搞定了。
 
 ## 功能說明
 `SelectMany`可以將集合中每個元素內的子集合合併為一個新的集合。
@@ -173,7 +173,7 @@ Pixel
 Pixel 2
 ```
 
-這裡可以看到`Select`的結果並沒有打平，可是`SelectMany`有，我們可以用`SelectMany`輕易的處理像`store`這樣的**master/details**結構。
+這裡可以看到`Select`的結果並沒有打平，可是`SelectMany`有，我們可以用`SelectMany`輕易的處理像`store`這樣的**Master/Details**(主檔/明細檔)結構。
 
 ### `SelectMany`的第二個`Selector`
 * 範例程式
@@ -281,7 +281,7 @@ public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(
 重點是在`collectionSelector`，我們可以看到每個`TSource`會輸出一次`IEnumerable<TCollection>`，啊哈，我有**兩間**(*App Store*、*Google Store*)商店阿，所以`PCs`的資料會被重複輸出。
 
 ## 結語
-SelectMany在物件的資料處理中很常會需要使用，在看到**Master/Details**時就先想想它吧。
+SelectMany在物件的資料處理中很常會需要使用，在看到**Master/Details**(主檔/明細檔)時就先想想它吧。
 
 ## 範例程式
 [GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/12_HowToUseSelectMany/demo/12_HowToUseSelectMany)
