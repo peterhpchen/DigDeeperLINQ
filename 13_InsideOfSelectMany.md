@@ -3,7 +3,7 @@
 
 ## 原始碼分析
 * Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/SelectMany.cs
-* Public Method: SelectMany總共有四個多載的方法，兩個是只有**一個**`selector`，另外兩個是有**兩個**`selector`(`collectionSelector`及`resultSelector`)
+* Public Method: `SelectMany`總共有四個多載的方法，兩個是只有**一個**`selector`，另外兩個是有**兩個**`selector`(`collectionSelector`及`resultSelector`)
 ```C#
 /* 下面兩個方法只有一個selector */
 public static IEnumerable<TResult> SelectMany<TSource, TResult>(    // 4
@@ -27,9 +27,7 @@ public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(   
 ```
 * 方法的右邊註解的數字為等下講解的順序
 
-我們先從多了個`int`的`selector`的方法看起: 
-
-1. 第一個看的是只有**一個**`selector`的方法: 
+1. 第一個看的是只有**一個**`selector`但有`int`傳入參數的方法: 
 ```C#
 public static IEnumerable<TResult> SelectMany<TSource, TResult>(
     this IEnumerable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
@@ -50,7 +48,7 @@ public static IEnumerable<TResult> SelectMany<TSource, TResult>(
 * 判斷`source`及`selector`是否為空，為空的話丟`ArgumentNull`例外
 * 傳回`SelectManyIterator`
 
-到這裡跟`Select`幾乎一模一樣，唯一有差別的就只有最後的回傳值，`SelectMany`是傳回`SelectManyIterator`，相信差別就是在這裡，我們來看看`SelectMany`的定義: 
+到這裡跟`Select`幾乎一模一樣，唯一有差別的就只有最後的回傳值，`SelectMany`是傳回`SelectManyIterator`，相信特別之處就是在這裡，我們來看看`SelectMany`的定義: 
 ```C#
 private static IEnumerable<TResult> SelectManyIterator<TSource, TResult>(
     IEnumerable<TSource> source, Func<TSource, int, IEnumerable<TResult>> selector)
@@ -72,11 +70,11 @@ private static IEnumerable<TResult> SelectManyIterator<TSource, TResult>(
 ```
 * 此方法區塊為`yield`區塊，會轉為`Iterator Pattern`，回傳的資料是`IEnumerable`的集合
 * `yield return`傳回**每一個元素**的資料
-* 每個元素的`index`較前面的元素多加1
-* `selector`執行後取得每個元素的**子集合**資料，在用`foreach`巡覽整個**子集合**
+* 每個元素的`index`較前面的元素多加**1**
+* `selector`執行後取得每個元素的**子集合**資料，再用`foreach`巡覽整個**子集合**
 * 傳回**子集合**的每個元素
 
-我們可以看到跟`Select`還是幾乎一模一樣，差別在於**第二個**`foreach`，還記得我們前面講**SelectMany的應用**時比較了跟`Select`的差別之處就是`SelectMany`不用多一個迴圈去處理子集合的資料，從原始碼中觀察就更加明顯了，原來`SelectMany`已經幫我們把**第二個**迴圈要做的事情給做掉了。
+我們可以看到跟`SelectIterator`還是幾乎一模一樣，差別在於**第二個**`foreach`，還記得我們前面講**SelectMany的應用**時比較了跟`Select`的差別之處就是`SelectMany`不用多一個迴圈去處理子集合的資料，從原始碼中觀察就更加明顯了，原來`SelectMany`已經幫我們把**第二個**迴圈要做的事情給做掉了。
 
 2. 接著我們要來看有兩個`selector`(collectionSelector及resultSelector)但`CollectionSelector`沒有`int`參數的方法: 
 ```C#
@@ -106,7 +104,7 @@ public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(
 * 判斷`source`及`selector`是否為空，空的話丟出`ArgumentNull`的例外
 * 傳回`SelectManyIterator`
 
-這個方法跟跟一個`selector`的方法差在多了一個`resultSelector`的判斷，然後回傳的方法`SelectManyIterator`有**三個參數**，想當然，這裡不會是重點所在，我們接著來看看這個有**三個參數**的`SelectManyIterator`: 
+這個方法跟剛剛介紹的第一個`SelectMany`的方法差在多了一個`if`判斷`resultSelector`是否為空，然後回傳的方法`SelectManyIterator`有**三個參數**，想當然，這裡不會是重點所在，我們接著來看看這個有**三個參數**的`SelectManyIterator`: 
 ```C#
 private static IEnumerable<TResult> SelectManyIterator<TSource, TCollection, TResult>(
     IEnumerable<TSource> source, 
@@ -124,7 +122,7 @@ private static IEnumerable<TResult> SelectManyIterator<TSource, TCollection, TRe
 ```
 * 回傳值為`resultSelector`執行後的結果
 
-跟第一個介紹的方法差別只差在子集合的元素要回傳前再去執行了`resultSelector`，這樣的目的就是可以輸出子集合跟原集合合併的資料。
+跟第一個介紹的方法差別只差在子集合的元素要回傳前再去執行了`resultSelector`，這樣的目的就是可以輸出**子集合**跟**原集合**合併的資料。
 
 我們可以看到它跟第一個方法的結構是完全一樣的，但是有`resultSelector`的幫助讓我們可以更省力的拿到自己想要的檔案。
 
@@ -256,7 +254,7 @@ public static IEnumerable<object[]> ParameterizedTestsData()
 }
 ```
 
-Aggregate會將每個目前巡覽的結果向後一個元素丟，以上述程式碼為例`Aggregate((l, r) => l.Concat(r))`: 
+`Aggregate()`會將每個目前巡覽的結果向後一個元素丟，以上述程式碼為例`Aggregate((l, r) => l.Concat(r))`: 
 * `l`: 前個元素執行`Aggregate`後的值
 * `r`: 目前的元素值
 
@@ -285,8 +283,9 @@ using (e)   // Enumerator
         // However, all of the sub-collections before us should have been disposed.
         // Their indices should also be maxed out.
         Assert.All(subState.Take(subIndex), s => Assert.Equal(subLength + 1, s));
-        Assert.All(subCollectionDisposed.Take(subIndex), t => Assert.True(t));
+
         // 此Source中的其他已巡覽完的Sub會Dispose
+        Assert.All(subCollectionDisposed.Take(subIndex), t => Assert.True(t));        
 
         index++;
     }
@@ -314,7 +313,7 @@ new IEnumerable<int>[]
 }
 ```
 
-當然我們還是可以把**陣列**當作`IEnumerable`去做處理，這在一般的處理中是可以的(因為都必須要Call `MoveNext()`)，但在`ToArray()`中你的目標本來就是要轉為Array了，你卻要把**陣列**轉成`IEnumerable`再轉成**Array**怎麼樣都划不來，因此`SelectMany`的`ToArray()`用了一個`Marker`來表示集合中的陣列，我們先來看程式碼: 
+當然我們還是可以把**陣列**當作`IEnumerable`去做處理，這在一般的處理中是可以的(因為都必須要Call `MoveNext()`)，但在`ToArray()`中你的目標本來就是要轉為**Array**了，你卻要把**陣列**轉成`IEnumerable`再轉成**Array**怎麼樣都划不來，因此`SelectMany`的`ToArray()`用了一個`Marker`來表示集合中的陣列，我們先來看程式碼: 
 ```C#
 public TResult[] ToArray()
 {
