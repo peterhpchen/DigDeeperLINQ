@@ -49,14 +49,14 @@ public static IEnumerable<TResult> Select<TSource, TResult>(
 ```C#
 private static IEnumerable<TResult> SelectIterator<TSource, TResult>(
     IEnumerable<TSource> source, Func<TSource, int, TResult> selector)
-
-int index = -1;
-foreach (TSource element in source)
 {
-    checked
+    int index = -1;
+    foreach (TSource element in source)
     {
-        index++;
-    }
+        checked
+        {
+            index++;
+        }
 
         yield return selector(element, index);
     }
