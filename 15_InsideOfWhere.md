@@ -1,5 +1,5 @@
 # Where的原碼探索
-前一章我們講到`Where`的使用方式，`Where`使用起來很直覺，就像用`if else`做判斷一樣，使用一個`bool`回傳型態的`Lambda Expression`就可以篩選我們所需要的資料，既然`Where`使用起來這麼單純，那我們來看看它的原始碼是不是也這麼單純吧。
+前一章我們講到`Where`的使用方式，`Where`使用起來很直覺，就像用`if else`做判斷一樣，使用一個`bool`回傳型態的`Lambda Expression`就可以**篩選**我們所需要的資料，既然`Where`使用起來這麼單純，那我們來看看它的原始碼是不是也這麼單純吧。
 
 ## 原始碼分析
 * Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Where.cs
@@ -42,7 +42,7 @@ private static IEnumerable<TSource> WhereIterator<TSource>(IEnumerable<TSource> 
     }
 }
 ```
-* `yield`區塊中的yield return是傳回每個元素的值，而整個方法的回傳型別是`IEnumerable`
+* `yield`區塊中的`yield return`是傳回每個元素的值，而整個方法的回傳型別是`IEnumerable`
 * 後一個元素會比前個元素多加**1**
 * 用`if`接收`predicate`執行後的結果來判斷是否要將目前的元素回傳
 
@@ -119,7 +119,7 @@ public override bool MoveNext()
 * `_state`為陣列位置的基準，在`GetEnumerator()`執行後會被設為**1**，所以起始的`index`是`_state - 1`
 * 巡覽至陣列最尾端，每次都用`predicate`取得是否要回傳元素的判斷
 * 通過`predicate`後將`current`設為目前的元素，然後回傳`true`
-* 如果巡覽結束則`Dispose`跟`return false`
+* 如果巡覽結束則`Dispose()`跟`return false`
 
 這裡我們可以看到`_state`的用法跟前面介紹的`SelectMany`是不一樣的，`SelectMany`是用來決定是在**第幾層**的`Enumerator`和巡覽結束後要**跳回**哪層`Enumerator`，而`Where`則是完全當作`index`來使用。
 
@@ -155,7 +155,7 @@ public int GetCount(bool onlyIfCheap)
 ## 測試案例賞析
 * Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/WhereTests.cs
 ### Where_SourceThrowsOnGetEnumerator
-這個案例的`source`是`ThrowsOnGetEnumerator()`，會在第一個叫用`GetEnumerator()`時丟出`InvalidOperationException`例外。
+這個案例的`source`是`ThrowsOnGetEnumerator()`，會在第一次叫用`GetEnumerator()`時丟出`InvalidOperationException`例外。
 ```C#
 protected class ThrowsOnGetEnumerator : TestEnumerator
 {
@@ -194,7 +194,9 @@ public void Where_SourceThrowsOnGetEnumerator()
 ```
 要看懂這個測試案例要建立一個觀念: `Where`叫用的`GetEnumerator()`並不是`source`的`GetEnumerator()`，而是`Where`自己的`GetEnumerator()`。
 
-知道這觀念後我們再看測試案例，這樣也就說得通為什麼不是在`var enumerator = source.Where(truePredicate).GetEnumerator();`拋出例外，而是在`enumerator.MoveNext()`丟出例外，由於我們剛剛介紹`Where`的`MoveNext()`的`source`是`Array`的，所以他並沒有叫用`GetEnumerator()`，現在我們來看看`WhereEnumerableIterator`的`MoveNext()`: 
+知道這觀念後我們再看測試案例，這樣也就說得通為什麼不是在`var enumerator = source.Where(truePredicate).GetEnumerator();`拋出例外，而是在`enumerator.MoveNext()`丟出例外。
+
+由於我們剛剛介紹`Where`的`MoveNext()`的`source`是`Array`的，所以他並沒有叫用`GetEnumerator()`，現在我們來看看`WhereEnumerableIterator`的`MoveNext()`: 
 ```C#
 public override bool MoveNext()
 {
