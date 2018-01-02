@@ -102,6 +102,9 @@ private static  bool equalA(char letter)
 ## 結語
 `Where`是一個篩選條件的方法，以`predicate`當作判斷式，如果符合**判斷式**則傳回此元素。
 
+## 範例程式
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/14_HowToUseWhere/demo/14_HowToUseWhere)
+
 ## 參考
 * [Microsoft Docs-where-clause](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/keywords/where-clause)
 * [Microsoft Docs-filtering-data](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/filtering-data)
