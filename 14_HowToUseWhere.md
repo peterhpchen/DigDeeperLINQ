@@ -1,8 +1,8 @@
 # Where的應用
-`Where`這個語法對於大家來說應該都不陌生，要查詢的情境幾乎都脫離不了篩選資料的處理，`Where`在LINQ中就是篩選條件的語法，接下來請看`Where`的介紹。
+`Where`這個語法對於大家來說應該都不陌生，要查詢的情境幾乎都脫離不了**篩選**資料的處理，`Where`在LINQ中就是**篩選**條件的語法，接下來請看`Where`的介紹。
 
 ## 功能說明
-使用`Where`可以取得集合中符合描述的元素。
+使用`Where`可以取得集合中**符合描述**的元素。
 
 ## 方法定義
 `Where`的方法有**兩個**，差別依然是有沒有`index`傳入參數: 
@@ -19,7 +19,7 @@ public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> sour
 
 ![linq_filter](image/14_HowToUseWhere/linq_filter.png)
 
-我們有個`source`的`char`**陣列**如上圖的**Source**，現在我想要拿出`A`的元素，我們會利用下面的程式碼取得`A`的資料: 
+我們有個`source`的`char`**陣列**，如上圖的**Source**，現在我想要拿出`A`的元素，我們會利用`Where`取得`A`的資料: 
 ```C#
 char[] source = new char[] { 'A', 'B', 'C', 'A', 'B', 'A', 'C' };
 
@@ -27,7 +27,7 @@ IEnumerable<char> result = source.Where(letter => letter == 'A');
 
 // output: A A A
 ```
-* `predicate`是一個**判斷式**的Lambda Expression
+* `predicate`是一個**判斷式**的**Lambda Expression**
 
 透過這個例子我們就可以清楚的了解`Where`就是為了**篩選**資料。
 
@@ -42,7 +42,7 @@ where_clause
 
 我們可以看到`where`運算式後面是接**判斷式**，跟`if`一樣，如果是`true`就是符合的資料，反之是不符合的資料。
 
-我們將剛剛在方法定義時使用的例子轉為運算式試試看: 
+我們將剛剛在*方法定義*時使用的例子轉為**運算式**試試看: 
 ```C#
 from letter in source
 where letter == 'A'
@@ -92,10 +92,15 @@ IEnumerable<char> result =
     select letter;
 
 // output: A A A
+
+private static  bool equalA(char letter)
+{
+    return letter == 'A';
+}
 ```
 
 ## 結語
-`Where`是一個篩選條件的方法，以`predicate`當作判斷式，如果符合判斷式則傳回此元素。
+`Where`是一個篩選條件的方法，以`predicate`當作判斷式，如果符合**判斷式**則傳回此元素。
 
 ## 參考
 * [Microsoft Docs-where-clause](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/keywords/where-clause)
