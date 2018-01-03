@@ -14,7 +14,7 @@
 1. [SelectMany的應用](12_HowToUseSelectMany.md)
 1. [SelectMany的原碼探險](13_InsideOfSelectMany.md)
 1. [Where的應用](14_HowToUseWhere.md)
-1. Where的原理
+1. [Where的原碼探險](15_InsideOfWhere.md)
 1. OrderBy的應用
 1. OrderBy的原理
 1. Join的應用
@@ -27,4 +27,5 @@
 1. Distinct的原理
 1. First Class Language Construct
 1. Lambda變數範圍
+1. WhereSelectIterator和SelectWhereIterator
 1. 旅程的結尾
