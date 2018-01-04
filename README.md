@@ -16,7 +16,7 @@
 1. [Where的應用](14_HowToUseWhere.md)
 1. [Where的原碼探險](15_InsideOfWhere.md)
 1. [LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用](16_HowToUseOrderBy.md)
-1. OrderBy的原理
+1. [OrderBy的原碼探索](17_InsideOfOrderBy.md)
 1. Join的應用
 1. Join的原理
 1. Skip的應用
