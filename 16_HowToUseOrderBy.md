@@ -1,5 +1,5 @@
 # LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用
-這章我們來說說要如何在LINQ中使用排序的功能整理集合，因為在LINQ中的排序其實是一組的語法所組合而成的，所以今天會講到多個不同的語法，雖然說是多個語法，但是關鍵都還是圍繞在排序這個目的上，只是使用的情境會不同而已，讓我們來看看這些語法各有什麼樣的作用吧。
+這章我們來說說要如何在LINQ中使用排序的功能整理集合，由於LINQ中的排序其實是一組的語法所組合而成的，所以今天會講到多個不同的語法，雖然說是多個語法，但是關鍵都還是圍繞在**排序**這個目的上，只是使用的情境會不同而已，讓我們來看看這些語法各有什麼樣的作用吧。
 
 ## 功能說明
 ### `OrderBy`
@@ -14,7 +14,7 @@
 ### `ThenByDescending`
 設定**第二個以後**的排序條件，此排序條件為**遞減**排序。
 
-本章會講解以上四個方法，藉由說明我們可以看到它們其實只有順序及遞增遞減的差別而已，性質其實是相同的。
+本章會講解以上四個方法，藉由說明我們可以看到它們其實只有**順序**及**遞增遞減**的差別而已，性質其實是相同的。
 
 ## 方法定義
 這組方法主要目的就是排序資料，請看下面的例子(節錄自[Microsoft Docs](https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/sorting-data)):
@@ -45,13 +45,13 @@ public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
 ```
 * `keySelector`: 要排序的欄位
 * `comparer`: 客製的比較器
-* `IOrderedEnumerable`: **LINQ排序語法**都會傳回此型別
+* `IOrderedEnumerable`: **LINQ排序語法**都會回傳此型別
 
-`OrderBy`有兩個方法，差別在於要不要傳入客製的比較器，客製的比較器是使用在你有特別的排序方式的情況，等下的範例程式我們做個範例。
+`OrderBy`有兩個方法，差別在於要不要傳入**客製的比較器**，客製的比較器是使用在你有特別的排序方式的情況時，等下的範例程式我們做個範例。
 
 這裡我們會看到一個特別的回傳型別`IOrderedEnumerable`，它繼承自`IEnumerable`，會定義這個型別的目的是為了要讓`ThenBy`及`ThenByDescending`可以接續在這個排序之後再做其他的排序。
 
-當然，因為`IOrderedEnumerable`是繼承自`IEnumerable`，所以你要在後面再用`OrderBy`也是合法的，但是這樣做會讓它忽略之前的排序，將其本身視為第一個排序條件，我們之後的範例程式再來看看。
+當然，因為`IOrderedEnumerable`是繼承自`IEnumerable`，所以你要在後面用`OrderBy`也是合法的，但是這樣做會讓它忽略之前的排序，將其本身視為第一個排序條件，我們之後的範例程式再來看看。
 
 接下來的`OrderByDescending`的方法定義:
 ```C#
@@ -87,7 +87,7 @@ public static IOrderedEnumerable<TSource> ThenByDescending<TSource, TKey>(
     IComparer<TKey> comparer)
 ```
 
-前面有說到`ThenBy`及`ThenByDescending`是要接在其他排序的後面，現在來看它的`this`的確是需要傳入`IOrderedEnumerable`，所以代表你在一個`Enumerable`的後面是不能接`ThenBy`的。
+前面有說到`ThenBy`及`ThenByDescending`是要接在其他排序的後面，現在看到定義`this`的確是需要傳入`IOrderedEnumerable`，所以代表你在一個`IEnumerable`的後面是不能接`ThenBy`的，要先接`OrderBy`才能用`ThenBy`。
 
 ## 查詢運算式
 依據[C# Spec](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions)可以照到下面跟`orderby`相關的定義: 
@@ -124,7 +124,7 @@ IOrderedEnumerable<string> results = from word in words
 * **第一個**排序條件為**第二個字母遞增**
 * **第二個**排序條件為**第三個字母遞減**
 
-可以看到查詢運算式的排序是非常直覺的，相較於方法要用各個不同的方法來排序，運算式的語法更像是我們熟悉的SQL。
+可以看到查詢運算式的排序是非常直覺的，相較於方法要用各個不同的方法來排序，運算式的語法更像是我們熟悉的**SQL**。
 
 我們可以依照[C# Spec](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions)的定義將下面的運算式: 
 ```C#
@@ -141,11 +141,11 @@ ThenBy ( x => k2 ) .
 ThenBy ( x => kn )
 ...
 ```
-可以看到查詢運算式所轉出來的方法按照`OrderBy.ThenBy`的方式實作。
+可以看到查詢運算式所轉出來的方法是按照`OrderBy.ThenBy`的方式實作。
 
 ## 方法範例
 ### 客製比較器
-想要將偶數排在奇數之前，我們可以時做一個客製的比較器如下: 
+想要將偶數排在奇數之前，我們可以實作一個客製的比較器如下: 
 ```C#
 int[] numbers = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 IOrderedEnumerable<int> results = numbers.OrderBy(x => x, newCustomComparer());
@@ -191,15 +191,15 @@ IOrderedEnumerable<string> results2 = words
  * Apple
  */
 ```
-由結果可以看出不用`ThenBy`的話第一個查詢條件形同虛設，根本沒有用到。
+由結果可以看出不用`ThenBy`的話**第一個查詢條件形同虛設**，根本沒有用到。
 
 # 特別之處
-* 屬於延遲執行的方法，回傳的只是查詢的資訊，要等到`GetEnumerator`或是`foreach`觸發才會做巡覽
-* 回傳值不是`IEnumerable`而是`IOrderedEnumerable`，目的是要讓ThenBy及ThenByDescending接續其後做排序條件
+* 屬於延遲執行的方法，回傳的只是查詢的資訊，要等到`GetEnumerator()`或是`foreach`觸發才會做巡覽
+* 回傳值不是`IEnumerable`而是`IOrderedEnumerable`，目的是要讓ThenBy及ThenByDescending接續其後設定其他的排序條件
 * 可以是實作`IComparer`來客製比較器
 
 ## 結語
-這一章我們學了4個排序方法，`OrderBy`家族會排在第一個條件，而`ThenBy`家族則是排在第二到第n個條件，利用`Descending`搭配讓我們可以遞增遞減排序。
+這一章我們學了4個**排序**方法，`OrderBy`家族會排在第一個條件，而`ThenBy`家族則是排在第二到第n個條件，利用`Descending`搭配讓我們可以遞增遞減排序。
 
 ## 參考
 * [Microsoft Docs-OrderBy](https://docs.microsoft.com/zh-tw/dotnet/api/system.linq.enumerable.orderby?view=netframework-4.7.1)
