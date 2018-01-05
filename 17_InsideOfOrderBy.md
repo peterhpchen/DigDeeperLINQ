@@ -1,6 +1,6 @@
 # OrderBy的原碼探索
 前面我們說到LINQ排序方法有四個`OrderBy`、`OrderByDescending`、`ThenBy`及`ThenByDescending`，
-`OrderBy`及`OrderByDescending`是設定**第一個**排序條件，而有沒有`Descending`是差在是不是**遞減**排序，它們會回傳`IOrderedEnumerable`型別，只有`ThenBy`及`ThenByDescending`接在它們後面才可以下**複數個**查詢條件，本章會聚焦在方法的原始碼說明上，讓我們來看看裡面施了什麼魔法吧。
+`OrderBy`及`OrderByDescending`是設定**第一個**排序條件，而有沒有`Descending`是差在是不是**遞減**排序，LINQ的排序方法都會回傳`IOrderedEnumerable`型別，只有`ThenBy`及`ThenByDescending`接在它們後面才可以下**複數個**查詢條件，本章會聚焦在方法的原始碼說明上，讓我們來看看裡面施了什麼魔法吧。
 
 ## 原始碼分析
 * Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/OrderBy.cs
@@ -26,7 +26,9 @@ public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(
     return source.CreateOrderedEnumerable(keySelector, null, false);
 }
 ``` 
-由於`ThenBy`會接在`OrderBy`後面，使用`OrderBy`已經建立好的`OrderedEnumerable`類別叫用`CreateOrderedEnumerable()`來更新`OrderedEnumerable`，接著我們來找找`CreateOrderedEnumerable()`做了什麼事情，在[OrderedEnumerable.cs](https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/OrderedEnumerable.cs)中找到下面的定義: 
+由於`ThenBy`會接在`OrderBy`後面，使用`OrderBy`已經建立好的`OrderedEnumerable`類別叫用`CreateOrderedEnumerable()`來更新`OrderedEnumerable`。
+
+接著我們來找找`CreateOrderedEnumerable()`做了什麼事情，在[OrderedEnumerable.cs](https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/OrderedEnumerable.cs)中找到下面的定義: 
 ```C#
 IOrderedEnumerable<TElement> IOrderedEnumerable<TElement>.CreateOrderedEnumerable<TKey>(
     Func<TElement, TKey> keySelector, 
@@ -51,14 +53,14 @@ internal OrderedEnumerable(
 }
 ```
 這個建構子有下面這些需注意的點: 
-* 跟之前介紹的方法一樣會去檢查`source`跟`keySelector`是否為空，空的話會回傳`ArgumentNull`的例外
+* 跟其他方法一樣會去檢查`source`跟`keySelector`是否為空，空的話會回傳`ArgumentNull`的例外
 * 如果沒有設定`comparer`會使用`default`的比較器
 * 是否**遞減**由參數`descending`決定
 * 紀錄是誰(`parent`)`new`了這個`OrderedEnumerable`
 
-在這邊我們發現了`OrderBy`及`ThenBy`的差別就是`ThenBy`會傳入`this`當作`parent`參數，所以`ThenBy`的動作會被**之前**的`Source`所影響。
+在這邊我們發現了`OrderBy`及`ThenBy`的差別就是`ThenBy`會傳入`this`當作`parent`參數，所以`ThenBy`的動作會被**之前**的`Source`所影響，這也是為什麼只有`ThenBy`接續增加查詢條件才會有用的原因。
 
-由上面的觀察我們可以觀察到OrderBy及ThenBy的差別就是有沒有傳入之前的`Source`進`OrderedEnumerable`，現在我們先將這個部分放一邊，單純一點的觀察排序的方式，我們前一章有提到`OrderBy`系列的方法也是延遲執行，代表它排序的時間點是在`GetEnumerator()`之後，我們先來看`GetEnumerator()`的定義: 
+由上面的程式我們可以觀察到`OrderBy`及`ThenBy`的差別就是有沒有傳入之前的`Source`進`OrderedEnumerable`，先把這點記起來，現在我們來觀察排序的方式，我們前一章有提到`OrderBy`系列的方法也是延遲執行，代表它排序的時間點是在`GetEnumerator()`之後，我們先來看`GetEnumerator()`的定義: 
 
 ```C#
 public IEnumerator<TElement> GetEnumerator()
@@ -108,7 +110,7 @@ internal override EnumerableSorter<TElement> GetEnumerableSorter(EnumerableSorte
     return sorter;
 }
 ```
-`GetEnumerableSorter()`會建立一個`EnumerableSorter`實體，這時如果有使用`ThenBy()`的話就會有_parent的資料，我們就會將目前的`Sorter`放在`_parent`的`next`，用`_parent.GetEnumerableSorter(sorter)`取得`_parent`的`Sorter`。
+`GetEnumerableSorter()`會建立一個`EnumerableSorter`實體，這時如果有使用`ThenBy()`的話就會有`_parent`的資料，我們就會將目前的`Sorter`放在`_parent`的`next`，用`_parent.GetEnumerableSorter(sorter)`取得`_parent`的`Sorter`。
 
 所以`GetEnumerableSorter()`是在取得實體化每個查詢條件的`Sorter`，並且將**第一個**(祖先)查詢條件回傳。
 
@@ -176,16 +178,61 @@ internal override int CompareAnyKeys(int index1, int index2)
     return (_descending != (c > 0)) ? 1 : -1;
 }
 ```
-* 叫用**比較器**做排序
+* 叫用之前設定的**比較器**做排序
 * 如果目前的排序相同的話，檢查是否有下一個排序條件
-* 有的話則往下一個查詢條件叫用，沒有的話則直接傳回兩個`index`的相減值，由於剛剛`map`是按照`index`排序的，所以一定會是負值，它依然會按照原本的順序輸出，所以會是**stability of sort**
+* 有的話則往下一個查詢條件叫用，沒有的話則直接傳回兩個`index`的相減值，由於剛剛`map`是按照`index`排序的，所以一定會是負值，代表它依然會按照原本的順序輸出，所以會是**stability of sort**
 * 如果有設定`_descending`，會將`comparer`的值相反
 * 回傳比較值
 
 到這裡就是整個**排序**的流程了，可以看到他們將每個步驟都**切分**，設定`Sorter`、取得`Keys`到`Comparer`完成排序都切得很乾淨，這樣的程式碼看上去真是賞心悅目，而且又學到了很多的技巧，在理解LINQ的過程中又可以增強程式能力，真是太棒了。
 
+## 測試案例賞析
+### SourceReverseOfResultNullPassedAsComparer
+```C#
+[Fact]
+public void SourceReverseOfResultNullPassedAsComparer()
+{
+    int?[] source = { 100, 30, 9, 5, 0, -50, -75, null };
+    int?[] expected = { null, -75, -50, 0, 5, 9, 30, 100 };
+
+    Assert.Equal(expected, source.OrderBy(e => e, null));
+}
+```
+* `Comparer`傳入`null`時會使用`Default`的比較器
+* `null`的元素會被排在**第一個**
+
+### SameKeysVerifySortStable
+```C#
+[Fact]
+public void SameKeysVerifySortStable()
+{
+    var source = new[]
+    {
+        new { Name = "Tim", Score = 90 },
+        new { Name = "Robert", Score = 90 },
+        new { Name = "Prakash", Score = 90 },
+        new { Name = "Jim", Score = 90 },
+        new { Name = "John", Score = 90 },
+        new { Name = "Albert", Score = 90 },
+    };
+    var expected = new[]
+    {
+        new { Name = "Tim", Score = 90 },
+        new { Name = "Robert", Score = 90 },
+        new { Name = "Prakash", Score = 90 },
+        new { Name = "Jim", Score = 90 },
+        new { Name = "John", Score = 90 },
+        new { Name = "Albert", Score = 90 },
+    };
+
+    Assert.Equal(expected, source.OrderBy(e => e.Score));
+}
+```
+* 測試排序是否為`Stable`
+* `Stable Sort`的方式在前面的原碼探索有提到，因為是用原本的`index`去相減，所以可以維持**原本的排序**
+
 ## 結語
-這裡的排序方法跟前面的方法差別比較大，所以在**原始碼分析**上花了不少的篇幅，**測試案例賞析**就留到下章再說(我絕對不是要偷懶喔XD)。
+這裡的排序方法跟前面的方法差別比較大，所以在**原始碼分析**上花了不少的篇幅，原始碼看得多後面的測試案例看起來就比較平常了，主要都是應證原始碼中分析出來的特性。
 
 ## 參考
 * [dotnet/corefx](https://github.com/dotnet/corefx)
