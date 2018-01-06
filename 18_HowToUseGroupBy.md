@@ -4,19 +4,19 @@
 
 ## 功能說明
 
-使用`GroupBy`時指定元素的屬性(欄位)就會以這個屬性做分組的處理。
+使用`GroupBy`時**指定元素的屬性**(欄位)，它就會以這個屬性做**分組**的處理。
 
 請看下面的示意圖(節錄自[Microsoft Docs](https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/grouping-data)):
 
 ![linq_group](image/18_HowToUseGroupBy/linq_group.png)
 
-我們有一個英文字的`Source`，想要把各個英文字的資料給抓出來，這時就會用到分組的處理，處理完的結果就會像示意圖上的一樣，由單個集合變成多個集合。
+我們有一個英文字集合的物件`Source`，想要把各個英文字的資料抓出來，這時就會用到分組的處理，處理完的結果就會像示意圖上的一樣，由單個集合變成多個集合。
 
 ## 方法定義
 
 `GroupBy`的方法有很多，應用於各種不同的需求上，我們現在來看看這些方法的定義及說明。
 
-方法總共有八個，因為有些方法很相近，所以我們分四組來說明，由單純到複雜的順序來介紹，下面先介紹第一組的方法:
+方法總共有**8**個，因為有些方法很相近，所以我們**分4組**來說明，由單純到複雜的順序來介紹，下面先介紹第一組的方法:
 
 ```C#
 public static IEnumerable<IGrouping<TKey, TSource>> GroupBy<TSource, TKey>(
@@ -34,11 +34,11 @@ public static IEnumerable<IGrouping<TKey, TSource>> GroupBy<TSource, TKey>(
 再來我們看到傳入參數的部分:
 
 * `keySelector`: 定義要以什麼屬性(欄位)做分組
-* `comparer`: 客製的等值比較器，這裡是比較兩個鍵值是否相同來決定要不要分同一組
+* `comparer`: 客製的等值比較器，這裡是比較兩個鍵值是否相同來決定要不要分在同一組
 
 第一組的方法是對`source`設定要分組的欄位(`keySelector`)，然後將資料以此欄位分組輸出成已分組的資料(`IGrouping<TKey, TSource>`)集合(`IEnumerable`)。
 
-而這組的兩個方法差在是否要自己設定比較器(`comparer`)，如果不設定的話就會使用預設的比較器。
+而這組的兩個方法差在是否要自己設定比較器(`comparer`)，如果不設定的話就會使用預設(`Default`)的比較器。
 
 接著我們來看第二組的方法:
 
@@ -57,7 +57,7 @@ public static IEnumerable<IGrouping<TKey, TElement>> GroupBy<TSource, TKey, TEle
 
 跟上組相同，這組的差別也是在有沒有`comparer`的參數，而這組多增加了一個`elementSelector`，這是決定你的每個元素的資料要輸出什麼，在第一組方法時並沒有這個參數，所以第一組會把每個元素的全部物件回傳，如果你只需要特定的屬性(欄位)資料的話就可以使用`elementSelector`去指定，可以想成它是對每個組別中的每個元素做`Select`的處理。
 
-上面介紹的四個方法的回傳資料都是`IGrouping`的集合，就是我沒會拿到分組的集合的的集合，會是一個兩層的集合，這是需要每個元素的詳細資料時使用的方法，但如果我只是想要拿到每個組別的統計資料呢? 使用上面的方法的話我還要再跑迴圈將每個組別的資料作統整才能得到我要的資料，是不是有點麻煩又多此一舉呢? 後面的兩組方法就是幫我們解決這樣的問題。
+上面介紹的四個方法的回傳資料都是`IGrouping`的集合，就是會拿到**分組的集合的的集合**，會是一個兩層的集合，這是需要**每個元素的詳細資料**時使用的方法，但如果我只是想要拿到每個組別的統計資料呢? 使用上面的方法的話我還要再跑迴圈將每個組別的資料作統整才能得到我要的資料，是不是有點麻煩又多此一舉呢? 後面的兩組方法就是幫我們解決這樣的問題。
 
 我們先來看第三組的方法定義:
 
@@ -79,7 +79,7 @@ public static IEnumerable<TResult> GroupBy<TSource, TKey, TResult>(
 * 回傳值變為`IEnumerable<TResult>`
 * 多了一個`resultSelector`
 
-這裡我們可以看到多了一個`resultSelector`的方法，這個方法是讓我們可以來指定每組要輸出的資料，它傳入兩個資料:
+這裡我們可以看到多了一個`resultSelector`的參數，前面兩組的方法都只能將同組的集合各別輸出，而這個方法它可以透過`resultSelector`讓我們可以來指定每組要輸出的資料，它傳入兩個資料:
 
 * `TKey`: 分組依據的屬性
 * `IEnumerable<TSource>`: 每組的集合資料
@@ -302,11 +302,11 @@ foreach (var cityInfo in result)
 
 最後一組方法則可以簡化`resultSelector`的處理，使其可以專注於它的對象資料(`age`)就好。
 
-這個例子利用了四組方法各個不同的特性，將相同的資料作輸出，雖然越後面的方法，在執行完後需要做的處理越少，但是每個方法都有適用於它的情境，就需要查詢的資料做最適當的選擇。
+這個例子利用了四組方法各個不同的特性，將相同的資料作輸出，雖然越後面的方法，在執行完後需要做的處理越少，但是每個方法都有適用於它的情境，工程師可以就需要查詢的資料做最適當的選擇。
 
 ### 比較器的應用
 
-這個例子繼續使用上面的資料，這次我想要把基偶數年齡的人分別找出來，為了這個我們需要客製自己的比較器。
+這個例子繼續使用上面的資料(`people`)，這次我想要把基偶數年齡的人分別找出來，為了這個我們需要客製自己的比較器。
 
 ```C#
 IEnumerable<IGrouping<int, string>> result = personList.GroupBy<Person, int, string>(x => x.Age, x => x.Name, new CustomComparer());
@@ -351,9 +351,9 @@ class CustomComparer : IEqualityComparer<int>
 
 * 要實作`Equals`及`GetHashCode`
 * 由`GetHashCode`取得每個元素的雜湊值，如果雜湊值相同才會交由`Equals`比對
-* `Equals`比對相同傳回`true`，反之傳回`false`
+* `Equals`比對**相同**傳回`true`，反之傳回`false`
 
-對於`IEqualityComparer`不熟的可以參考[這裡](https://github.com/peterhpchen/TDDTariningByLeetCode/blob/master/LeetCode.No40.CombinationSumII/README.md#iequalitycomparert)
+對於`IEqualityComparer`不熟的可以參考[這裡](https://github.com/peterhpchen/TDDTariningByLeetCode/blob/master/LeetCode.No40.CombinationSumII/README.md#iequalitycomparert)。
 
 ## 特別之處
 
@@ -374,7 +374,7 @@ query_body
 
 ```
 
-可以看到`query_expression`最後一定要接`query_body`，而`query_body`的最後要接`select_or_group_clause`(`query_continuation`可以不用有)，所以`select`跟`group`會是唯二可以在最後的指令。
+可以看到`query_expression`最後一定要接`query_body`，而`query_body`的最後要接`select_or_group_clause`(`query_continuation`可以不用有)，所以`select`跟`group`會是唯二可以在運算式最後的指令。
 
 ### 方法的特別之處
 
@@ -399,7 +399,7 @@ Console.WriteLine($"{groupName}: {group.Key}");
  */
 ```
 
-的確都是第一筆資料的年齡。
+的確都是基數偶數年齡的第一筆資料。
 
 ## 結語
 
