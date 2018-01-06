@@ -405,6 +405,10 @@ Console.WriteLine($"{groupName}: {group.Key}");
 
 GroupBy提供給我們很多種的用法，讓我們在某個情境下能找出最合適的方法，帶給我們的不只是便利，也讓我們驚艷能有如此絕妙的方式來做出我們認為複雜的處理，下一章我們來探索到底是怎麼做到的。
 
+## 範例程式
+
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/18_HowToUseGroupBy/demo/18_HowToUseGroupBy)
+
 ## 參考
 
 * [Microsoft Docs-query-expressions](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions)
