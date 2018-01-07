@@ -78,7 +78,7 @@ public static IEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(thi
 * *斜體字*代表上面一組有的參數，
 * **粗體字**表示這個類別多的參數
 
-看了這麼多的類別，看的都眼花撩亂了，但是其實它們都是很相似的類別，我們就挑一個最複雜的`GroupedResultEnumerable<TSource, TKey, TElement, TResult>`來看吧。
+看了這麼多的類別，看的都眼花撩亂了，但是其實它們都是很相似的類別，因此我們就挑一個最複雜的`GroupedResultEnumerable<TSource, TKey, TElement, TResult>`來看吧。
 
 ### GroupedResultEnumerable<TSource, TKey, TElement, TResult>
 
@@ -135,9 +135,9 @@ internal static Lookup<TKey, TElement> Create<TSource>(IEnumerable<TSource> sour
 
 這個`Create`方法有幾個看點:
 
-1. 新建了一個Lookup的實體
+1. 新建了一個`Lookup`的實體
     * 如果沒有設定`comparer`的話，用預設(`Default`)的比較器
-    * 新建`Grouping`的實體，預設大小為**7**
+    * 新建存放`Grouping`的陣列，預設大小為**7**
 
 ```C#
 private Lookup(IEqualityComparer<TKey> comparer)
@@ -182,7 +182,7 @@ internal Grouping<TKey, TElement> GetGrouping(TKey key, bool create)
 }
 ```
 
-2. `create==false`: 取得目前`_groupings`中相同鍵值的`grouping`回傳，如果在`_groupings`中找不到的話同鍵值的`grouping`就回傳`null`
+2. `create==false`: 取得目前`_groupings`中相同鍵值的`grouping`回傳，如果在`_groupings`中找不到相同鍵值的`grouping`就回傳`null`
     1. 比對是否已有相同鍵值的`grouping`存在
     1. 比對方式: 先比對`hashCode`，`hashCode`相同再用`Equals`比對
     1. 有相同鍵值的`grouping`則回傳此`grouping`
@@ -206,9 +206,9 @@ internal Grouping<TKey, TElement> GetGrouping(TKey key, bool create)
 ```
 
 3. `create==true`: 在新增模式下如果第二步沒有找到相應的`grouping`的話，則新增一個
-    1. 判斷是否為新增模式
+    1. 判斷是否為**新增模式**
     1. 新增此鍵值的`Grouping`
-    1. 加進`_groupings`中，讓之後的查找找的到
+    1. 加進`_groupings`中，讓之後的查找找得到
     1. 回傳`grouping`
 
 ```C#
@@ -247,11 +247,13 @@ internal Grouping<TKey, TElement> GetGrouping(TKey key, bool create)
 }
 ```
 
+這裡我們會發現`index`的取法是`hashCode % _groupings.Length`，還記得剛剛`_groupings`的預設大小是**7**嗎? 這裡它利用`hashCode`對陣列長度的餘數來放進對應的位置裡，這樣我就不用`new`一個很大的陣列來存放各個`HashCode`的`Grouping`，也不用說每次都要全部查找才能找到對應的`Grouping`，是一個解決的好方法。
+
 執行完`GetGrouping()`後我們得到了一個`Grouping`的物件，這裡面可能已經有元素，因為之前的元素可能跟目前的元素有相同的鍵值，接下來要把目前的元素加到這個`Grouping`裡面，所以叫用了`Grouping`的`Add`方法。
 
 現在`Lookup.Create()`的工作完成了，它把每個元素放進了它該待的`Grouping`中，然後傳回給`GroupedResultEnumerable`。
 
-還記得上面有說`GroupedResultEnumerable`是四種`Enumerable`中最複雜的嗎? 其實介紹到這裡，我們已經把`GroupedEnumerable`要做的事給說完，因為`GroupedEnumerable`比`GroupedResultEnumerable`還要少了**彙整組內資料**的處理，所以`GroupedEnumerable`其實在分完`Grouping`後就已經完成了，那就在這裡先來看看`GetEnumerator()`是怎麼處理分組資料的:
+還記得上面有說`GroupedResultEnumerable`是四種`Enumerable`中最複雜的嗎? 其實介紹到這裡，我們已經把另一個叫`GroupedEnumerable`的類別要做的事給說完了，因為`GroupedEnumerable`比`GroupedResultEnumerable`少了**彙整組內資料**的處理，所以`GroupedEnumerable`其實在分完`Grouping`後就已經完成了，那就在這裡先來看看`GetEnumerator()`是怎麼處理分組資料的:
 
 ```C#
 public IEnumerator<IGrouping<TKey, TElement>> GetEnumerator()
