@@ -1,5 +1,7 @@
 # 2018 iT邦幫忙鐵人賽
+
 ## 深入探索LINQ
+
 1. [踏上探索的旅途: 前言](01_Preface.md)
 1. [探索的準備: 使用工具及資源說明](02_Prepare.md)
 1. [每個.NET工程師都要有的一隻箭: LINQPad介紹](03_LINQPad.md)
@@ -18,6 +20,7 @@
 1. [LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用](16_HowToUseOrderBy.md)
 1. [OrderBy的原碼探索](17_InsideOfOrderBy.md)
 1. [GroupBy的應用](18_HowToUseGroupBy.md)
+1. [GroupBy的原碼探索](19_InsideOfGroupBy.md)
 1. Join的應用
 1. Join的原理
 1. Skip的應用
