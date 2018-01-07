@@ -21,7 +21,7 @@
 1. [OrderBy的原碼探索](17_InsideOfOrderBy.md)
 1. [GroupBy的應用](18_HowToUseGroupBy.md)
 1. [GroupBy的原碼探索](19_InsideOfGroupBy.md)
-1. Join的應用
+1. [Join的應用](20_HowToUseJoin.md)
 1. Join的原理
 1. Skip的應用
 1. Skip的原理
