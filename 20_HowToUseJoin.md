@@ -6,7 +6,7 @@
 
 ## 功能說明
 
-設定`Outer`及`Inner`兩個資料型別物件，再將兩個型別中對應對方的屬性訂出來，最後決定輸出的資料結構，取得目標資料。
+設定`Outer`及`Inner`兩個資料型別物件，再將兩個型別中對應**對方的屬性**訂出來，最後決定輸出的資料結構，取得目標資料。
 
 ## 方法定義
 
@@ -36,7 +36,7 @@ public static IEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(
 * `outerKeySelector`: 跟`inner`有關聯的屬性
 * `innerKeySelector`: 跟`outer`有關聯的屬性
 * `resultSelector`: 目標資料
-* `comparer`: `inner`跟`outer`關聯屬性的等值比較器
+* `comparer`: `inner`跟`outer`關聯屬性的**等值比較器**
 
 我們用剛剛提到的**人**跟**電話**的例子來看，**我們要找到某個人的電話**，可以畫成下面的這張圖:
 
@@ -54,7 +54,7 @@ join_clause
     ;
 ```
 
-這個定義看不出個所以然，那我們用Northwind裡的資料來寫個例子:
+這個定義看不出個所以然，那我們用`Northwind`裡的資料來寫個例子:
 
 > 找出所有有訂單的客戶聯絡人姓名
 
@@ -166,7 +166,7 @@ foreach (var result in results)
 
 ### Join是Inner Join
 
-我們將Person及Phone的資料各拿掉一個，會是互相有對應到的資料才會輸出。
+我們將`Person`及`Phone`的資料各拿掉一個，會是互相有對應到的資料才會輸出。
 
 ```C#
 Phone[] phones = new Phone[] { num1, num2, num3, num4, num5 };
@@ -248,6 +248,9 @@ class CustomComparer : IEqualityComparer<Person>
 ## 結語
 
 `Join`因為是Inner Join，所以對於要拿取的資料來說，inner及outer是沒有差別的，但是剛剛提到的排序就會有差別，如果對排序有需求的資料還是要小心使用。
+
+## 範例程式
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/20_HowToUseJoin/demo/20_HowToUseJoin)
 
 ## 參考
 
