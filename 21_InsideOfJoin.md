@@ -55,7 +55,12 @@ private static IEnumerable<TResult> JoinIterator<TOuter, TInner, TKey, TResult>(
 
 這裡也可以看出因為外層是巡覽`outer`，`outer`找到`inner`後才依序輸出`outer`跟`inner`的資料，所以資料排序會是`outer`後才是`inner`。
 
-最後這段實作告訴我們`Join`這個方法確實是**Inner Join**的實作。
+最後這段實作告訴我們`Join`這個方法確實是**Inner Join**的實作，原因可以從`inner`跟`outer`取值的方式知道:
+
+* `inner`依鍵值分組
+* `outer`依`inner`組別取得對應的資料
+
+從取值的方式可以知道其中一方沒有值是都不會成為結果的。
 
 ## 測試案例賞析
 
