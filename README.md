@@ -23,6 +23,7 @@
 1. [GroupBy的原碼探索](19_InsideOfGroupBy.md)
 1. [Join的應用](20_HowToUseJoin.md)
 1. [Join的原碼探索](21_InsideOfJoin.md)
+1. [GroupJoin的應用](22_HowToUseGroupJoin.md)
 1. Skip的應用
 1. Skip的原理
 1. Aggregation的應用
