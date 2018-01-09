@@ -1,3 +1,5 @@
 demo/**/bin
 demo/**/obj
+
 demo/**/.vscode
+**/.vscode
