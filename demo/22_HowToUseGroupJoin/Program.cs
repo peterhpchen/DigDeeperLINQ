@@ -29,27 +29,109 @@ namespace _22_HowToUseGroupJoin
             Phone num4 = new Phone() { PhoneNumber = "04-5555555", Person = May };
             Phone num5 = new Phone() { PhoneNumber = "05-5555555", Person = Peter };
 
-            Phone[] phones = new Phone[] { num1, num2, num3, 
-            //num4, 
+            Phone[] phones = new Phone[] { num1, num2, num3,
+            num4,
             num5 };
-            Person[] persons = new Person[] { Peter, Sunny, 
-            //Tim, May 
+            Person[] persons = new Person[] { Peter, Sunny,
+            Tim, May
             };
 
-            simpleTest(phones, persons);
+            //joingroup(phones, persons);
+            groupjoin(phones, persons);
+            //leftjoin(phones, persons);
+            //innerjoin(phones, persons);
+
         }
 
-        private static void simpleTest(Phone[] phones, Person[] persons)
+        private static void innerjoin(Phone[] phones, Person[] persons)
         {
-            var results = persons.GroupJoin(
+            var results = persons.Join(
                 phones,
                 person => person,
                 phone => phone.Person,
-                (person, phoneEnum) => new { name = person.Name, phoneNumber = string.Join(',', phoneEnum.Select(x => x.PhoneNumber)) });
+                (person, phone) =>
+                    new
+                    {
+                        person.Name,
+                        phone.PhoneNumber
+                    }
+            );
 
             foreach (var result in results)
             {
-                Console.WriteLine($"{result.name}: {result.phoneNumber}");
+                Console.WriteLine($"{result.Name}: {result.PhoneNumber}");
+            }
+            Console.WriteLine();
+        }
+
+        private static void joingroup(Phone[] phones, Person[] persons)
+        {
+            var results = persons.Join(
+                phones,
+                person => person,
+                phone => phone.Person,
+                (person, phone) => new { person.Name, phone.PhoneNumber })
+                .GroupBy(x => x.Name,
+                    (name, data) => new
+                    {
+                        Name = name,
+                        PhoneNumber = string.Join(',', data.Select(x => x.PhoneNumber))
+                    });
+
+            foreach (var result in results)
+            {
+                Console.WriteLine($"{result.Name}: {result.PhoneNumber}");
+            }
+            Console.WriteLine();
+        }
+
+        private static void groupjoin(Phone[] phones, Person[] persons)
+        {
+            var results = from person in persons
+                            join phone in phones on person equals phone.Person into ppGroup
+                            select new {person.Name, PhoneNumber= string.Join(',', ppGroup.Select(x => x.PhoneNumber))};
+                //persons.GroupJoin(
+                //    phones,
+                //    person => person,
+                //    phone => phone.Person,
+                //    (person, phoneEnum) =>
+                //        new
+                //        {
+                //            person.Name,
+                //            PhoneNumber = string.Join(',', phoneEnum.Select(x => x.PhoneNumber))
+                //        }
+                //)
+                ;
+
+            foreach (var result in results)
+            {
+                Console.WriteLine($"{result.Name}: {result.PhoneNumber}");
+            }
+            Console.WriteLine();
+        }
+
+        private static void leftjoin(Phone[] phones, Person[] persons)
+        {
+            var results = from person in persons
+                            join phone in phones on person equals phone.Person into ppGroup
+                            from item in ppGroup.DefaultIfEmpty(new Phone() { Person = null, PhoneNumber = ""})
+                            select new {name = person.Name, phone = item};
+                // persons.GroupJoin(
+                // phones,
+                // person => person,
+                // phone => phone.Person,
+                // (person, phoneEnum) => new
+                // {
+                //     name = person.Name,
+                //     phones = phoneEnum.DefaultIfEmpty()
+                // })
+                // .SelectMany(x => x.phones.Select(phone => new { name = x.name, phone = phone }))
+                //;
+
+            foreach (var result in results)
+            {
+                var phoneNnum = result.phone == null ? "" : result.phone.PhoneNumber;
+                Console.WriteLine($"{result.name}: {phoneNnum}");
             }
             Console.WriteLine();
         }
