@@ -1,6 +1,8 @@
 # GroupJoin的應用
 
-今天我們來看`GroupBy`跟`Join`的合體`GroupJoin`，一般資料表都會是一對多的關聯設計，很少會有一對一、多對多的情況出現，所以當我們`Join`完兩個資料時，我們得到的結果會是一邊的資料有重複的情形，例如有個人有兩筆電話號碼，當我們`Join`人跟電話的資料時，這個人的資料就會出現兩筆，造成我們的資料處理上的困難，`GroupJoin`就是讓你在`Join`時就可以做彙整資料的作業，增加便利性。
+今天我們來看`GroupBy`跟`Join`的合體`GroupJoin`，一般資料表都會是一對多的關聯設計，很少會有一對一、多對多的情況出現，所以當我們`Join`完兩個資料時，我們得到的結果會是一邊的資料有**重複**的情形。
+
+例如有個人有兩筆電話號碼，當我們`Join`人跟電話的資料時，這個人的資料就會出現**兩筆**，造成我們的資料處理上的困難，`GroupJoin`就是讓你在`Join`時就可以做彙整資料的作業，增加便利性。
 
 ## 功能說明
 
@@ -27,7 +29,9 @@ public static IEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(
     IEqualityComparer<TKey> comparer);
 ```
 
-仔細看`GroupJoin`跟`Join`只差在`resultSelector`，而在講這個`resultSelector`前，來喚醒一下對`GroupBy`的`resultSelector`的記憶，他會將每個鍵值及其資料傳入`resultSelector`，讓每個鍵值資料可以彙整回傳。
+仔細看`GroupJoin`的方法定義後，我們來跟`Join`比較，發現它們只差在`resultSelector`。
+
+而在講這個`resultSelector`前，先來喚醒大家對`GroupBy`的`resultSelector`的記憶，`GroupBy`的`resultSelector`會將每個**鍵值**及其**資料**傳入`resultSelector`，讓每個鍵值資料可以**彙整**回傳。
 
 複習完`GroupBy`的`resultSelector`後，`GroupJoin`的也是跟其相似的，它是將`outer`對應的`inner`資料的集合跟著`outer`一起傳入`resultSelector`，這樣你就可以做彙整的動作。
 
@@ -41,7 +45,7 @@ join_into_clause
     ;
 ```
 
-這個`into`的後面是接一個要在`select`中使用`inner`的別名，`inner`在查詢運算式中就是`join`後面定義的物件，現在我們來看一下轉換的公式:
+這個`into`的後面是接一個要在`select`中使用`inner`的別名，`inner`在查詢**運算式**中就是`join`後面定義的物件，現在我們來看一下轉換的公式:
 
 下面這段查詢運算式:
 
@@ -61,9 +65,9 @@ select v
 
 ## 方法範例
 
-這裡我們使用跟Join範例相同的物件及資料。
+這裡我們使用跟`Join`範例相同的物件及資料。
 
-下面是人跟電話的物件，電話上有個人的物件藉此跟人關聯:
+下面是**人**跟**電話**的物件，電話上有個人的物件藉此跟人關聯:
 
 ```C#
 class Person
@@ -97,7 +101,7 @@ Phone num5 = new Phone() { PhoneNumber = "05-5555555", Person = Peter };
 
 ### 跟Join的比較
 
-**題目**: 取得每個人的電話，如有多筆用逗號(,)隔開。
+**題目**: 取得每個人的電話，如有多筆用逗號(`,`)隔開。
 
 **答案**如下:
 
@@ -112,7 +116,7 @@ Phone num5 = new Phone() { PhoneNumber = "05-5555555", Person = Peter };
  */
 ```
 
-1. 用Join及GroupBy實作
+1. 用`Join`及`GroupBy`實作
 
 ```C#
 var results = persons.Join(
@@ -126,7 +130,7 @@ var results = persons.Join(
             PhoneNumber = string.Join(',', data.Select(x => x.PhoneNumber)) });
 ```
 
-2. 用GroupBy實作
+2. 用`GroupBy`實作
 
 ```C#
 var results = persons.GroupJoin(
@@ -145,8 +149,12 @@ var results = persons.GroupJoin(
 
 * 因為`Join`出來的資料是沒有分組的，所以需要再用`GroupBy`做分組
 * 兩個最大的差別在於`resultSelector`的**第二個**傳入參數
-    * `Join`是傳入此`outer`鍵值對應的其中一個`inner`的資料
-    * `GroupJoin`是傳入此`outer`鍵值對應的所有`inner`的集合
+    * `Join`是傳入此`outer`鍵值對應的其中一個`inner`的**資料**
+    * `GroupJoin`是傳入此`outer`鍵值對應的所有`inner`的**集合**
+
+因為`GroupJoin`的`resultSelector`可以拿到**集合**的資料，所以他可以做**彙整**的動作。
+
+而`Join`只拿的到單筆資料，也就沒辦法做彙整了。
 
 ### Left Join
 
@@ -203,14 +211,14 @@ var results = persons.GroupJoin(
  */
 ```
 
-* `DefaultIfEmpty`: 如果空的話回傳預設資料，讓此筆資料不會因為沒有電話資料而被刪掉
-* `SelectMany`: `phones`傳回來的是`phone`的集合，所以要用`SelectMany`把他打平
+* `DefaultIfEmpty`: 如果空的話回傳**預設資料**，讓此筆資料不會因為沒有電話資料而被刪掉
+* `SelectMany`: `phones`傳回來的是`phone`的集合，所以要用`SelectMany`把他**打平**
 
 ### 查詢運算式
 
 **題目**: 使用查詢運算式取得資料。
 
-1. 一個人一筆資料
+1. 一個人一筆資料(有做**彙整**)
 
 ```C#
 var results = from person in persons
@@ -227,7 +235,7 @@ var results = from person in persons
  */
 ```
 
-2. 每筆電話都一筆資料，沒有電話的人也要顯示名稱(Left Join)
+2. 每筆電話都一筆資料，沒有電話的人也要顯示名稱(**Left Join**)
 
 ```C#
 var results = from person in persons
@@ -256,6 +264,8 @@ var results = from person in persons
 `GroupJoin`的特性就像是`Join`跟`GroupBy`的合併，前半段作`Join`合併資料，後半段做`GroupBy`將相同鍵值的資料做彙整，下一章來看看`GroupJoin`是怎麼做到的。
 
 ## 範例程式
+
+[GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/22_HowToUseGroupJoin/demo/22_HowToUseGroupJoin)
 
 ## 參考
 
