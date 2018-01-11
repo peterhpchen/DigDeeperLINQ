@@ -111,6 +111,10 @@ Console.WriteLine(output);
 * `Skip`或`SkipLast`指定的`count`數量**小於等於**零，則傳回**完整**的集合
 * `SkipWhile`的`predicate`對所有元素都傳回`true`，則回傳**空**集合
 
+## 範例程式
+
+* [GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/master/demo/24_HowToUseSkip)
+
 ## 參考
 
 * [Microsoft Docs-Linq Partitioning Data](https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/partitioning-data)
