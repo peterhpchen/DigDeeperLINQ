@@ -1,6 +1,6 @@
 # GroupJoin的原碼探索
 
-今天要來看`GroupJoin`的內部實作，知道`GroupJoin`的使用方式後，我就想過它的實作可能跟`Join`很相似: 因為`GroupJoin`主要還是做`Join`的動作，只是最後加了個`resultSeletor`讓它可以對每個鍵值做彙整，現在來看看是不是真的是這樣吧。
+今天要來看`GroupJoin`的內部實作，知道`GroupJoin`的使用方式後，應該不難猜出它的實作可能跟`Join`很相似: 因為`GroupJoin`主要還是做`Join`的動作，只是最後加了個`resultSeletor`讓它可以對每個鍵值做**彙整**，現在來看看是不是真的是這樣吧。
 
 ## 原始碼分析
 
@@ -8,8 +8,10 @@
 
 如往常一樣，我們來看一下`GroupJoin`的公開方法，再一次的如同之前`Join`的原始碼，這裡只做了兩件事:
 
-* 檢查傳入參數是否為空，如果是空的拋出`ArgumentNull`例外
+* **檢查傳入參數**是否為空，如果是空的拋出`ArgumentNull`例外
 * 所有參數皆合法的話叫用`GroupJoinIterator`取得`Iterator`之後回傳
+
+其實在*System.Linq*專案中的公開方法都是這樣做處理的，只有做檢查參數的動作，接著就丟給其他**Method**做事，以後如果沒有其他特別的處理，都會像上面一樣用文字說明，就不再貼原始碼了。
 
 接著我們來看一下`GroupJoinIterator`的實作:
 
@@ -38,15 +40,14 @@ private static IEnumerable<TResult> GroupJoinIterator<TOuter, TInner, TKey, TRes
 }
 ```
 
-這邊可以看到跟`JoinIterator`很像的實作，差別在於下面三點:
+這邊可以看到跟`JoinIterator`很像的實作，差別在於下面兩點:
 
 * 未檢查`inner`是否有值就叫傳入`resultSelector`作結果輸出
 * 沒有對`inner`再做一次迴圈，而是直接把整包`inner`丟給`resultSelector`
-* `yield return`時叫用了`resultSelector`
 
-第一點是`GroupJoin`是**Left Join**的原因，在沒有`inner`資料的情況下還是會做`yield return`，就算只有`outer`的資料也可以回傳。
+第一點是`GroupJoin`是**Left Join**的原因，在沒有`inner`資料的情況下還是會執行`yield return`，就算只有`outer`的資料也可以回傳。
 
-第二及第三點是`GroupJoin`可以**彙整**資料的原因，因為沒有做迴圈，所以丟給`resultSelector`的是`inner`的**集合**資料，所以可以用集合資料來做**彙整**。
+第二點是`GroupJoin`可以**彙整**資料的原因，因為沒有做迴圈，所以丟給`resultSelector`的是`inner`的**集合**資料，所以可以用集合資料來做**彙整**。
 
 ## 測試案例賞析
 
@@ -99,7 +100,7 @@ public void SelectorsReturnNull()
 
 ## 結語
 
-這次賞析的`GroupJoin`跟`Join`大同小異，最大的差別就在於`GroupJoin`可以不用`inner`的資料也可以輸出，造成`GroupJoin`是**Left Join**，另外也因為`GroupJoin`沒有再作迴圈巡覽`inner`就輸出給`resultSeletor`做處理，所以可以直接**彙整**每個鍵值的資料，跟`Join`在用途及情境上就有差異了。
+這次賞析的`GroupJoin`跟`Join`大同小異，最大的差別就在於`GroupJoin`可以不用`inner`的資料也可以輸出，這也是造成`GroupJoin`是**Left Join**的原因，另外也因為`GroupJoin`沒有再做迴圈巡覽`inner`就輸出給`resultSeletor`做處理，所以可以直接**彙整**每個鍵值的資料，跟`Join`在用途及情境上就有差異了。
 
 ## 參考
 
