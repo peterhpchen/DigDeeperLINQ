@@ -1,6 +1,6 @@
 # Skip的原碼探索
 
-本章會說明及分析`Skip`、`SkipLast`、`SkipWhile`三個方法的**原始碼實作**及**測試案例**的欣賞。
+本章會說明及分析`Skip`、`SkipLast`、`SkipWhile`三個方法的**原始碼實作**及**測試案例欣賞**。
 
 ## 原始碼分析
 
@@ -52,7 +52,7 @@ public static IEnumerable<TSource> Skip<TSource>(this IEnumerable<TSource> sourc
 * 如果是`IList`就用`ListPartition`實作
 * 其餘的叫用`EnumerablePartition`實作
 
-想要`Enumerable`就會想到`MoveNext()`，所以接下來會介紹`ListPartition`跟`EnumerablePartition`的定義及`MoveNext()`。
+看到`Enumerable`就會想到`MoveNext()`，所以接下來會介紹`ListPartition`跟`EnumerablePartition`的定義及`MoveNext()`。
 
 #### ListPartition
 
@@ -88,12 +88,12 @@ public override bool MoveNext()
 上面的程式有幾個重點:
 
 * `_state`當作索引，初始值是`1`，所以`index = _state - 1`
-* 這裡的`index`是`_minIndexInclusive`起算，可以想成`_minIndexInclusive`是個起點，而`index`則是由這個**起點數來第幾個**
+* 這裡要輸出的元素是由`_minIndexInclusive`起算，可以想成`_minIndexInclusive`是個起點，而`index`則是由這個**起點數來第幾個**的變數
 * 判斷`index`有沒有超出**最大索引值**及**集合數量**
 * 如果超出則`return false`，結束迭代
 * 如果沒有超出，則把目前的元素附給`_current`，然後`_state`加**1**，回傳`true`
 
-這裡我們注意到一件事，因為`_maxIndexInclusive`的用法是`index <= _maxIndexInclusive - _minIndexInclusive`，所以只要把`_maxIndexInclusive`設為`int.MaxValue`，`_maxIndexInclusive`就不會影響判斷，因此Skip才會將其設為`int.MaxValue`。
+這裡我們注意到一件事，因為`_maxIndexInclusive`的用法是`index <= _maxIndexInclusive - _minIndexInclusive`，所以只要把`_maxIndexInclusive`設為`int.MaxValue`，`_maxIndexInclusive`就不會影響判斷，因此`Skip`才會將其設為`int.MaxValue`。
 
 #### EnumerablePartition
 
@@ -101,11 +101,11 @@ public override bool MoveNext()
 internal EnumerablePartition(IEnumerable<TSource> source, int minIndexInclusive, int maxIndexInclusive);
 ```
 
-傳入一個`IEnumerable`，設好**第一個**元素的**最後個**元素的`index`，他會把這區間內的元素集合輸出。
+傳入一個`IEnumerable`，設好**第一個**元素及**最後個**元素的`index`，他會把這區間內的元素集合輸出。
 
-如果只要忽略前面的元素的話只需要設定`minIndexInclusive`，`maxIndexInclusive`設為`-1`就好。
+如果只要忽略由第一個數來第N個元素的話只需要設定`minIndexInclusive`，`maxIndexInclusive`設為`-1`就好。
 
-這裡有一個地方跟`ListPartition`不同，只要忽略前面的元素時`maxIndexInclusive`的設定一個是`int.MaxValue`，一個是`-1`，我們等下從實作上看為什麼會不同。
+這裡有一個地方跟`ListPartition`不同，只要**忽略前面的元素**時`maxIndexInclusive`的設定一個是`int.MaxValue`，一個是`-1`，我們等下從實作上看為什麼會不同。
 
 下面是`MoveNext()`的實作:
 
@@ -163,7 +163,7 @@ public override bool MoveNext()
 * 這裡的`_state`回歸原本的用法: **狀態的設置**
 * `_state=1`: 初始`_source`，轉為`Enumerator`
 * `_state=2`: 判斷設置的`minIndexInclusive`是否**超過集合總長度**並且將`_enumerator`的`_current`推至`minIndexInclusive`的位置
-* `_state=3`: 判斷是否超過**最大長度**，沒有的話將`_current`往後**再推一個至目標位置**
+* `_state=3`: 判斷是否超過**最大長度**，沒有的話將`_current`往後**再推一個至目標位置**然後傳回**true**
 
 我們可以在`HasLimit`找到為什麼`maxIndexInclusive`要設`-1`:
 
@@ -216,11 +216,11 @@ private static IEnumerable<TSource> SkipLastIterator<TSource>(IEnumerable<TSourc
 `SkipLast`是用`yield return`實作，有下面幾個重點:
 
 * 維護一個`Queue`，用來存放集合的元素
-* 叫用`MoveNext()`將`Queue`的元素數量塞到跟要`Skip`的數量一樣為止
-* 當Queue的元素數量跟要Skip的數量相同時，做以下動作
-    * 從Queue裡抓出第一個元素做`yield return`
-    * 將目前的元素在塞到Queue裡
-    * 叫用`MoveNext()`做下一輪的判斷
+* 叫用`MoveNext()`將`Queue`的元素數量塞到跟要`Skip`的元素數量一樣為止
+* 當Queue的元素數量跟要`Skip`的數量相同時，做以下動作
+    1. 從Queue裡抓出第一個元素做`yield return`
+    1. 將目前的元素在塞到Queue裡
+    1. 叫用`MoveNext()`做下一輪的判斷
 
 第三點的處理會讓Queue裡一直保持最後`count`數的元素，代表到巡覽結束時在Queue中的元素就不會被輸出，所以就可以做到最後`count`數的元素`Skip`的處理。
 
