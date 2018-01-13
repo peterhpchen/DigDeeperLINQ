@@ -60,7 +60,7 @@ public static IEnumerable<TSource> Skip<TSource>(this IEnumerable<TSource> sourc
 public ListPartition(IList<TSource> source, int minIndexInclusive, int maxIndexInclusive);
 ```
 
-傳入一個`List`，設好**第一個**元素的**最後個**元素的`index`，他會把這區間內的元素集合輸出。
+傳入一個`List`，設好**第一個**元素及**最後個**元素的`index`，他會把這區間內的元素集合輸出。
 
 這裡要注意的是如果只要忽略前面的元素的話只需要設定`minIndexInclusive`，`maxIndexInclusive`設為`int.MaxValue`就好。
 
