@@ -16,7 +16,7 @@
 
 * `Skip`: 由集合的第一個元素開始記數，到達指定的數量為止的元素都忽略不算在結果集合中
 * `SkipLast`: 由集合的最後個元素往前記數，到達指定的數量為止的元素都忽略不算在結果集合中
-* `SkipWhile`: 集合中符合條件的元素忽略，其餘的元素傳回結果集合中
+* `SkipWhile`: 集合中符合條件的元素忽略，碰到第一個不符合條件的元素及其之後的元素都回傳
 
 看完上面的例子應該會比較清楚三個`Skip`的差別，接著我們依序來看方法定義。
 
@@ -56,10 +56,10 @@ public static IEnumerable<TSource> SkipWhile<TSource>(
     Func<TSource, int, bool> predicate);
 ```
 
-* `predicate`: 判斷式，如果符合判斷是傳回`true`的話則忽略此元素，反之`false`的話則保留
+* `predicate`: 判斷式，如果符合判斷是傳回`true`的話則忽略此元素，反之遇到`false`條件後的所有元素都保留
 * 第二個方法`predicate`多傳入`index`參數為元素的**位置**
 
-`SkipWhile`是回傳**不符合**`predicate`條件的元素集合。
+`SkipWhile`是回傳**不符合**`predicate`條件的**元素及其後的所有的元素**。
 
 ## 方法範例
 
