@@ -26,7 +26,7 @@
 1. [GroupJoin的應用](22_HowToUseGroupJoin.md)
 1. [GroupJoin的原碼探索](23_InsideOfGroupJoin.md)
 1. [Skip的應用](24_HowToUseSkip.md)
-1. Skip的原理
+1. [Skip的原碼探索](25_InsideOfSkip.md)
 1. Aggregation的應用
 1. Aggregation的原理
 1. Distinct的應用
