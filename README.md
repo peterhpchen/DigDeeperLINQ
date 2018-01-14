@@ -28,6 +28,7 @@
 1. [Skip的應用](24_HowToUseSkip.md)
 1. [Skip的原碼探索](25_InsideOfSkip.md)
 1. [Take的應用](26_HowToUseTake.md)
+1. [Take的原碼探索](27_InsideOfTake.md)
 1. Aggregation的應用
 1. Aggregation的原理
 1. Distinct的應用
