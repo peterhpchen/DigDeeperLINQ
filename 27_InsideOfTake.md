@@ -31,16 +31,16 @@ public static IEnumerable<TSource> Take<TSource>(this IEnumerable<TSource> sourc
 }
 ```
 
-前面檢查傳入參數是否合法的部分用...代替，剩下的是真正做事的地方，這裡會做下面幾件事:
+前面檢查傳入參數是否合法的部分用`...`代替，剩下的是真正做事的地方，這裡會做下面幾件事:
 
 * 如果已經是`IPartition`的類別，直接叫用之前設定的`Take`
 * 如果是`IList`，叫用`ListPartition`
 * 上述皆不符合的話就叫用`EnumerablePartition`
 
-這裡我們把焦點方到`Skip`中有出現的`ListPartition`跟`EnumerablePartition`上，它們的傳入index跟Skip剛好相反:
+這裡我們把焦點放到`Skip`中有出現的`ListPartition`跟`EnumerablePartition`上，它們傳入的`index`跟`Skip`剛好相反:
 
-* `minIndexInclusive`: 設為`0`，代表從第一個元素開始取
-* `maxIndexInclusive`: 設為`count - 1`，因為要從索引值為`0`開始取，所以最後一個元素應該要`count - 1`
+* `minIndexInclusive`: 設為`0`，代表從**第一個元素**開始取
+* `maxIndexInclusive`: 設為`count - 1`，因為要從索引值`0`開始取，所以**最後一個元素**應該要`count - 1`
 
 這邊看出`Skip`跟`Take`的**互補**關係，`Take`從`0`到`count - 1`，`Skip`從`count`到**最後個**元素，所以兩個合併就會是原本的集合。
 
@@ -98,13 +98,13 @@ private static IEnumerable<TSource> TakeLastIterator<TSource>(IEnumerable<TSourc
 
 這段程式我們可以知道:
 
-* 建立一個Queue存放結果集合
-* 巡覽將Queue給填滿
-* 填滿後，如果集合還沒巡覽結束，則將Queue中的第一個元素丟出，再將目前的元素放入
+* 建立一個**Queue**存放結果集合
+* 巡覽將**Queue**給填滿至`count`的數量
+* 填滿後，如果集合還沒巡覽結束，則將**Queue**中的第一個元素丟出，再將目前的元素放入
 * 重複丟出放入直到集合巡覽結束
 * 將Queue中的元素回傳
 
-這裡跟`Skip`同樣都是用Queue來實作，可是用法卻差很多，`Skip`**不回傳Queue中的元素**，反之`Take`卻是**只回傳Queue中的元素**。
+這裡跟`Skip`同樣都是用**Queue**來實作，可是用法卻差很多，`Skip`**不回傳Queue中的元素**，反之`Take`卻是**只回傳Queue中的元素**。
 
 ## TakeWhile
 
@@ -113,7 +113,7 @@ private static IEnumerable<TSource> TakeLastIterator<TSource>(IEnumerable<TSourc
 * 判斷傳入參數是否為空，如果空的話拋出`ArgumentNull`的例外
 * 傳入參數合法的話則叫用`TakeWhileIterator`
 
-接下來我們來看看`TakeWhileIterator`，他有兩個方法，差別在於`predicate`有沒有傳入`index`參數，我們直接來看有index參數的方法:
+接下來我們來看看`TakeWhileIterator`，他有兩個方法，差別在於`predicate`有沒有傳入`index`參數，我們直接來看有`index`參數的方法:
 
 ```C#
 private static IEnumerable<TSource> TakeWhileIterator<TSource>(IEnumerable<TSource> source, Func<TSource, int, bool> predicate)
@@ -136,9 +136,9 @@ private static IEnumerable<TSource> TakeWhileIterator<TSource>(IEnumerable<TSour
 }
 ```
 
-* 每次跳至下一個元素，index就加1
+* 每次跳至下一個元素，`index`就加**1**
 * 如果符合`predicate`的判斷，就回傳這個元素
-* 如果遇到不符合`predicate`的元素，則直接結束巡覽
+* 如果遇到不符合`predicate`的元素，則**直接結束巡覽**
 
 ## 測試案例賞析
 
@@ -163,7 +163,7 @@ public void SourceNonEmptyPredicateTrueSomeFalseSecond()
 
 ## 結語
 
-這次觀看的Take中跟Skip的相似之處有很多，但是也有不同且特別的部分，從Skip跟Take的原始碼中我覺得收穫最多的就是Queue的運用，利用Queue暫緩回傳時機，可以使回傳的資料有更多的彈性，以後有相關需求時希望可以用上。
+這次觀看的`Take`中跟`Skip`的相似之處有很多，但是也有不同且特別的部分，從`Skip`跟`Take`的原始碼中我覺得收穫最多的就是`Queue`的運用，利用`Queue`暫緩回傳時機，可以使回傳的資料有更多的彈性。
 
 ## 參考
 
