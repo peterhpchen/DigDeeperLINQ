@@ -19,7 +19,7 @@
 
 ## 方法定義
 
-Aggregate有三個公開方法，我們由單純到複雜來說明:
+`Aggregate`有**三個公開方法**，我們由單純到複雜來說明:
 
 ### 第一個方法
 
@@ -30,11 +30,11 @@ public static TSource Aggregate<TSource>(
 ```
 
 * `func`: 彙整資料所做的處理函式
-* `func`第一個傳入參數: 之前元素彙整結果
+* `func`第一個傳入參數: 之前元素的彙整結果
 * `func`第二個傳入參數: 目前元素的資料
 * `func`的回傳值: 之前元素跟目前元素的彙整結果
 
-由此可以看出來Aggregate這個方法其實就是把之前元素的彙整資料跟目前的元素做彙整，在將目前彙整的結果丟到下一個元素再做彙整，最後就會得到一個彙整的結果。
+由此可以看出來`Aggregate`這個方法其實就是把**之前元素的彙整資料跟目前的元素做彙整**，再將目前彙整的結果丟到下一個元素再做彙整，最後就會得到一個彙整的結果。
 
 ### 第二個方法
 
@@ -48,7 +48,7 @@ public static TAccumulate Aggregate<TSource, TAccumulate>(
 * `seed`: 初始的累加值
 * `func`: 彙整資料所做的處理函式
 
-這個方法多了一個`seed`參數，他是自定義的初始值，這個值會傳入`func`中，變為第一個func執行的傳入參數，以用來做彙整。
+這個方法多了一個`seed`參數，他是**自定義的初始值**，這個值會傳入`func`中，變為第一個`func`的傳入參數，以用來做彙整。
 
 ### 第三個方法
 
@@ -94,7 +94,7 @@ private static int Min(IEnumerable<int> source)
 }
 ```
 
-每次都去比對目前的元素是否小於目前的最小值，如果是的話就更新最小值。
+每次都去比對目前的元素是否**小於**目前的**最小值**，如果是的話就更新最小值。
 
 ### Max
 
@@ -106,7 +106,7 @@ private static int Max(IEnumerable<int> source)
 }
 ```
 
-每次都去比對目前的元素是否大於目前的最大值，如果是的話就更新最大值。
+每次都去比對目前的元素是否**大於**目前的**最大值**，如果是的話就更新最大值。
 
 ### Count
 
@@ -141,7 +141,7 @@ private static double Average(IEnumerable<int> source)
 }
 ```
 
-累加元素並對外部變數count加1，最後用resultSelector取得平均資料。
+累加元素並對外部變數`count`加**1**，最後用`resultSelector`取得**平均**資料。
 
 範例的結果如下:
 
@@ -166,7 +166,7 @@ private static double Average(IEnumerable<int> source)
 
 ## 範例程式
 
-* [GitHub]()
+* [GitHub](https://github.com/peterhpchen/DigDeeperLINQ/tree/28_HowToUseAggregate/demo/28_HowToUseAggregate)
 
 ## 參考
 
