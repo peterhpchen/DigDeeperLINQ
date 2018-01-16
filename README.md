@@ -30,7 +30,7 @@
 1. [Take的應用](26_HowToUseTake.md)
 1. [Take的原碼探索](27_InsideOfTake.md)
 1. [Aggregate的應用](28_HowToUseAggregate.md)
-1. Aggregation的原理
+1. [Aggregate的原碼探索](29_InsideOfAggregate.md)
 1. Distinct的應用
 1. Distinct的原理
 1. First Class Language Construct
