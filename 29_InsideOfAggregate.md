@@ -1,12 +1,12 @@
 # Aggregate的原碼探索
 
-這次我們要來看Aggregate的原始碼，由上一章的介紹可以知道Aggregate的功能是把前面元素的彙整結果傳到目前的元素再跟其合併並且再傳至下個元素，這樣累加的方式實際上是怎麼實作的呢? 讓我們來看看吧。
+這次我們要來看`Aggregate`的原始碼，由上一章的介紹可以知道`Aggregate`的功能是把**前面元素的彙整結果**傳到**目前的元素再跟其合併**並且再傳至下個元素，這樣累加的方式實際上是怎麼實作的呢? 讓我們來看看吧。
 
 ## 原始碼分析
 
 > Source Code: [Aggregate.cs](https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Aggregate.cs)
 
-前一章介紹到Aggregate有三個公開方法，我們依照慣例由單純開始。
+前一章介紹到`Aggregate`有**三個**公開方法，我們依照慣例由單純開始。
 
 ### 第一個方法
 
@@ -47,7 +47,7 @@ public static TSource Aggregate<TSource>(this IEnumerable<TSource> source, Func<
 
 * 檢查傳入參數(`source`、`func`)是否為空，如果為空則拋出`ArgumentNull`例外
 * 通過參數檢查後，取得`Enumerator`(`GetEnumerator()`)開始巡覽
-* 如果沒有集合沒有元素，拋出`NoElements`例外
+* 如果集合沒有元素，拋出`NoElements`例外
 * 有元素的話將自己的數值丟給`func`，然後執行`func`
 * 每次將`func`的結果傳給`result`，下一輪再丟進`func`
 * 巡覽結束就傳回結果
@@ -151,7 +151,7 @@ public void EmptySourceAndSeed()
 
 ## 結語
 
-這次看的Aggregate是一個比較特別的方法，首先他並不是延遲執行的，再來是會參考上一個元素的資料，讓我們看到了不一樣的寫法實作。
+這次看的`Aggregate`是一個比較特別的方法，首先他並**不是延遲執行**的，再來就是**會參考上一個元素**的資料，讓我們看到了不一樣的寫法實作。
 
 ## 參考
 
