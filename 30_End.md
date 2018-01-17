@@ -74,3 +74,7 @@
 * **Henry**: 沒有你，就不會有這次的鐵人賽
 * **karelz**: 讓我有了第一次PR的機會
 * **JonHanna**: 對我的疑惑提供了解答
+
+## GitHub Repository
+
+最後附上GitHub的[連結](https://github.com/peterhpchen/DigDeeperLINQ)，之後有時間會再加上其他的文章。
