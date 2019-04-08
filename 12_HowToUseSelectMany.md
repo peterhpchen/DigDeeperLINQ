@@ -21,7 +21,7 @@ class 元素
 ```
 下圖顯示執行`SelectMany`及`Select`的差異: 
 
-![SelectMany vs Select](image/12_HowToUseSelectMany/SelectManyVSSelect.png)
+![SelectMany vs Select](./image/12_HowToUseSelectMany/SelectManyVSSelect.png)
 
 各別執行`Select`及`SelectMany`後會變成下面這樣，可以注意兩個**回傳型別**的不同之處: 
 ```C#

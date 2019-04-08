@@ -3,3 +3,6 @@ demo/**/obj
 
 demo/**/.vscode
 **/.vscode
+
+.vuepress/dist
+node_modules

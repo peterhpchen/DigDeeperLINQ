@@ -19,7 +19,7 @@
 ## 方法定義
 這組方法主要目的就是排序資料，請看下面的例子(節錄自[Microsoft Docs](https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/sorting-data)):
 
-![sort](image/16_HowToUseOrderBy/linq_ordering.png)
+![sort](./image/16_HowToUseOrderBy/linq_ordering.png)
 
 ```C#
 char[] Source = new char[] { 'G', 'C', 'F', 'E', 'B', 'A', 'D' };

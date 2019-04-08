@@ -9,7 +9,7 @@
 
 1. 安裝Visual Studio 2015/2017，以2017版本為例，需要安裝下圖勾選的套件: 
 
-![install](image/10_BuildCoreFX/install.PNG)
+![install](./image/10_BuildCoreFX/install.png)
 
 2. 安裝[CMake](https://cmake.org/download/)
 
@@ -36,7 +36,7 @@
 * 方案下有一個*tests*的資料夾，對裡面的System.Linq.Tests按右鍵*Set as StartUp Project*
 * 接著按執行，程式執行完以後你會看到下面的畫面: 
 
-![test all](image/10_BuildCoreFX/testAll.PNG)
+![test all](./image/10_BuildCoreFX/testAll.png)
 
 corefx的測試框架是[xunit](http://xunit.github.io/)，案例可以用`Skip`這個屬性來忽略不想要每次測試都執行的案例:
 ```C#
@@ -54,7 +54,7 @@ public void IndexOverflows()
 1. 打開**Debug**的Tab
 1. 在**Command line arguments**的字串後面加上`-class System.Linq.Tests.SelectTests`(這邊以`SelectTests`為例)，格式為*namspace.class*
 
-![class](image/10_BuildCoreFX/class.PNG)
+![class](./image/10_BuildCoreFX/class.png)
 
 #### 執行單個測試案例
 跟Class的方式相同，修改Command line arguments的字串，在後面加上`-method System.Linq.Tests.SelectTests.SameResultsRepeatCallsStringQuery`，格式為*namespace.class.method*

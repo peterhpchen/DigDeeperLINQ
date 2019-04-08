@@ -26,7 +26,7 @@
 ## 安裝
 請至[官網的下載頁面](http://www.linqpad.net/Download.aspx)下載，有安裝版及免安裝版，.NET Framework版本就選擇你目前開發的版本:
 
-![Install](image/03_LINQPad/Install.PNG)
+![Install](./image/03_LINQPad/Install.png)
 
 LINQPad有付費版本，個人覺得付費版本很實用的功能有: 
 * 自動完成
@@ -38,7 +38,7 @@ LINQPad有付費版本，個人覺得付費版本很實用的功能有:
 在[官網的購買頁面](https://www.linqpad.net/Purchase.aspx)有更詳細的資訊。
 
 ## 介面
-![LINQPad Interface](image/03_LINQPad/LINQPadInterface.PNG)
+![LINQPad Interface](./image/03_LINQPad/LINQPadInterface.png)
 
 介面分為四個部分: 
 * **伺服器連線瀏覽**: 跟SSMS的Object Explorer一樣，連線後可以看到各個Database的相關資訊
@@ -65,7 +65,7 @@ LINQPad有付費版本，個人覺得付費版本很實用的功能有:
 ```C#
 DateTime.Now.ToString("yyyy/MM/dd")
 ```
-![Expression Ex1](image/03_LINQPad/ExpressionEx1.PNG)
+![Expression Ex1](./image/03_LINQPad/ExpressionEx1.png)
 
 可以看到Result直接輸出結果，在測試或學習Method時很好用。
 
@@ -75,7 +75,7 @@ from word in "The quick brown fox jumps over the lazy dog".Split()
 orderby word.Length
 select word
 ```
-![Expression Ex2](image/03_LINQPad/ExpressionEx2.PNG)
+![Expression Ex2](./image/03_LINQPad/ExpressionEx2.png)
 
 就算是分成多行，只要還是一個陳述式就算是Expression。對於要找出期望的資料很好用。
 
@@ -99,7 +99,7 @@ words.Dump();
 duplicates.Dump();
 ```
 
-![Multiple Statements](image/03_LINQPad/MultipleStatements.PNG)
+![Multiple Statements](./image/03_LINQPad/MultipleStatements.png)
 
 ### Program
 * **使用場景**: 需要演練Method、Function或是Class時
@@ -124,7 +124,7 @@ class Test{
 }
 ```
 
-![Program](image/03_LINQPad/Program.PNG)
+![Program](./image/03_LINQPad/Program.png)
 
 你沒看錯!!最外面是不需要再一層Class的，可以直接寫所需的程式碼，是不是很方便阿。
 
@@ -137,7 +137,7 @@ class Test{
 
 進入**Query Properties**頁面，按下**Add...** 或是 **Browse...** 按鈕選擇需要的參考加到程式中
 
-![Reference](image/03_LINQPad/Reference.PNG)
+![Reference](./image/03_LINQPad/Reference.png)
 
 ## 與資料庫連線
 在沒有LINQPad的幫助下，我們要測試用LINQ抓取的資料庫資料是否正確時，我們需要做下面兩件事:
@@ -151,25 +151,25 @@ class Test{
 
 1. 左上方區塊裡按下Add connection，跳出的視窗裡直接按下next
 
-![Add Connection 1](image/03_LINQPad/AddConnection1.PNG)
+![Add Connection 1](./image/03_LINQPad/AddConnection1.png)
 
 2. 進入下一個頁面，這裡跟連線SSMS的設定相同，設定好後按下OK(也可以按Test測試連線是否正確)
 
-![Add Connection 2](image/03_LINQPad/AddConnection2.PNG)
+![Add Connection 2](./image/03_LINQPad/AddConnection2.png)
 
 3. 連線完成後就可以在左上的區塊看到Database，我們的**Northwind**出現了~
 
-![Add Connection 3](image/03_LINQPad/AddConnection3.PNG)
+![Add Connection 3](./image/03_LINQPad/AddConnection3.png)
 
 ### 使用資料庫資料做LINQ演練
 
 1. 對**Northwind**按**右鍵>Use in Current Query**
 
-![Use in Current Query](image/03_LINQPad/UseInCurrentQuery.PNG)
+![Use in Current Query](./image/03_LINQPad/UseInCurrentQuery.png)
 
 2. 連線成功後可以看到程式碼區塊上的Connection變成**Northwind**
 
-![Connection Success](image/03_LINQPad/UseDatabaseSuccess.PNG)
+![Connection Success](./image/03_LINQPad/UseDatabaseSuccess.png)
 
 3. 接著我們來寫個LINQ(此範例為*LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>What about querying a database!*)，執行後我們可以看到我們夢寐以求的資料了~~
 
@@ -187,7 +187,7 @@ select new
 }
 ```
 
-![Query a Database](image/03_LINQPad/QueryDatabase.PNG)
+![Query a Database](./image/03_LINQPad/QueryDatabase.png)
 
 ### 執行SQL語法
 有沒有想要查詢資料庫時卻不想打開資料庫工具呢?這時候LINQPad又可以派上用場了(萬能阿~~)。
@@ -203,7 +203,7 @@ Select top 1 * from Products
 order by UnitPrice desc
 ``` 
 
-![SQL](image/03_LINQPad/SQL.PNG)
+![SQL](./image/03_LINQPad/SQL.png)
 
 上述的範例如果還看不過癮的話，在*LINQPad>Samples>LINQPad Tutorial & Reference>5-minute induction>But I don't have NORTHWIND!* 中展示了`Create Table`、`Insert Data`的演練，可以參考一下。
 
@@ -212,7 +212,7 @@ order by UnitPrice desc
 
 1. 在左下的區塊中的**My Queries**的Tab>My Extensions，程式碼區塊會出現`MyExtensions`的Class
 
-![MyExtensions](image/03_LINQPad/MyExtensions.PNG)
+![MyExtensions](./image/03_LINQPad/MyExtensions.png)
 
 2. 接著我們來加入`Hello`到`MyExtensions`中
 ```C#
@@ -237,7 +237,7 @@ public static void ConsoleWriteLine(this string str)
 
 5. 在剛剛的Query中呼叫`ConsoleWriteLine`，最後就會像下圖一樣
 
-![Extensions](image/03_LINQPad/Extensions.PNG)
+![Extensions](./image/03_LINQPad/Extensions.png)
 
 Extension Methods的好處在於你可以擴充自己的Infrastructure，來縮減每個程式碼片段重複的處理。
 
@@ -250,7 +250,7 @@ Extension Methods的好處在於你可以擴充自己的Infrastructure，來縮�
 1. 在要儲存的片段的Tab上按**右鍵>Save**(或**ctrl+s**)。
 1. 儲存後在左下角MyQueries就會看到剛剛儲存的檔案了。
 
-![Save](image/03_LINQPad/Save.PNG)
+![Save](./image/03_LINQPad/Save.png)
 
 ### 快捷鍵表
 在`Help>Keyboard/Mouse Shortcuts`可以打開快捷鍵表
@@ -258,7 +258,7 @@ Extension Methods的好處在於你可以擴充自己的Infrastructure，來縮�
 ### 執行選取的程式碼
 選取想要執行的片段按下`執行`或是`F5`就可以執行片段程式碼
 
-![Execution Selection](image/03_LINQPad/ExecutionSelection.PNG)
+![Execution Selection](./image/03_LINQPad/ExecutionSelection.png)
 
 ### LINQPad extension methods
 LINQPad自己有提供Dump，讓開發者可以更產出更清楚的結果，關於Dump的詳細說明可以參考作者自己在StackOverflow的回答: [LINQPad extension methods](https://stackoverflow.com/a/3562160)。

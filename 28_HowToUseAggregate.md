@@ -6,7 +6,7 @@
 
 以下圖為例(節錄自[Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/aggregation-operations)):
 
-![aggregaet](image/28_HowToUseAggregate/linq_aggregation.png)
+![aggregaet](./image/28_HowToUseAggregate/linq_aggregation.png)
 
 以下說明圖片:
 

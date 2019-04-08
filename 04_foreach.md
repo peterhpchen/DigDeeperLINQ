@@ -52,7 +52,7 @@ foreach (int integer in integers)	//error
 }
 ```
 
-![Get Enumerator](image/04_foreach/GetEnumerator.PNG)
+![Get Enumerator](./image/04_foreach/GetEnumerator.png)
 
 **YA!!** 發生錯誤: *because 'int' does not contain a public definition for **'GetEnumerator'***，找到關鍵字，原來是沒有定義`GetEnumerator`，那我們就來加上定義: 
 ```C#
@@ -88,7 +88,7 @@ Integers integers = new Integers(123456789);
 
 再來看看會發生什麼事: 
 
-![Enumerable](image/04_foreach/Enumerable.PNG)
+![Enumerable](./image/04_foreach/Enumerable.png)
 
 又發生錯誤了: ***'UserQuery.IntegerEnum'** of 'UserQuery.Integers.GetEnumerator()' must have a suitable **public MoveNext method** and **public Current property***。
 
@@ -153,7 +153,7 @@ public class Integers
 ### Iterator Pattern
 `foreach`的實作是`Iterator Pattern`，下圖為**UML圖**: 
 
-![640px-Iterator_UML_class_diagram.svg.PNG](image/04_foreach/640px-Iterator_UML_class_diagram.svg.PNG)
+![640px-Iterator_UML_class_diagram.svg.png](./image/04_foreach/640px-Iterator_UML_class_diagram.svg.png)
 
 在範例程式中分別對應: 
 * **ConcreteAggregate**: `Integers`

@@ -1,0 +1,15 @@
+{
+  "name": "DigDeeperLINQ",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:peterhpchen/DigDeeperLINQ.git",
+  "author": "peterhpchen <peterhsinpingchen@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vuepress dev",
+    "build": "vuepress build"
+  },
+  "devDependencies": {
+    "vuepress": "^0.14.10"
+  }
+}

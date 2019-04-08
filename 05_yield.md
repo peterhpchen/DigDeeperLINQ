@@ -98,7 +98,7 @@ private static void outputDivide_foreach_List(int maxNum, int divide)
 }
 ```
 
-![efficiency](image/05_yield/efficiency.png)
+![efficiency](./image/05_yield/efficiency.png)
 
 各位應該猜到問題點了: 不管有沒有需要，`enumerable_List`裡的迴圈都會跑完，並且將取得的數值放到List中，這樣就算我們沒有實際使用到List，也一樣要耗費時間跟空間，相較之下原本的`for`反而沒有這個問題。
 
@@ -195,7 +195,7 @@ private static IEnumerable enumerable_yield(int maxNum, int divide)
 ### 運作方式
 我們可以將中斷點下在`yield return`那行，然後一步一步執行看看會發生什麼事情，你會發現他跳回`foreach`中，又再跳回`yield block`中:
 
-![yield break point](image/05_yield/yieldBreakPoint.gif)
+![yield break point](./image/05_yield/yieldBreakPoint.gif)
 
 這個執行順序顛覆了我們對程式的認知，一般的程式都會是迴圈完成後再回傳，而**Iterator Block**卻是遇到了`yield return`就回傳而且執行完`foreach`的**embedded_statement**後還能回到迴圈中繼續執行。
 
@@ -232,7 +232,7 @@ private static IEnumerable enumerable_yield2()
 }
 ```
 
-![yield break point](image/05_yield/yieldBreakpoint2.gif)
+![yield break point](./image/05_yield/yieldBreakpoint2.gif)
 
 其中`yield break`就是停止整個巡覽的動作，所以數列只會印到9而已。
 

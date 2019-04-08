@@ -8,7 +8,7 @@
 
 請看下面的示意圖(節錄自[Microsoft Docs](https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/grouping-data)):
 
-![linq_group](image/18_HowToUseGroupBy/linq_group.png)
+![linq_group](./image/18_HowToUseGroupBy/linq_group.png)
 
 我們有一個英文字集合的物件`Source`，想要把各個英文字的資料抓出來，這時就會用到分組的處理，處理完的結果就會像示意圖上的一樣，由單個集合變成多個集合。
 

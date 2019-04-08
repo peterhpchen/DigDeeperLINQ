@@ -114,7 +114,7 @@ foreach(var result in afterSelect){}
 
 下面是比較結果: 
 
-![foreach](image/09_HowToUseSelect/foreach.PNG)
+![foreach](./image/09_HowToUseSelect/foreach.png)
 
 Select少了很多對吧，其實Select它有**延遲執行**的特性，意思是說你叫用它時，它不會馬上去巡覽所有的元素，而是會等到你叫用`GetEnumerator()`或是`foreach`時才會去變動集合，詳細的原理我們留到之後再深入討論。
 
@@ -131,7 +131,7 @@ from x in Products
 group x by x.CategoryID
 ```
 
-![Without Select](image/09_HowToUseSelect/WithoutSelect.PNG)
+![Without Select](./image/09_HowToUseSelect/WithoutSelect.png)
 
 這裡請了`group`出來代班一下，我們可以看到這裡並沒有select，但這還是一個正確的查詢運算式，其實在[C#語言規格](https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions)中在介紹Query Experssions的章節有提到下面這段解釋: 
 > A query expression begins with a `from` clause and ends with either a `select` or `group` clause.

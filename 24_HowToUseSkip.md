@@ -10,7 +10,7 @@
 
 `Skip`有三種不同名稱的方法: `Skip`、`SkipLast`、`SkipWhile`，它們的差別可以用下圖來說明:
 
-![skip](image/24_HowToUseSkip/Skip.png)
+![skip](./image/24_HowToUseSkip/Skip.png)
 
 我們看圖說故事:
 

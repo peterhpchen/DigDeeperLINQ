@@ -17,7 +17,7 @@ public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> sour
 
 我們來看看出自[Microsoft Docs](https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/filtering-data)的例子: 
 
-![linq_filter](image/14_HowToUseWhere/linq_filter.png)
+![linq_filter](./image/14_HowToUseWhere/linq_filter.png)
 
 我們有個`source`的`char`**陣列**，如上圖的**Source**，現在我想要拿出`A`的元素，我們會利用`Where`取得`A`的資料: 
 ```C#

@@ -40,7 +40,7 @@ public static IEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(
 
 我們用剛剛提到的**人**跟**電話**的例子來看，**我們要找到某個人的電話**，可以畫成下面的這張圖:
 
-![join](image/20_HowToUseJoin/join.png)
+![join](./image/20_HowToUseJoin/join.png)
 
 可以看到因為我們的目標是特定**人**的**電話**號碼，所以**人**是`inner`，而**電話**是`outer`，但是因為LINQ的`Join`方法是**Inner Join**，如果想要找的人沒有電話資訊，那個人的資料也不會出現，因此圖片的人的圓圈才會畫到外面。
 

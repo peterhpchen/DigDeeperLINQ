@@ -12,7 +12,7 @@
 
 三個方法的比較圖如下:
 
-![take](image/26_HowToUseTake/Take.png)
+![take](./image/26_HowToUseTake/Take.png)
 
 * `Take`: **第一個元素**起算到參數設定的數量為止的元素的集合為結果集合
 * `TakeLast`: **最後個元素**往前算到參數設定的數量為止的元素集合為結果集合
