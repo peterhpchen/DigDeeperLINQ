@@ -1,5 +1,6 @@
 // .vuepress/config.js
 module.exports = {
+  base: '/DigDeeperLINQ/',
   title: '深入探索 LINQ',
   themeConfig: {
     sidebar: [
