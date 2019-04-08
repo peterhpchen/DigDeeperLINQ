@@ -232,7 +232,7 @@ private static IEnumerable enumerable_yield2()
 }
 ```
 
-![yield break point](./image/05_yield/yieldBreakpointTwo.gif)
+![yield break point](./image/05_yield/twoYieldBreakpoint.gif)
 
 其中`yield break`就是停止整個巡覽的動作，所以數列只會印到9而已。
 
