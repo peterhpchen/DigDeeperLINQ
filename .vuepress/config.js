@@ -2,13 +2,6 @@
 module.exports = {
   base: '/DigDeeperLINQ/',
   title: '深入探索 LINQ',
-  configureWebpack: {
-    resolve: {
-      alias: {
-        '@image': './image'
-      }
-    }
-  },
   themeConfig: {
     sidebar: [
       ['/', '目錄'],
