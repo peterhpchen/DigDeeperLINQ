@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GroupJoin的原碼探索 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/28.8c249b58.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="active sidebar-link">GroupJoin的原碼探索</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/23_InsideOfGroupJoin.html#原始碼分析" class="sidebar-link">原始碼分析</a></li><li class="sidebar-sub-header"><a href="/23_InsideOfGroupJoin.html#測試案例賞析" class="sidebar-link">測試案例賞析</a></li><li class="sidebar-sub-header"><a href="/23_InsideOfGroupJoin.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/23_InsideOfGroupJoin.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="groupjoin的原碼探索"><a href="#groupjoin的原碼探索" aria-hidden="true" class="header-anchor">#</a> GroupJoin的原碼探索</h1> <p>今天要來看<code>GroupJoin</code>的內部實作，知道<code>GroupJoin</code>的使用方式後，應該不難猜出它的實作可能跟<code>Join</code>很相似: 因為<code>GroupJoin</code>主要還是做<code>Join</code>的動作，只是最後加了個<code>resultSeletor</code>讓它可以對每個鍵值做<strong>彙整</strong>，現在來看看是不是真的是這樣吧。</p> <h2 id="原始碼分析"><a href="#原始碼分析" aria-hidden="true" class="header-anchor">#</a> 原始碼分析</h2> <blockquote><p>Source Code: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/GroupJoin.cs" target="_blank" rel="noopener noreferrer">GroupJoin.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <p>如往常一樣，我們來看一下<code>GroupJoin</code>的公開方法，再一次的如同之前<code>Join</code>的原始碼，這裡只做了兩件事:</p> <ul><li><strong>檢查傳入參數</strong>是否為空，如果是空的拋出<code>ArgumentNull</code>例外</li> <li>所有參數皆合法的話叫用<code>GroupJoinIterator</code>取得<code>Iterator</code>之後回傳</li></ul> <p>其實在<em>System.Linq</em>專案中的公開方法都是這樣做處理的，只有做檢查參數的動作，接著就丟給其他<strong>Method</strong>做事，以後如果沒有其他特別的處理，都會像上面一樣用文字說明，就不再貼原始碼了。</p> <p>接著我們來看一下<code>GroupJoinIterator</code>的實作:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TResult&gt; GroupJoinIterator&lt;TOuter, TInner, TKey, TResult&gt;(
+    IEnumerable&lt;TOuter&gt; outer,
+    IEnumerable&lt;TInner&gt; inner,
+    Func&lt;TOuter, TKey&gt; outerKeySelector,
+    Func&lt;TInner, TKey&gt; innerKeySelector,
+    Func&lt;TOuter, IEnumerable&lt;TInner&gt;, TResult&gt; resultSelector,
+    IEqualityComparer&lt;TKey&gt; comparer)
+{
+    using (IEnumerator&lt;TOuter&gt; e = outer.GetEnumerator())
+    {
+        if (e.MoveNext())
+        {
+            Lookup&lt;TKey, TInner&gt; lookup = Lookup&lt;TKey, TInner&gt;.CreateForJoin(inner, innerKeySelector, comparer);
+            do
+            {
+                TOuter item = e.Current;
+                yield return resultSelector(item, lookup[outerKeySelector(item)]);
+            }
+            while (e.MoveNext());
+        }
+    }
+}
+</code></pre></div><p>這邊可以看到跟<code>JoinIterator</code>很像的實作，差別在於下面兩點:</p> <ul><li>未檢查<code>inner</code>是否有值就叫傳入<code>resultSelector</code>作結果輸出</li> <li>沒有對<code>inner</code>再做一次迴圈，而是直接把整包<code>inner</code>丟給<code>resultSelector</code></li></ul> <p>第一點是<code>GroupJoin</code>是<strong>Left Join</strong>的原因，在沒有<code>inner</code>資料的情況下還是會執行<code>yield return</code>，就算只有<code>outer</code>的資料也可以回傳。</p> <p>第二點是<code>GroupJoin</code>可以<strong>彙整</strong>資料的原因，因為沒有做迴圈，所以丟給<code>resultSelector</code>的是<code>inner</code>的<strong>集合</strong>資料，所以可以用集合資料來做<strong>彙整</strong>。</p> <h2 id="測試案例賞析"><a href="#測試案例賞析" aria-hidden="true" class="header-anchor">#</a> 測試案例賞析</h2> <ul><li>Source Code: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/GroupJoinTests.cs" target="_blank" rel="noopener noreferrer">GroupJoinTests.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul> <h3 id="outerinnerbothsinglenullelement"><a href="#outerinnerbothsinglenullelement" aria-hidden="true" class="header-anchor">#</a> OuterInnerBothSingleNullElement</h3> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void OuterInnerBothSingleNullElement()
+{
+    string[] outer = new string[] { null };
+    string[] inner = new string[] { null };
+    string[] expected = new string[] { null };
+
+    Assert.Equal(expected, outer.GroupJoin(inner, e =&gt; e, e =&gt; e, (x, y) =&gt; x, EqualityComparer&lt;string&gt;.Default));
+    Assert.Empty(outer.Join(inner, e =&gt; e, e =&gt; e, (x, y) =&gt; x, EqualityComparer&lt;string&gt;.Default));
+}
+</code></pre></div><p>這裡我們可以看到<code>inner</code>跟<code>outer</code>是有一個<code>null</code>的字串陣列，可是他還是會回傳有一個<code>null</code>的字串陣列，可是<code>Join</code>就會傳回空。</p> <h3 id="selectorsreturnnull"><a href="#selectorsreturnnull" aria-hidden="true" class="header-anchor">#</a> SelectorsReturnNull</h3> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void SelectorsReturnNull()
+{
+    CustomerRec[] outer = new []
+    {
+        new CustomerRec{ name = &quot;Tim&quot;, custID = null },
+        new CustomerRec{ name = &quot;Bob&quot;, custID = null }
+    };
+    OrderRec[] inner = new []
+    {
+        new OrderRec{ orderID = 97865, custID = null, total = 25 },
+        new OrderRec{ orderID = 34390, custID = null, total = 19 }
+    };
+    JoinRec[] expected = new []
+    {
+        new JoinRec{ name = &quot;Tim&quot;, orderID = new int?[]{ }, total = new int?[]{ } },
+        new JoinRec{ name = &quot;Bob&quot;, orderID = new int?[]{ }, total = new int?[]{ } }
+    };
+
+    Assert.Equal(expected, outer.GroupJoin(inner, e =&gt; e.custID, e =&gt; e.custID, createJoinRec));
+}
+</code></pre></div><p>在鍵值為<code>null</code>的情形下會拿不到<code>inner</code>的資料，可是<code>outer</code>的資料依然可以輸出。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>這次賞析的<code>GroupJoin</code>跟<code>Join</code>大同小異，最大的差別就在於<code>GroupJoin</code>可以不用<code>inner</code>的資料也可以輸出，這也是造成<code>GroupJoin</code>是<strong>Left Join</strong>的原因，另外也因為<code>GroupJoin</code>沒有再做迴圈巡覽<code>inner</code>就輸出給<code>resultSeletor</code>做處理，所以可以直接<strong>彙整</strong>每個鍵值的資料，跟<code>Join</code>在用途及情境上就有差異了。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/22_HowToUseGroupJoin.html" class="prev">
+          GroupJoin的應用
+        </a></span> <span class="next"><a href="/24_HowToUseSkip.html">
+          Skip的應用
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/28.8c249b58.js" defer></script>
+  </body>
+</html>

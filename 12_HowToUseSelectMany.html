@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SelectMany的應用 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/8.e39bbbe7.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="active sidebar-link">SelectMany的應用</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#功能說明" class="sidebar-link">功能說明</a></li><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#方法定義" class="sidebar-link">方法定義</a></li><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#查詢運算式" class="sidebar-link">查詢運算式</a></li><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#方法範例" class="sidebar-link">方法範例</a></li><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#特別之處" class="sidebar-link">特別之處</a></li><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#範例程式" class="sidebar-link">範例程式</a></li><li class="sidebar-sub-header"><a href="/12_HowToUseSelectMany.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="selectmany的應用"><a href="#selectmany的應用" aria-hidden="true" class="header-anchor">#</a> SelectMany的應用</h1> <p>這次我們要來說一個跟<code>Select</code>相似的語法-<code>SelectMany</code>，這個語法在處理<strong>Master/Details</strong>(主檔/明細檔)的資料時非常的有用，在沒有<code>SelectMany</code>前，我們處理有明細的資料都需要用複數層迴圈才能查找資料，現在我們只要用<code>SelectMany</code>就搞定了。</p> <h2 id="功能說明"><a href="#功能說明" aria-hidden="true" class="header-anchor">#</a> 功能說明</h2> <p><code>SelectMany</code>可以將集合中每個元素內的子集合合併為一個新的集合。</p> <p>舉個例子，我們有一個下面這樣子的資料:</p> <div class="language-C# extra-class"><pre class="language-text"><code>class 元素
+{
+    public List&lt;string&gt; 子集合 { get; set; }
+}
+
+元素[] 集合=
+{
+    new 元素() { 子集合 = new List&lt;string&gt;() { &quot;a&quot;, &quot;b&quot;, &quot;c&quot; } },
+    new 元素() { 子集合 = new List&lt;string&gt;() { &quot;d&quot;, &quot;e&quot;, &quot;f&quot; } },
+    new 元素() { 子集合 = new List&lt;string&gt;() { &quot;g&quot;, &quot;h&quot;, &quot;i&quot; } },
+    new 元素() { 子集合 = new List&lt;string&gt;() { &quot;j&quot;, &quot;k&quot;, &quot;l&quot; } }
+};
+</code></pre></div><p>下圖顯示執行<code>SelectMany</code>及<code>Select</code>的差異:</p> <p><img src="/assets/img/SelectManyVSSelect.eb57ce6e.png" alt="SelectMany vs Select"></p> <p>各別執行<code>Select</code>及<code>SelectMany</code>後會變成下面這樣，可以注意兩個<strong>回傳型別</strong>的不同之處:</p> <div class="language-C# extra-class"><pre class="language-text"><code>IEnumerable&lt;List&lt;string&gt;&gt; afterSelect = 集合.Select(元素 =&gt; 元素.子集合);
+
+IEnumerable&lt;string&gt; afterSelect = 集合.SelectMany(元素 =&gt; 元素.子集合);
+</code></pre></div><ul><li>Select: 將資料經由<code>Selector</code>轉換後放入<code>IEnumerable</code>中，其<strong>結果的數量跟原本相同</strong></li> <li>SelectMany: <code>SelectMany</code>會將<code>Selector</code>的結果扁平化，輸出在同一集合中，其<strong>結果的數量會跟原本的不同</strong></li></ul> <h2 id="方法定義"><a href="#方法定義" aria-hidden="true" class="header-anchor">#</a> 方法定義</h2> <p><code>SelectMany</code>有兩組方法，首先來看只有一個<code>Selector</code>的方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, IEnumerable&lt;TResult&gt;&gt; selector);
+
+public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, int, IEnumerable&lt;TResult&gt;&gt; selector);
+</code></pre></div><ul><li>這兩個多載的差異點跟<code>Select</code>一樣都是<code>selector</code>多了一個<code>int</code>的傳入參數，這個<code>int</code>就是每個元素的<code>index</code></li> <li>跟<code>Select</code>的不同之處在於<code>SelectMany</code>的<code>selector</code>的回傳值是一個帶有<code>TResult</code>型別元素的<code>IEnumerable</code></li> <li>雖然<code>Selector</code>吐回來的型別是<code>IEnumerable&lt;TResult&gt;</code>，可是回傳值依然是<code>IEnumerable&lt;TResult&gt;</code>，由此我們可以知道<code>SelectMany</code>有做扁平化的處理。</li></ul> <p>另外<code>SelectMany</code>還有兩個<code>Selector</code>的方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TCollection, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, 
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector);
+
+public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TCollection, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, int, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, 
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector);
+</code></pre></div><ul><li>這兩個方法的差別依然在多個<code>index</code>的傳入參數</li> <li>這組方法跟上組方法的差異在於多了一個多了一個<code>resultSelector</code>，它可以傳入<code>TSource</code>(原本集合的每一個元素)及<code>TCollection</code>(子集合中的每一個元素)，讓我們可以讓主檔的資料跟明細的資料合為同一筆資料。</li></ul> <h2 id="查詢運算式"><a href="#查詢運算式" aria-hidden="true" class="header-anchor">#</a> 查詢運算式</h2> <p>在查詢運算式中並<strong>沒有</strong><code>SelectMany</code>這個<code>Expression</code>，但是依照<a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">C# spec<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>我們可以知道依然有<code>Expression</code>會轉換為<code>SelectMany</code>，請看下面的運算式:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x1 in e1
+from x2 in e2
+select v
+</code></pre></div><p>當有<strong>複數</strong>個<code>from</code>時會轉為下面這樣的運算子:</p> <div class="language-C# extra-class"><pre class="language-text"><code>( e1 ) . SelectMany( x1 =&gt; e2 , ( x1 , x2 ) =&gt; v )
+</code></pre></div><p>當<code>from</code>後面不是接<code>select</code>時:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x1 in e1
+from x2 in e2
+...
+</code></pre></div><p>會轉為下面這樣將<code>from</code>取得的兩組資料都回傳:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from * in ( e1 ) . SelectMany( x1 =&gt; e2 , ( x1 , x2 ) =&gt; new { x1 , x2 } )
+...
+</code></pre></div><h2 id="方法範例"><a href="#方法範例" aria-hidden="true" class="header-anchor">#</a> 方法範例</h2> <p>下面是一個<strong>商店的物件</strong>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>class Store
+{
+    public string Name { get; set; }
+    public string[] Products { get; set; }
+}
+</code></pre></div><p><strong>資料</strong>如下，有兩間商店<em>App Store</em>跟<em>Google Store</em>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>Store[] stores = new Store[] 
+{
+    new Store()
+    {
+        Name = &quot;App Store&quot;,
+        Products = new string[] {&quot;iPhone 8&quot;, &quot;iPhone 8s&quot;, &quot;iPhone X&quot;}
+    },
+    new Store()
+    {
+        Name = &quot;Google Store&quot;,
+        Products = new string[] {&quot;Pixel&quot;, &quot;Pixel 2&quot;}
+    }
+};
+</code></pre></div><p>我們會用上述的資料做演練。</p> <h3 id="比較select及selectmany"><a href="#比較select及selectmany" aria-hidden="true" class="header-anchor">#</a> 比較Select及SelectMany</h3> <ul><li>範例程式</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>IEnumerable&lt;string[]&gt; selectQuery = stores.Select(store =&gt; store.Products);
+
+IEnumerable&lt;string&gt; selectManyQuery = stores.SelectMany(store =&gt; store.Products);
+// 等同於下面的Query Expression
+//
+// from store in stores
+// from product in store.Products
+// select product
+
+Console.WriteLine(&quot;**Select**&quot;);
+Console.WriteLine();
+
+// Select要兩次迴圈
+foreach (string[] products in selectQuery)
+{
+    foreach (string product in products)
+    {
+        Console.WriteLine(product);
+    }
+    Console.WriteLine();
+}
+
+Console.WriteLine(&quot;**SelectMany**&quot;);
+Console.WriteLine();
+
+// SelectMany一次迴圈
+foreach (string product in selectManyQuery)
+{
+    Console.WriteLine(product);
+}
+Console.WriteLine();
+</code></pre></div><ul><li>執行結果</li></ul> <div class="language- extra-class"><pre class="language-text"><code>**Select**
+
+iPhone 8
+iPhone 8s
+iPhone X
+
+Pixel
+Pixel 2
+
+**SelectMany**
+
+iPhone 8
+iPhone 8s
+iPhone X
+Pixel
+Pixel 2
+</code></pre></div><p>這裡可以看到<code>Select</code>的結果並沒有打平，可是<code>SelectMany</code>有，我們可以用<code>SelectMany</code>輕易的處理像<code>store</code>這樣的<strong>Master/Details</strong>(主檔/明細檔)結構。</p> <h3 id="selectmany的第二個selector"><a href="#selectmany的第二個selector" aria-hidden="true" class="header-anchor">#</a> <code>SelectMany</code>的第二個<code>Selector</code></h3> <ul><li>範例程式</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>var selectMany = stores.SelectMany(
+    store =&gt; store.Products, 
+    (store, product) =&gt; new { StoreName = store.Name, ProductName = product });
+
+foreach(var product in selectMany){
+    Console.WriteLine($&quot;Store Name: {product.StoreName}, Product Name: {product.ProductName}&quot;);
+}
+</code></pre></div><ul><li>執行結果</li></ul> <div class="language- extra-class"><pre class="language-text"><code>Store Name: App Store, Product Name: iPhone 8
+Store Name: App Store, Product Name: iPhone 8s
+Store Name: App Store, Product Name: iPhone X
+Store Name: Google Store, Product Name: Pixel
+Store Name: Google Store, Product Name: Pixel 2
+</code></pre></div><p>注意到了嗎? 我們把主檔及明細的資料合併變成一筆新的資料，所以第二個<code>resultSelector</code>的應用就是你可以利用主檔及明細的資料組成你想要的資料。</p> <h2 id="特別之處"><a href="#特別之處" aria-hidden="true" class="header-anchor">#</a> 特別之處</h2> <h3 id="多個from的查詢運算式"><a href="#多個from的查詢運算式" aria-hidden="true" class="header-anchor">#</a> 多個<code>from</code>的查詢運算式</h3> <p>在上面的介紹中我們知道<code>SelectMany</code>在查詢運算式中是用多個<code>from</code>來表示，那如果超過三個會怎麼樣呢? 例如像下面這樣:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from store in stores
+from product in store.Products
+from c in product
+select c;
+</code></pre></div><p>我們來想想剛剛講的運算式定義，當最後接的不是<code>select</code>時會是下面這樣的型式:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x1 in e1
+from x2 in e2
+...
+</code></pre></div><p>轉譯為下面這樣:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from * in ( e1 ) . SelectMany( x1 =&gt; e2 , ( x1 , x2 ) =&gt; new { x1 , x2 } )
+...
+</code></pre></div><p>那我們就按照位置把上面的範例填入，會變下面這樣:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from * in ( stores ) . SelectMany( store =&gt; store.Products , ( store , product ) =&gt; new { store , product } )
+from c in product
+select c
+</code></pre></div><ul><li>*(星號)可以想成是編譯器取的別名</li></ul> <p>現在變回兩個<code>from</code>，那就依照原本的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x1 in e1
+from x2 in e2
+select v
+</code></pre></div><p>轉為下面這樣:</p> <div class="language-C# extra-class"><pre class="language-text"><code>( e1 ) . SelectMany( x1 =&gt; e2 , ( x1 , x2 ) =&gt; v )
+</code></pre></div><p>把範例填上去:</p> <div class="language-C# extra-class"><pre class="language-text"><code>( ( stores ) . SelectMany( store =&gt; store.Products , ( store , product ) =&gt; new { store , product } ) ) . SelectMany( * =&gt; product, (*, c) =&gt; c)
+</code></pre></div><p>終於答案揭曉: 它會跑兩次<code>SelectMany</code>，範例結果會是<code>Product</code>因為在被做了一次<code>SelectMany</code>而被分割為<strong>字母</strong>。</p> <h3 id="第二個from的後面接的跟第一個from無關"><a href="#第二個from的後面接的跟第一個from無關" aria-hidden="true" class="header-anchor">#</a> 第二個<code>from</code>的後面接的跟第一個<code>from</code>無關</h3> <p>前面的範例在第二個<code>from</code>都很乖的用了第一個<code>from</code>的屬性，那如果我偏不放第一個<code>from</code>的屬性呢? 例如說像下面這樣:</p> <div class="language-C# extra-class"><pre class="language-text"><code>string[] PCs = new string[] { &quot;ASUS&quot;, &quot;ACER&quot;, &quot;DELL&quot; };
+
+var query = from store in stores
+            from PC in PCs
+            select PC;
+</code></pre></div><p>結果如下:</p> <div class="language- extra-class"><pre class="language-text"><code>ASUS
+ACER
+DELL
+ASUS
+ACER
+DELL
+</code></pre></div><p>它會跑兩次第二個<code>from</code>得到的資料，為什麼? 我們來依照定義將對應的變數放上去:</p> <div class="language-C# extra-class"><pre class="language-text"><code>( stores ) . SelectMany( store =&gt; PCs , ( store , PC ) =&gt; PC )
+</code></pre></div><ul><li>PCs是外部變數，Lambda運算式可以吃到外部變數</li></ul> <p>有點難懂對吧? 那我們在對照方法定義來觀察:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TCollection, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, 
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector);
+</code></pre></div><p>重點是在<code>collectionSelector</code>，我們可以看到每個<code>TSource</code>會輸出一次<code>IEnumerable&lt;TCollection&gt;</code>，啊哈，我有<strong>兩間</strong>(<em>App Store</em>、<em>Google Store</em>)商店阿，所以<code>PCs</code>的資料會被重複輸出。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>SelectMany在物件的資料處理中很常會需要使用，在看到<strong>Master/Details</strong>(主檔/明細檔)時就先想想它吧。</p> <h2 id="範例程式"><a href="#範例程式" aria-hidden="true" class="header-anchor">#</a> 範例程式</h2> <p><a href="https://github.com/peterhpchen/DigDeeperLINQ/tree/12_HowToUseSelectMany/demo/12_HowToUseSelectMany" target="_blank" rel="noopener noreferrer">GitHub<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">C# Spec-expressions#query-expressions<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/api/system.linq.enumerable.selectmany?view=netframework-4.7.1" target="_blank" rel="noopener noreferrer">Microsoft Docs-SelectMany<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/projection-operations" target="_blank" rel="noopener noreferrer">Microsoft Docs-projection-operations<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://www.draw.io/" target="_blank" rel="noopener noreferrer">draw.io<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/11_InsideOfSelect.html" class="prev">
+          Select的原碼探險
+        </a></span> <span class="next"><a href="/13_InsideOfSelectMany.html">
+          SelectMany的原碼探險
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/8.e39bbbe7.js" defer></script>
+  </body>
+</html>

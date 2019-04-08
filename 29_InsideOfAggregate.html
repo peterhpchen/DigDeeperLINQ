@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Aggregate的原碼探索 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/31.39fff360.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="active sidebar-link">Aggregate的原碼探索</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/29_InsideOfAggregate.html#原始碼分析" class="sidebar-link">原始碼分析</a></li><li class="sidebar-sub-header"><a href="/29_InsideOfAggregate.html#測試案例賞析" class="sidebar-link">測試案例賞析</a></li><li class="sidebar-sub-header"><a href="/29_InsideOfAggregate.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/29_InsideOfAggregate.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="aggregate的原碼探索"><a href="#aggregate的原碼探索" aria-hidden="true" class="header-anchor">#</a> Aggregate的原碼探索</h1> <p>這次我們要來看<code>Aggregate</code>的原始碼，由上一章的介紹可以知道<code>Aggregate</code>的功能是把<strong>前面元素的彙整結果</strong>傳到<strong>目前的元素再跟其合併</strong>並且再傳至下個元素，這樣累加的方式實際上是怎麼實作的呢? 讓我們來看看吧。</p> <h2 id="原始碼分析"><a href="#原始碼分析" aria-hidden="true" class="header-anchor">#</a> 原始碼分析</h2> <blockquote><p>Source Code: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Aggregate.cs" target="_blank" rel="noopener noreferrer">Aggregate.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <p>前一章介紹到<code>Aggregate</code>有<strong>三個</strong>公開方法，我們依照慣例由單純開始。</p> <h3 id="第一個方法"><a href="#第一個方法" aria-hidden="true" class="header-anchor">#</a> 第一個方法</h3> <p>第一個是只有一個<code>func</code>運算式參數的方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static TSource Aggregate&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, TSource, TSource&gt; func)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (func == null)
+    {
+        throw Error.ArgumentNull(nameof(func));
+    }
+
+    using (IEnumerator&lt;TSource&gt; e = source.GetEnumerator())
+    {
+        if (!e.MoveNext())
+        {
+            throw Error.NoElements();
+        }
+
+        TSource result = e.Current;
+        while (e.MoveNext())
+        {
+            result = func(result, e.Current);
+        }
+
+        return result;
+    }
+}
+</code></pre></div><p>這個方法有幾個重點:</p> <ul><li>檢查傳入參數(<code>source</code>、<code>func</code>)是否為空，如果為空則拋出<code>ArgumentNull</code>例外</li> <li>通過參數檢查後，取得<code>Enumerator</code>(<code>GetEnumerator()</code>)開始巡覽</li> <li>如果集合沒有元素，拋出<code>NoElements</code>例外</li> <li>有元素的話將自己的數值丟給<code>func</code>，然後執行<code>func</code></li> <li>每次將<code>func</code>的結果傳給<code>result</code>，下一輪再丟進<code>func</code></li> <li>巡覽結束就傳回結果</li></ul> <p>每次都將自己上一輪的結果再丟進<code>func</code>中，可以做到<strong>彙整</strong>的處理，從這裡我們也可以看到<code>Aggregate</code>並<strong>沒有延遲執行</strong>的特性，因為在叫用的時候馬上就做巡覽了，並不像是之前介紹的方法是回傳<strong>Iterator</strong>。</p> <h3 id="第二個方法"><a href="#第二個方法" aria-hidden="true" class="header-anchor">#</a> 第二個方法</h3> <p>第二個方法多了一個<code>seed</code>參數的方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static TAccumulate Aggregate&lt;TSource, TAccumulate&gt;(this IEnumerable&lt;TSource&gt; source, TAccumulate seed, Func&lt;TAccumulate, TSource, TAccumulate&gt; func)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (func == null)
+    {
+        throw Error.ArgumentNull(nameof(func));
+    }
+
+    TAccumulate result = seed;
+
+    foreach (TSource element in source)
+    {
+        result = func(result, element);
+    }
+
+    return result;
+}
+</code></pre></div><p>與第一個方法比較，兩個方法的差距只有<code>result</code>的起始值:</p> <ul><li>第一個方法: <code>TSource result = e.Current;</code></li> <li>第二個方法: <code>TAccumulate result = seed;</code></li></ul> <p>我們可以看到有<code>seed</code>傳入參數的方法將<code>seed</code>當作第一次的<code>result</code>，這讓我們可以不用一定要把第一個元素當作起始值，對於不一定會取第一個元素值做彙整的處理來說是必要的。</p> <h3 id="第三個方法"><a href="#第三個方法" aria-hidden="true" class="header-anchor">#</a> 第三個方法</h3> <p>與第二個方法比起來，第三個方法多了一個<code>resultSelector</code>的<code>Lambda</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static TResult Aggregate&lt;TSource, TAccumulate, TResult&gt;(this IEnumerable&lt;TSource&gt; source, TAccumulate seed, Func&lt;TAccumulate, TSource, TAccumulate&gt; func, Func&lt;TAccumulate, TResult&gt; resultSelector)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (func == null)
+    {
+        throw Error.ArgumentNull(nameof(func));
+    }
+
+    if (resultSelector == null)
+    {
+        throw Error.ArgumentNull(nameof(resultSelector));
+    }
+
+    TAccumulate result = seed;
+
+    foreach (TSource element in source)
+    {
+        result = func(result, element);
+    }
+
+    return resultSelector(result);
+}
+</code></pre></div><p>我們可以看到第三跟第二個方法的差別再最後一行的<code>return</code>:</p> <ul><li>第二個方法: <code>return result;</code></li> <li>第三個方法: <code>return resultSelector(result);</code></li></ul> <p>所以從兩者的差別上我們可以知道，最後的<code>return</code>多了<code>resultSelector</code>的叫用，讓我們可以做最後的處理。</p> <h2 id="測試案例賞析"><a href="#測試案例賞析" aria-hidden="true" class="header-anchor">#</a> 測試案例賞析</h2> <blockquote><p>Source Code: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/AggregateTests.cs" target="_blank" rel="noopener noreferrer">AggregateTests.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <h3 id="emptysourceandseed"><a href="#emptysourceandseed" aria-hidden="true" class="header-anchor">#</a> EmptySourceAndSeed</h3> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void EmptySourceAndSeed()
+{
+    int[] source = { };
+    long seed = 2;
+    long expected = 2;
+
+    Assert.Equal(expected, source.Aggregate(seed, (x, y) =&gt; x * y));
+}
+</code></pre></div><p><code>expected</code>會是<strong>2</strong>是因為<code>source</code>雖然是空陣列，但並不是<code>null</code>，所以不會拋出例外，再來就是<code>source</code>是空所以不會做巡覽，因此<code>seed</code>的值就會是回傳值。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>這次看的<code>Aggregate</code>是一個比較特別的方法，首先他並<strong>不是延遲執行</strong>的，再來就是<strong>會參考上一個元素</strong>的資料，讓我們看到了不一樣的寫法實作。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <p><a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/28_HowToUseAggregate.html" class="prev">
+          Aggregate的應用
+        </a></span> <span class="next"><a href="/30_End.html">
+          旅程的結尾
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/31.39fff360.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GroupJoin的應用 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/27.9528ee7e.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="active sidebar-link">GroupJoin的應用</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#功能說明" class="sidebar-link">功能說明</a></li><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#方法定義" class="sidebar-link">方法定義</a></li><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#查詢運算式" class="sidebar-link">查詢運算式</a></li><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#方法範例" class="sidebar-link">方法範例</a></li><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#特別之處" class="sidebar-link">特別之處</a></li><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#範例程式" class="sidebar-link">範例程式</a></li><li class="sidebar-sub-header"><a href="/22_HowToUseGroupJoin.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="groupjoin的應用"><a href="#groupjoin的應用" aria-hidden="true" class="header-anchor">#</a> GroupJoin的應用</h1> <p>今天我們來看<code>GroupBy</code>跟<code>Join</code>的合體<code>GroupJoin</code>，一般資料表都會是一對多的關聯設計，很少會有一對一、多對多的情況出現，所以當我們<code>Join</code>完兩個資料時，我們得到的結果會是一邊的資料有<strong>重複</strong>的情形。</p> <p>例如有個人有兩筆電話號碼，當我們<code>Join</code>人跟電話的資料時，這個人的資料就會出現<strong>兩筆</strong>，造成我們的資料處理上的困難，<code>GroupJoin</code>就是讓你在<code>Join</code>時就可以做彙整資料的作業，增加便利性。</p> <h2 id="功能說明"><a href="#功能說明" aria-hidden="true" class="header-anchor">#</a> 功能說明</h2> <p>將<code>outer</code>鍵值跟<code>inner</code>鍵值相等的資料合併，並且對資料進行彙整的動作。</p> <h2 id="方法定義"><a href="#方法定義" aria-hidden="true" class="header-anchor">#</a> 方法定義</h2> <p><code>GroupJoin</code>跟<code>Join</code>一樣有兩個公開方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; GroupJoin&lt;TOuter, TInner, TKey, TResult&gt;(
+    this IEnumerable&lt;TOuter&gt; outer,
+    IEnumerable&lt;TInner&gt; inner,
+    Func&lt;TOuter, TKey&gt; outerKeySelector,
+    Func&lt;TInner, TKey&gt; innerKeySelector,
+    Func&lt;TOuter, IEnumerable&lt;TInner&gt;, TResult&gt; resultSelector);
+
+public static IEnumerable&lt;TResult&gt; GroupJoin&lt;TOuter, TInner, TKey, TResult&gt;(
+    this IEnumerable&lt;TOuter&gt; outer,
+    IEnumerable&lt;TInner&gt; inner,
+    Func&lt;TOuter, TKey&gt; outerKeySelector,
+    Func&lt;TInner, TKey&gt; innerKeySelector,
+    Func&lt;TOuter, IEnumerable&lt;TInner&gt;, TResult&gt; resultSelector,
+    IEqualityComparer&lt;TKey&gt; comparer);
+</code></pre></div><p>仔細看<code>GroupJoin</code>的方法定義後，我們來跟<code>Join</code>比較，發現它們只差在<code>resultSelector</code>。</p> <p>而在講這個<code>resultSelector</code>前，先來喚醒大家對<code>GroupBy</code>的<code>resultSelector</code>的記憶，<code>GroupBy</code>的<code>resultSelector</code>會將每個<strong>鍵值</strong>及其<strong>資料</strong>傳入<code>resultSelector</code>，讓每個鍵值資料可以<strong>彙整</strong>回傳。</p> <p>複習完<code>GroupBy</code>的<code>resultSelector</code>後，<code>GroupJoin</code>的也是跟其相似的，它是將<code>outer</code>對應的<code>inner</code>資料的集合跟著<code>outer</code>一起傳入<code>resultSelector</code>，這樣你就可以做彙整的動作。</p> <h2 id="查詢運算式"><a href="#查詢運算式" aria-hidden="true" class="header-anchor">#</a> 查詢運算式</h2> <p><code>GroupJoin</code>在查詢運算式中是跟<code>Join</code>用同樣的運算式: <code>join</code>，不同的是<code>GroupJoin</code>會在後面加一個<code>into</code>。</p> <div class="language-C# extra-class"><pre class="language-text"><code>join_into_clause
+    : 'join' type? identifier 'in' expression 'on' expression 'equals' expression 'into' identifier
+    ;
+</code></pre></div><p>這個<code>into</code>的後面是接一個要在<code>select</code>中使用<code>inner</code>的別名，<code>inner</code>在查詢<strong>運算式</strong>中就是<code>join</code>後面定義的物件，現在我們來看一下轉換的公式:</p> <p>下面這段查詢運算式:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x1 in e1
+join x2 in e2 on k1 equals k2 into g
+select v
+</code></pre></div><p>可以被轉換成<code>GroupJoin</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>( e1 ) . GroupJoin( e2 , x1 =&gt; k1 , x2 =&gt; k2 , ( x1 , g ) =&gt; v )
+</code></pre></div><p>我們可以看到<code>g</code>是在<code>inner Enumerable</code>的位置，所以他會是<code>x2</code>中跟<code>x1</code>有關係的集合。</p> <h2 id="方法範例"><a href="#方法範例" aria-hidden="true" class="header-anchor">#</a> 方法範例</h2> <p>這裡我們使用跟<code>Join</code>範例相同的物件及資料。</p> <p>下面是<strong>人</strong>跟<strong>電話</strong>的物件，電話上有個人的物件藉此跟人關聯:</p> <div class="language-C# extra-class"><pre class="language-text"><code>class Person
+{
+    public string Name { get; set; }
+}
+
+class Phone
+{
+    public string PhoneNumber { get; set; }
+    public Person Person { get; set; }
+}
+</code></pre></div><p>下面是範例資料:</p> <div class="language-C# extra-class"><pre class="language-text"><code>Person Peter = new Person() { Name = &quot;Peter&quot; };
+Person Sunny = new Person() { Name = &quot;Sunny&quot; };
+Person Tim = new Person() { Name = &quot;Tim&quot; };
+Person May = new Person() { Name = &quot;May&quot; };
+
+Phone num1 = new Phone() { PhoneNumber = &quot;01-5555555&quot;, Person = Peter };
+Phone num2 = new Phone() { PhoneNumber = &quot;02-5555555&quot;, Person = Sunny };
+Phone num3 = new Phone() { PhoneNumber = &quot;03-5555555&quot;, Person = Tim };
+Phone num4 = new Phone() { PhoneNumber = &quot;04-5555555&quot;, Person = May };
+Phone num5 = new Phone() { PhoneNumber = &quot;05-5555555&quot;, Person = Peter };
+</code></pre></div><p>接下來我們來看幾個範例。</p> <h3 id="跟join的比較"><a href="#跟join的比較" aria-hidden="true" class="header-anchor">#</a> 跟Join的比較</h3> <p><strong>題目</strong>: 取得每個人的電話，如有多筆用逗號(<code>,</code>)隔開。</p> <p><strong>答案</strong>如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>/*
+ * output:
+ *
+ * Peter: 01-5555555,05-5555555
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ * May: 04-5555555
+ */
+</code></pre></div><ol><li>用<code>Join</code>及<code>GroupBy</code>實作</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>var results = persons.Join(
+    phones,
+    person =&gt; person,
+    phone =&gt; phone.Person,
+    (person, phone) =&gt; new { person.Name, phone.PhoneNumber })
+    .GroupBy(x =&gt; x.Name,
+        (name, data) =&gt; new {
+            Name = name,
+            PhoneNumber = string.Join(',', data.Select(x =&gt; x.PhoneNumber)) });
+</code></pre></div><ol start="2"><li>用<code>GroupBy</code>實作</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>var results = persons.GroupJoin(
+    phones,
+    person =&gt; person,
+    phone =&gt; phone.Person,
+    (person, phoneEnum) =&gt;
+        new {
+            person.Name,
+            PhoneNumber = string.Join(',', phoneEnum.Select(x =&gt; x.PhoneNumber))
+        }
+);
+</code></pre></div><p>我們可以看到下面幾個重點:</p> <ul><li>因為<code>Join</code>出來的資料是沒有分組的，所以需要再用<code>GroupBy</code>做分組</li> <li>兩個最大的差別在於<code>resultSelector</code>的<strong>第二個</strong>傳入參數
+<ul><li><code>Join</code>是傳入此<code>outer</code>鍵值對應的其中一個<code>inner</code>的<strong>資料</strong></li> <li><code>GroupJoin</code>是傳入此<code>outer</code>鍵值對應的所有<code>inner</code>的<strong>集合</strong></li></ul></li></ul> <p>因為<code>GroupJoin</code>的<code>resultSelector</code>可以拿到<strong>集合</strong>的資料，所以他可以做<strong>彙整</strong>的動作。</p> <p>而<code>Join</code>只拿的到單筆資料，也就沒辦法做彙整了。</p> <h3 id="left-join"><a href="#left-join" aria-hidden="true" class="header-anchor">#</a> Left Join</h3> <p>之前介紹<code>Join</code>的時候有說過<code>Join</code>是<code>Inner Join</code>，而<code>GroupJoin</code>可以經過一些手腳來取得<code>Left Join</code>的結果。</p> <p><strong>資料</strong>: 還是上一題的資料，為了可以看到<code>Left Join</code>的結果，我們把<code>num4</code>給拿掉，讓<code>May</code>沒有電話資料。</p> <p>一般的<code>Join</code>會拿到<code>Inner Join</code>的資料:</p> <div class="language-C# extra-class"><pre class="language-text"><code>var results = persons.Join(
+    phones,
+    person =&gt; person,
+    phone =&gt; phone.Person,
+    (person, phone) =&gt;
+        new
+        {
+            person.Name,
+            phone.PhoneNumber
+        }
+);
+
+/*
+ * output
+ * Peter: 01-5555555
+ * Peter: 05-5555555
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ */
+</code></pre></div><p>用<code>GroupJoin</code>搭配<code>DefaultIfEmpty</code>和<code>SelectMany</code>達到<strong>Left Join</strong>的效果</p> <div class="language-C# extra-class"><pre class="language-text"><code>var results = persons.GroupJoin(
+    phones,
+    person =&gt; person,
+    phone =&gt; phone.Person,
+    (person, phoneEnum) =&gt; new
+    {
+        name = person.Name,
+        phones = phoneEnum.DefaultIfEmpty()
+    })
+    .SelectMany(x =&gt; x.phones.Select(phone =&gt; new { name = x.name, phone = phone }))
+    ;
+
+/*
+ * output
+ * Peter: 01-5555555
+ * Peter: 05-5555555
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ * May:
+ */
+</code></pre></div><ul><li><code>DefaultIfEmpty</code>: 如果空的話回傳<strong>預設資料</strong>，讓此筆資料不會因為沒有電話資料而被刪掉</li> <li><code>SelectMany</code>: <code>phones</code>傳回來的是<code>phone</code>的集合，所以要用<code>SelectMany</code>把他<strong>打平</strong></li></ul> <h3 id="查詢運算式-2"><a href="#查詢運算式-2" aria-hidden="true" class="header-anchor">#</a> 查詢運算式</h3> <p><strong>題目</strong>: 使用查詢運算式取得資料。</p> <ol><li>一個人一筆資料(有做<strong>彙整</strong>)</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>var results = from person in persons
+    join phone in phones on person equals phone.Person into ppGroup
+    select new {person.Name, PhoneNumber= string.Join(',', ppGroup.Select(x =&gt; x.PhoneNumber))};
+
+/*
+ * output
+ *
+ * Peter: 01-5555555,05-5555555
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ * May: 04-5555555
+ */
+</code></pre></div><ol start="2"><li>每筆電話都一筆資料，沒有電話的人也要顯示名稱(<strong>Left Join</strong>)</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>var results = from person in persons
+                join phone in phones on person equals phone.Person into ppGroup
+                from item in ppGroup.DefaultIfEmpty(new Phone() { Person = null, PhoneNumber = &quot;&quot;})
+                select new {name = person.Name, phone = item};
+
+/*
+ * output
+ *
+ * Peter: 01-5555555
+ * Peter: 05-5555555
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ * May:
+ */
+</code></pre></div><h2 id="特別之處"><a href="#特別之處" aria-hidden="true" class="header-anchor">#</a> 特別之處</h2> <ul><li>有<strong>延遲執行</strong>的特性，在<code>foreach</code>或是<code>GetEnumerator()</code>叫用時才會執行</li> <li>透過<code>SelectMany</code>及<code>DefaultIfEmpty</code>可以對資料做<strong>Left Join</strong></li></ul> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p><code>GroupJoin</code>的特性就像是<code>Join</code>跟<code>GroupBy</code>的合併，前半段作<code>Join</code>合併資料，後半段做<code>GroupBy</code>將相同鍵值的資料做彙整，下一章來看看<code>GroupJoin</code>是怎麼做到的。</p> <h2 id="範例程式"><a href="#範例程式" aria-hidden="true" class="header-anchor">#</a> 範例程式</h2> <p><a href="https://github.com/peterhpchen/DigDeeperLINQ/tree/22_HowToUseGroupJoin/demo/22_HowToUseGroupJoin" target="_blank" rel="noopener noreferrer">GitHub<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://docs.microsoft.com/zh-tw/dotnet/api/system.linq.enumerable.groupjoin?view=netframework-4.7.1" target="_blank" rel="noopener noreferrer">docs.microsoft: system.linq.enumerable.groupjoin<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">docs.microsoft: query-expressions<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/keywords/join-clause?view=netframework-4.7.1" target="_blank" rel="noopener noreferrer">docs.microsoft: join-clause<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://stackoverflow.com/questions/3792888/how-to-implement-left-join-in-join-extension-method" target="_blank" rel="noopener noreferrer">stackoverflow: how-to-implement-left-join-in-join-extension-method<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/21_InsideOfJoin.html" class="prev">
+          Join的原碼探索
+        </a></span> <span class="next"><a href="/23_InsideOfGroupJoin.html">
+          GroupJoin的原碼探索
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/27.9528ee7e.js" defer></script>
+  </body>
+</html>

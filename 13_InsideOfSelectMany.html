@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SelectMany的原碼探險 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/22.9295395c.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="active sidebar-link">SelectMany的原碼探險</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/13_InsideOfSelectMany.html#原始碼分析" class="sidebar-link">原始碼分析</a></li><li class="sidebar-sub-header"><a href="/13_InsideOfSelectMany.html#測試案例分析" class="sidebar-link">測試案例分析</a></li><li class="sidebar-sub-header"><a href="/13_InsideOfSelectMany.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/13_InsideOfSelectMany.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="selectmany的原碼探險"><a href="#selectmany的原碼探險" aria-hidden="true" class="header-anchor">#</a> SelectMany的原碼探險</h1> <p><code>Select</code>及<code>SelectMany</code>的差別在前一章的說明後應該有個初步的了解了，知道了應用的方式後我們接著來看看它是怎麼做到的吧。</p> <h2 id="原始碼分析"><a href="#原始碼分析" aria-hidden="true" class="header-anchor">#</a> 原始碼分析</h2> <ul><li>Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/SelectMany.cs</li> <li>Public Method: <code>SelectMany</code>總共有四個多載的方法，兩個是只有<strong>一個</strong><code>selector</code>，另外兩個是有<strong>兩個</strong><code>selector</code>(<code>collectionSelector</code>及<code>resultSelector</code>)</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>/* 下面兩個方法只有一個selector */
+public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TResult&gt;(    // 4
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, IEnumerable&lt;TResult&gt;&gt; selector);
+    
+public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TResult&gt;(    // 1
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, int, IEnumerable&lt;TResult&gt;&gt; selector); // 多一個int參數
+
+/* 下面兩個方法有兩個selector */
+public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TCollection, TResult&gt;(   // 2
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, 
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector);
+    
+public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TCollection, TResult&gt;(   // 3
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, int, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, // 多一個int參數
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector);
+</code></pre></div><ul><li>方法的右邊註解的數字為等下講解的順序</li></ul> <ol><li>第一個看的是只有<strong>一個</strong><code>selector</code>但有<code>int</code>傳入參數的方法:</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, IEnumerable&lt;TResult&gt;&gt; selector)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (selector == null)
+    {
+        throw Error.ArgumentNull(nameof(selector));
+    }
+
+    return SelectManyIterator(source, selector);
+}
+</code></pre></div><ul><li>判斷<code>source</code>及<code>selector</code>是否為空，為空的話丟<code>ArgumentNull</code>例外</li> <li>傳回<code>SelectManyIterator</code></li></ul> <p>到這裡跟<code>Select</code>幾乎一模一樣，唯一有差別的就只有最後的回傳值，<code>SelectMany</code>是傳回<code>SelectManyIterator</code>，相信特別之處就是在這裡，我們來看看<code>SelectMany</code>的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TResult&gt; SelectManyIterator&lt;TSource, TResult&gt;(
+    IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, IEnumerable&lt;TResult&gt;&gt; selector)
+{
+    int index = -1;
+    foreach (TSource element in source)
+    {
+        checked
+        {
+            index++;
+        }
+
+        foreach (TResult subElement in selector(element, index))
+        {
+            yield return subElement;
+        }
+    }
+}
+</code></pre></div><ul><li>此方法區塊為<code>yield</code>區塊，會轉為<code>Iterator Pattern</code>，回傳的資料是<code>IEnumerable</code>的集合</li> <li><code>yield return</code>傳回<strong>每一個元素</strong>的資料</li> <li>每個元素的<code>index</code>較前面的元素多加<strong>1</strong></li> <li><code>selector</code>執行後取得每個元素的<strong>子集合</strong>資料，再用<code>foreach</code>巡覽整個<strong>子集合</strong></li> <li>傳回<strong>子集合</strong>的每個元素</li></ul> <p>我們可以看到跟<code>SelectIterator</code>還是幾乎一模一樣，差別在於<strong>第二個</strong><code>foreach</code>，還記得我們前面講<strong>SelectMany的應用</strong>時比較了跟<code>Select</code>的差別之處就是<code>SelectMany</code>不用多一個迴圈去處理子集合的資料，從原始碼中觀察就更加明顯了，原來<code>SelectMany</code>已經幫我們把<strong>第二個</strong>迴圈要做的事情給做掉了。</p> <ol start="2"><li>接著我們要來看有兩個<code>selector</code>(collectionSelector及resultSelector)但<code>CollectionSelector</code>沒有<code>int</code>參數的方法:</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TCollection, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, 
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (collectionSelector == null)
+    {
+        throw Error.ArgumentNull(nameof(collectionSelector));
+    }
+
+    if (resultSelector == null)
+    {
+        throw Error.ArgumentNull(nameof(resultSelector));
+    }
+
+    return SelectManyIterator(source, collectionSelector, resultSelector);
+}
+</code></pre></div><ul><li>判斷<code>source</code>及<code>selector</code>是否為空，空的話丟出<code>ArgumentNull</code>的例外</li> <li>傳回<code>SelectManyIterator</code></li></ul> <p>這個方法跟剛剛介紹的第一個<code>SelectMany</code>的方法差在多了一個<code>if</code>判斷<code>resultSelector</code>是否為空，然後回傳的方法<code>SelectManyIterator</code>有<strong>三個參數</strong>，想當然，這裡不會是重點所在，我們接著來看看這個有<strong>三個參數</strong>的<code>SelectManyIterator</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TResult&gt; SelectManyIterator&lt;TSource, TCollection, TResult&gt;(
+    IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, 
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector)
+{
+    foreach (TSource element in source)
+    {
+        foreach (TCollection subElement in collectionSelector(element))
+        {
+            yield return resultSelector(element, subElement);
+        }
+    }
+}
+</code></pre></div><ul><li>回傳值為<code>resultSelector</code>執行後的結果</li></ul> <p>跟第一個介紹的方法差別只差在子集合的元素要回傳前再去執行了<code>resultSelector</code>，這樣的目的就是可以輸出<strong>子集合</strong>跟<strong>原集合</strong>合併的資料。</p> <p>我們可以看到它跟第一個方法的結構是完全一樣的，但是有<code>resultSelector</code>的幫助讓我們可以更省力的拿到自己想要的檔案。</p> <ol start="3"><li><strong>第三個</strong>方法是有<code>int</code>的<code>collectionSelector</code>的方法，因為方法的實作跟<strong>第二個</strong>完全一樣，我們就直接來看<code>SelectManyIterator</code>的實作:</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TResult&gt; SelectManyIterator&lt;TSource, TCollection, TResult&gt;(
+    IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, int, IEnumerable&lt;TCollection&gt;&gt; collectionSelector, 
+    Func&lt;TSource, TCollection, TResult&gt; resultSelector)
+{
+    int index = -1;
+    foreach (TSource element in source)
+    {
+        checked
+        {
+            index++;
+        }
+
+        foreach (TCollection subElement in collectionSelector(element, index))
+        {
+            yield return resultSelector(element, subElement);
+        }
+    }
+}
+</code></pre></div><p>學一套就會了全部，這個方法中完全沒有新的東西，只是把第一跟第二個方法合併起來而已。</p> <ul><li>用<code>index</code>來給予每個<code>selector</code>位置的資訊(第一個方法)</li> <li>回傳<code>resultSelector</code>執行結果(第二個方法)</li></ul> <ol start="4"><li>接著我們要來看最後一個方法了:</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource, TResult&gt;(this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, IEnumerable&lt;TResult&gt;&gt; selector)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (selector == null)
+    {
+        throw Error.ArgumentNull(nameof(selector));
+    }
+
+    return new SelectManySingleSelectorIterator&lt;TSource, TResult&gt;(source, selector);
+}
+</code></pre></div><p>跟前面的方法一樣，判斷參數是否為空，如果都是合法的就傳給<code>Iterator</code>做事，眼尖的人應該有發現到這次叫用的<code>Iterator</code>跟前面方法叫用的並不相同，看來是有什麼秘密藏在這裡喔，我們來看看吧:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private sealed class SelectManySingleSelectorIterator&lt;TSource, TResult&gt; : 
+    Iterator&lt;TResult&gt;, 
+    IIListProvider&lt;TResult&gt;
+</code></pre></div><p>這是一個實作了<code>Iterator</code>的<code>Class</code>，看到<code>Iterator</code>的<code>Class</code>自然就會想看看它的<code>MoveNext</code>，以下是它的實作:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public override bool MoveNext()
+{
+    switch (_state)
+    {
+        case 1:
+            // Retrieve the source enumerator.
+            _sourceEnumerator = _source.GetEnumerator();
+            _state = 2;
+            goto case 2;
+        case 2:
+            // Take the next element from the source enumerator.
+            if (!_sourceEnumerator.MoveNext())
+            {
+                break;
+            }
+
+            TSource element = _sourceEnumerator.Current;
+
+            // Project it into a sub-collection and get its enumerator.
+            _subEnumerator = _selector(element).GetEnumerator();
+            _state = 3;
+            goto case 3;
+        case 3:
+            // Take the next element from the sub-collection and yield.
+            if (!_subEnumerator.MoveNext())
+            {
+                _subEnumerator.Dispose();
+                _subEnumerator = null;
+                _state = 2;
+                goto case 2;
+            }
+
+            _current = _subEnumerator.Current;
+            return true;
+    }
+
+    Dispose();
+    return false;
+}
+</code></pre></div><ul><li><code>_state</code>在<code>GetEnumerator()</code>時會設為<strong>1</strong>(請參考第11章-<em>Select的原碼探險</em>)</li> <li><code>_state</code>為<strong>1</strong>時取得<strong>集合</strong>的<code>Enumerator</code></li> <li><code>_state</code>為<strong>2</strong>時對集合執行<code>_selector</code>取得目標資料，到這裡為止就是<code>Select</code>的<code>MoveNext()</code>所做的事，但<code>SelectMany</code>將目標資料的<code>Enumerator</code>取得放進<code>_subEnumerator</code>並且進入<strong>第三狀態</strong>(<code>_state=3</code>)</li> <li><code>_state</code>為<strong>3</strong>時將子集合的<code>Enumerator</code>(<code>_subEnumerator</code>)做巡覽放進<code>_current</code>裡面，如果巡覽終止則將狀態調回<strong>2</strong>(<code>_state=2</code>)</li></ul> <p>實際上<code>SelectMany</code>比<code>Select</code>多了一層的<code>MoveNext()</code>來取得子集合的元素資料，達到扁平化的目的。</p> <h2 id="測試案例分析"><a href="#測試案例分析" aria-hidden="true" class="header-anchor">#</a> 測試案例分析</h2> <ul><li>Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/SelectManyTests.cs</li></ul> <h3 id="parameterizedtests"><a href="#parameterizedtests" aria-hidden="true" class="header-anchor">#</a> ParameterizedTests</h3> <div class="language-C# extra-class"><pre class="language-text"><code>[Theory]
+[MemberData(nameof(ParameterizedTestsData))]
+public void ParameterizedTests(IEnumerable&lt;int&gt; source, Func&lt;int, IEnumerable&lt;int&gt;&gt;selector)
+{
+    var expected = source.Select(i =&gt; selector(i)).Aggregate((l, r) =&gt; l.Concat(r));
+    var actual = source.SelectMany(selector);
+
+    Assert.Equal(expected, actual);
+    Assert.Equal(expected.Count(), actual.Count()); // SelectMany may employ an optimized Count implementation.
+    Assert.Equal(expected.ToArray(), actual.ToArray());
+    Assert.Equal(expected.ToList(), actual.ToList());
+}
+
+public static IEnumerable&lt;object[]&gt; ParameterizedTestsData()
+{
+    for (int i = 1; i &lt;= 20; i++)
+    {
+        Func&lt;int, IEnumerable&lt;int&gt;&gt; selector = n =&gt; Enumerable.Range(i, n);
+        yield return new object[] { Enumerable.Range(1, i), selector };
+    }
+}
+</code></pre></div><p><code>Aggregate()</code>會將每個目前巡覽的結果向後一個元素丟，以上述程式碼為例<code>Aggregate((l, r) =&gt; l.Concat(r))</code>:</p> <ul><li><code>l</code>: 前個元素執行<code>Aggregate</code>後的值</li> <li><code>r</code>: 目前的元素值</li></ul> <p>所以<code>Aggregate((l, r) =&gt; l.Concat(r))</code>是把所有元素合為一個<code>IEnumerable</code>，而在這個測試案例我們可以發現到<code>SelectMany()</code>可以轉為<code>Select().Aggregate((l, r) =&gt; l.Concat(r))</code>。</p> <h3 id="disposeafterenumeration"><a href="#disposeafterenumeration" aria-hidden="true" class="header-anchor">#</a> DisposeAfterEnumeration</h3> <p>這是一個驗證<code>Dispose</code>執行的測試，在剛剛觀察程式碼後我們知道在巡覽(<code>MoveNext()</code>)過程中會產生兩層<code>Enumerator</code>(<strong>Source</strong>及<strong>Sub</strong>)，這個測試就是要確定<code>Enumerator</code>都有在應該<code>Dispose</code>時<code>Dispose</code>，由於案例較長，我們節錄重要的部分:</p> <div class="language-C# extra-class"><pre class="language-text"><code>using (e)   // Enumerator
+{
+    while (e.MoveNext())
+    {
+        int item = e.Current;
+
+        Assert.Equal(subState[subIndex], item); // Verify Current.
+        Assert.Equal(index / subLength, subIndex);
+
+        // 第一層的Source巡覽結束後才會Dispose
+        Assert.False(sourceDisposed); // Not yet.
+
+        // This represents whehter the sub-collection we're iterating thru right now
+        // has been disposed. Also not yet.
+        Assert.False(subCollectionDisposed[subIndex]);  // 目前的Sub因還在執行巡覽所以不會Dispose
+
+        // However, all of the sub-collections before us should have been disposed.
+        // Their indices should also be maxed out.
+        Assert.All(subState.Take(subIndex), s =&gt; Assert.Equal(subLength + 1, s));
+
+        // 此Source中的其他已巡覽完的Sub會Dispose
+        Assert.All(subCollectionDisposed.Take(subIndex), t =&gt; Assert.True(t));        
+
+        index++;
+    }
+}
+
+// 巡覽結束Source會Dispose
+Assert.True(sourceDisposed);
+Assert.Equal(sourceLength, subIndex);
+Assert.All(subState, s =&gt; Assert.Equal(subLength + 1, s));
+Assert.All(subCollectionDisposed, t =&gt; Assert.True(t));
+</code></pre></div><ul><li><code>Source</code>在全部巡覽完後<code>Dispose</code></li> <li>之前的<code>Sub</code>都應該<code>Dispose</code></li></ul> <h3 id="collectioninterleavedwithlazyenumerables-toarray"><a href="#collectioninterleavedwithlazyenumerables-toarray" aria-hidden="true" class="header-anchor">#</a> CollectionInterleavedWithLazyEnumerables_ToArray</h3> <p>我們都知道<code>IEnumerable</code>只會知道目前的元素資料，它是屬於一種<strong>延遲執行</strong>的巡覽方式，而<strong>陣列</strong>跟<code>Enumerable</code>的狀況不同，它一開始就知道<strong>所有的元素值</strong>了，那如果把它們兩個同時放到一個<code>IEnumerable</code>要如何處理呢? 例如像下面這樣:</p> <div class="language-C# extra-class"><pre class="language-text"><code>// Marker at the end
+new IEnumerable&lt;int&gt;[]
+{
+    new TestEnumerable&lt;int&gt;(new int[] { 0 }),
+    new TestEnumerable&lt;int&gt;(new int[] { 1 }),
+    new TestEnumerable&lt;int&gt;(new int[] { 2 }),
+    new int[] { 3 },
+}
+</code></pre></div><p>當然我們還是可以把<strong>陣列</strong>當作<code>IEnumerable</code>去做處理，這在一般的處理中是可以的(因為都必須要Call <code>MoveNext()</code>)，但在<code>ToArray()</code>中你的目標本來就是要轉為<strong>Array</strong>了，你卻要把<strong>陣列</strong>轉成<code>IEnumerable</code>再轉成<strong>Array</strong>怎麼樣都划不來，因此<code>SelectMany</code>的<code>ToArray()</code>用了一個<code>Marker</code>來表示集合中的陣列，我們先來看程式碼:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public TResult[] ToArray()
+{
+    var builder = new SparseArrayBuilder&lt;TResult&gt;(initialize: true);
+    var deferredCopies = new ArrayBuilder&lt;IEnumerable&lt;TResult&gt;&gt;();
+
+    foreach (TSource element in _source)
+    {
+        IEnumerable&lt;TResult&gt; enumerable = _selector(element);
+
+        /* 
+         * 是陣列(或是非延遲的集合)嗎?
+         * Yes: 將其的位置(Index)及數量(Count)加到builder.Markers中，然後傳回true
+         * No: 加到builder中，然後回傳false
+         */
+        if (builder.ReserveOrAdd(enumerable))
+        {
+            // 陣列內容加到deferredCopies中
+            deferredCopies.Add(enumerable);
+        }
+    }
+
+    // 將builder中的資料做ToArray的動作(因為已經排除了陣列的資料，所以沒有做多餘的轉換)
+    TResult[] array = builder.ToArray();
+
+    ArrayBuilder&lt;Marker&gt; markers = builder.Markers; // 取得陣列位置(Index)及數量(Count)資訊
+    for (int i = 0; i &lt; markers.Count; i++)
+    {
+        Marker marker = markers[i];
+        IEnumerable&lt;TResult&gt; enumerable = deferredCopies[i];    // 取得陣列內容
+        EnumerableHelpers.Copy(enumerable, array, marker.Index, marker.Count);  // 複製到剛剛builder轉出來的陣列中
+    }
+
+    return array;
+}
+</code></pre></div><p>從上述的程式碼說明可以知道<code>ToArray()</code>的運作細節，這個測試案例就是在測這個部分，我是因為看到這個案例才知道它的實作方式這麼的特別，所以才在測試案例這個單元做說明，如果想要深入了解的可以仔細看看這個測試案例。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p><code>SelectMany</code>是在<code>Select</code>的基礎上多做事情，整體的邏輯更為複雜，希望透過本文的介紹可以讓大家更加了解這個方法的原理。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://msdn.microsoft.com/zh-tw/library/bb548651(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">Enumerable.Aggregate<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/12_HowToUseSelectMany.html" class="prev">
+          SelectMany的應用
+        </a></span> <span class="next"><a href="/14_HowToUseWhere.html">
+          Where的應用
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/22.9295395c.js" defer></script>
+  </body>
+</html>

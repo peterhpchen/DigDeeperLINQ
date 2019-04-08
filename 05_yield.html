@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>仔細體會yield的甜美: yield介紹 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/6.31b88be0.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="active sidebar-link">仔細體會yield的甜美: yield介紹</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/05_yield.html#進化的程式碼" class="sidebar-link">進化的程式碼</a></li><li class="sidebar-sub-header"><a href="/05_yield.html#yield" class="sidebar-link">yield</a></li><li class="sidebar-sub-header"><a href="/05_yield.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/05_yield.html#範例程式" class="sidebar-link">範例程式</a></li><li class="sidebar-sub-header"><a href="/05_yield.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="仔細體會yield的甜美-yield介紹"><a href="#仔細體會yield的甜美-yield介紹" aria-hidden="true" class="header-anchor">#</a> 仔細體會<code>yield</code>的甜美: <code>yield</code>介紹</h1> <p>記得以前在學校學寫程式時是寫C語言，那時候認為寫程式要自己實作Linked List等的資料結構是理所當然的事情，就安分守己的自己實作，也沒有多想什麼。</p> <p>但是自從我開始寫C#後，遇到資料結構的問題都不是去查怎麼實作了，而是去翻<strong>Microsoft Docs</strong>看有沒有可以套用的物件...，C#的方便帶來了很多好處(上手簡單、開發時間縮短...等)，就好像進到了糖果屋一樣，想要吃什麼糖果(<a href="https://zh.wikipedia.org/wiki/%E8%AF%AD%E6%B3%95%E7%B3%96" target="_blank" rel="noopener noreferrer">語法糖<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>)都應有盡有，不怕你吃就怕你不吃，我自己就是很愛吃糖的其中一位。</p> <p>但今天我們要當個探險家，到屋外探索<code>yield</code>的起源。</p> <h2 id="進化的程式碼"><a href="#進化的程式碼" aria-hidden="true" class="header-anchor">#</a> 進化的程式碼</h2> <p>在這節中我們會看到程式碼也是會<strong>進化</strong>的，總而言之先來個例子吧: <strong>在1到特定數字中輸出可以被某數整除的數列</strong>，來看看下面的程式碼:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static void outputDivide_for(int maxNum, int divide)
+{
+    for (int currentNum = 1; currentNum &lt;= maxNum; currentNum++)
+    {
+        if (currentNum % divide != 0) continue;
+        Console.Write($&quot;{currentNum} &quot;);
+    }
+    Console.WriteLine();
+}
+</code></pre></div><p>我們用了一個<code>for</code>做完了所有的事情，很棒，但試著想想以下的情境:</p> <ul><li>顯示方式要改成每行一個數字:</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>for (int currentNum = 1; currentNum &lt;= maxNum; currentNum++)
+{
+    if (currentNum % divide != 0) continue;
+    //Console.Write($&quot;{currentNum} &quot;);
+    Console.WriteLine($&quot;{currentNum} &quot;);
+}
+Console.WriteLine();
+</code></pre></div><ul><li>計算邏輯修改成: 在1到特定數字中輸出可以被<strong>某數的2倍</strong>整除的數列:</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>int divideMultitwo = divide * 2;
+for (int currentNum = 1; currentNum &lt;= maxNum; currentNum++)
+{
+    //if (currentNum % divide != 0) continue;
+    if (currentNum % divideMultitwo != 0) continue;
+    //Console.Write($&quot;{currentNum} &quot;);
+    Console.WriteLine($&quot;{currentNum} &quot;);
+}
+Console.WriteLine();
+</code></pre></div><p>注意到問題了嗎?我們在改變顯示方式及運算邏輯時都動到了這段程式碼，違反了<a href="https://en.wikipedia.org/wiki/Single_responsibility_principle" target="_blank" rel="noopener noreferrer">Single responsibility principle<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>。</p> <p>既然這樣，那先取得運算後的陣列存入<code>List</code>中，再用迴圈去顯示總可以了吧:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static void outputDivide_foreach_List(int maxNum, int divide)
+{
+    foreach (int item in enumerable_List(maxNum, divide))
+    {
+        Console.Write($&quot;{item} &quot;);
+    }
+    Console.WriteLine();
+}
+
+private static IEnumerable enumerable_List(int maxNum, int divide)
+{
+    List&lt;int&gt; result = new List&lt;int&gt;();
+
+    for (int currentNum = 1; currentNum &lt;= maxNum; currentNum++)
+    {
+        if (currentNum % divide != 0) continue;
+        result.Add(currentNum);
+    }
+    return result;
+}
+</code></pre></div><p>上面這樣寫的確符合了<strong>SRP</strong>，但我們再回頭想想，發現這裡還是埋了一顆炸彈: <strong>效能問題</strong>，請對程式碼做以下的調整:</p> <ul><li><code>outputDivide_for</code>改成下面這樣，直接<code>break</code></li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>private static void outputDivide_for(int maxNum, int divide)
+{
+    for (int currentNum = 1; currentNum &lt;= maxNum; currentNum++)
+    {
+        break;
+    }
+}
+</code></pre></div><ul><li><code>outputDivide_foreach_List</code>也一樣，直接<code>break</code></li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>private static void outputDivide_foreach_List(int maxNum, int divide)
+{
+    foreach (int item in enumerable_List(maxNum, divide))
+    {
+        break;
+    }
+}
+</code></pre></div><p><img src="/assets/img/efficiency.c5d0e420.png" alt="efficiency"></p> <p>各位應該猜到問題點了: 不管有沒有需要，<code>enumerable_List</code>裡的迴圈都會跑完，並且將取得的數值放到List中，這樣就算我們沒有實際使用到List，也一樣要耗費時間跟空間，相較之下原本的<code>for</code>反而沒有這個問題。</p> <p>可是難道一定要<strong>效能</strong>跟<strong>可維護性</strong>做二選一嗎?在這個例子是不需要的，我們只要用上一章所講的<strong>Iterator Pattern</strong>就可以輕易地解決:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable enumerable_Iterator(int maxNum, int divide)
+{
+    integersAggregate enumerable = new integersAggregate(maxNum, divide);
+    return enumerable;
+}
+
+private class integersAggregate : IEnumerable
+{
+    private int _maxNum;
+    private int _divide;
+
+    public integersAggregate(int maxNum, int divide)
+    {
+        _maxNum = maxNum;
+        _divide = divide;
+    }
+
+    public IEnumerator GetEnumerator()
+    {
+        return new integersInterator(_maxNum, _divide);
+    }
+}
+private class integersInterator : IEnumerator
+{
+    private int _maxNum;
+    private int _divide;
+    private int currentNum = 1;
+
+    public integersInterator(int maxNum, int divide)
+    {
+        _maxNum = maxNum;
+        _divide = divide;
+    }
+
+    public object Current { get; private set; }
+    
+    public bool MoveNext()
+    {
+        do
+        {
+            if (currentNum % _divide == 0)
+            {
+                Current = currentNum;
+                return true;
+            }
+            currentNum++;
+        } while (currentNum &lt;= _maxNum);
+        return false;
+    }
+    
+    public void Reset()
+    {
+        currentNum = 1;
+    }
+}
+</code></pre></div><p><code>foreach</code>跟<code>IEnumerable</code>搭配，每次都是叫用<code>MoveNext</code>來確定是否有下一個元素，如果有則將下一個元素值賦予<code>Current</code>變數，所以每次只會取得下一個元素，也不會增加額外的空間消費。</p> <p>使用這樣的方式解決了我們擔心的兩個問題</p> <ul><li>可以保證計算的花費一定值得(效能問題解決)</li> <li>可以將巡覽及計算邏輯拆分(可維護性提高)</li></ul> <p>但人天生就是懶惰，難道每次愈到巡覽的需求都要實作<code>IEnumerator</code>嗎?沒有辦法像宣告<code>List</code>那樣簡單明瞭了嗎?</p> <p><strong>有的</strong>，就是我們今天的主角<code>yield</code>。</p> <h2 id="yield"><a href="#yield" aria-hidden="true" class="header-anchor">#</a> yield</h2> <p>一樣是上一節的例子，但我們改用<code>yield</code>來實作<code>IEnumerable</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable enumerable_yield(int maxNum, int divide)
+{
+    for (int currentNum = 1; currentNum &lt;= maxNum; currentNum++)
+    {
+        if (currentNum % divide != 0) continue;
+        yield return currentNum;
+    }
+}
+</code></pre></div><p>就這樣?對，真的只要這樣就可以做到<code>Iterator Pattern</code>做的事情，但寫法卻跟<code>List</code>一樣簡單(如果要驗證可以使用解譯器，文末的參考也有些是以解譯後的程式做解釋的，有興趣可以去看看)。</p> <p>這邊有幾個重點:</p> <ul><li>如果一個區塊(block)中有<code>yield</code>陳述式，此區塊就叫做<strong>Iterator Block</strong></li> <li>一個方法的區塊如果是<strong>Iterator Block</strong>，則它的回傳值會是<code>IEnumerable</code>、<code>IEnumerator</code>。</li></ul> <h3 id="運作方式"><a href="#運作方式" aria-hidden="true" class="header-anchor">#</a> 運作方式</h3> <p>我們可以將中斷點下在<code>yield return</code>那行，然後一步一步執行看看會發生什麼事情，你會發現他跳回<code>foreach</code>中，又再跳回<code>yield block</code>中:</p> <p><img src="/assets/img/yieldBreakPoint.6b40cbb1.gif" alt="yield break point"></p> <p>這個執行順序顛覆了我們對程式的認知，一般的程式都會是迴圈完成後再回傳，而<strong>Iterator Block</strong>卻是遇到了<code>yield return</code>就回傳而且執行完<code>foreach</code>的<strong>embedded_statement</strong>後還能回到迴圈中繼續執行。</p> <p>現在試著把<strong>Iterator Block</strong>想成是<code>Iterator</code>中的<code>MoveNext()</code>，再去看執行順序就比較容易看得懂了。</p> <p><code>foreach</code>觸發<code>MoveNext()</code>時: 可以想成是去執行<strong>Iterator Block</strong>內的程式碼，執行到<code>yield return</code>時它做了三件事情:</p> <ul><li><strong>Iterator Block</strong>的執行暫停</li> <li>將<code>Current</code>更新成<code>yield return</code>的value</li> <li><code>MoveNext()</code>回傳true</li></ul> <p>而<code>foreach</code>在執行完<strong>embedded_statement</strong>後再次觸發<code>MoveNext()</code>時會從原本暫停的地方再執行下去直到<strong>Iterator Block</strong>中的程式:</p> <ul><li>再次觸發<code>yield return</code></li> <li>執行結束</li> <li><code>yield break</code></li></ul> <p>這點可以用下面這個例子說明:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable enumerable_yield2()
+{
+    yield return 1;
+    yield return 2;
+    yield return 3;
+    yield return 4;
+    yield return 5;
+    yield return 6;
+    yield return 7;
+    yield return 8;
+    yield return 9;
+    yield break;
+    yield return 10;
+
+    //1 2 3 4 5 6 7 8 9
+}
+</code></pre></div><p>其中<code>yield break</code>就是停止整個巡覽的動作，所以數列只會印到9而已。</p> <p>PS: 本節可以搭配上一篇介紹的<code>foreach</code>來做學習，會比較好懂。</p> <h3 id="為什麼叫做yield"><a href="#為什麼叫做yield" aria-hidden="true" class="header-anchor">#</a> 為什麼叫做<code>yield</code></h3> <p>依照<a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/classes#iterators" target="_blank" rel="noopener noreferrer">C# 語言規格-類別<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>定義，<code>Yield Type</code>代表<code>Iterator</code>的回傳資料型態，所以<code>yield</code>就是<code>Iterator</code>的回傳資料。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>說到這裡我們的旅程也告一段落了，今天用比較的方式了解<code>yield</code>的原貌，<code>for</code>到<code>List</code>再到<code>yield</code>，我們的開發過程也越來越輕鬆，但在使用這些<strong>語法糖</strong>時，也不要忽略了它們背後的意義，因為這往往是它們最有價值的部分。</p> <h2 id="範例程式"><a href="#範例程式" aria-hidden="true" class="header-anchor">#</a> 範例程式</h2> <p><a href="https://github.com/peterhpchen/DigDeeperLINQ/tree/develop/demo/05_yield" target="_blank" rel="noopener noreferrer">GitHub<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/statements#the-yield-statement" target="_blank" rel="noopener noreferrer">C# spec-statements#the-yield-statement<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/statements#blocks" target="_blank" rel="noopener noreferrer">C# spec-statements#blocks<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/classes#iterators" target="_blank" rel="noopener noreferrer">C# spec-classes#iterators<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="http://columns.chicken-house.net/2008/09/18/c-yield-return-1-how-it-work/" target="_blank" rel="noopener noreferrer">安德魯的部落格-[C#: yield return] #1. How It Work ?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://stackoverflow.com/a/410058" target="_blank" rel="noopener noreferrer">stackoverflow-Proper use of 'yield return'<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="http://limitedcode.blogspot.tw/2014/07/c-yeild.html" target="_blank" rel="noopener noreferrer">限量ㄟ蓋步-C# - yeild return 使用方法<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/keywords/yield" target="_blank" rel="noopener noreferrer">Microsoft Docs-yield<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://www.kenneth-truyers.net/2016/05/12/yield-return-in-c/" target="_blank" rel="noopener noreferrer">Kenneth Truyers-Yield return in C#<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="http://csharpindepth.com/Articles/Chapter6/IteratorBlockImplementation.aspx" target="_blank" rel="noopener noreferrer">C# in Depth-Iterator Block Implementation<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/04_foreach.html" class="prev">
+          藏在foreach下的秘密: foreach原理說明
+        </a></span> <span class="next"><a href="/06_Lambda.html">
+          Lambda運算式介紹
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/6.31b88be0.js" defer></script>
+  </body>
+</html>

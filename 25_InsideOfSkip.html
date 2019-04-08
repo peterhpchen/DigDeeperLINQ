@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Skip的原碼探索 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/29.6223e730.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="active sidebar-link">Skip的原碼探索</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/25_InsideOfSkip.html#原始碼分析" class="sidebar-link">原始碼分析</a></li><li class="sidebar-sub-header"><a href="/25_InsideOfSkip.html#測試案例賞析" class="sidebar-link">測試案例賞析</a></li><li class="sidebar-sub-header"><a href="/25_InsideOfSkip.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/25_InsideOfSkip.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="skip的原碼探索"><a href="#skip的原碼探索" aria-hidden="true" class="header-anchor">#</a> Skip的原碼探索</h1> <p>本章會說明及分析<code>Skip</code>、<code>SkipLast</code>、<code>SkipWhile</code>三個方法的<strong>原始碼實作</strong>及<strong>測試案例欣賞</strong>。</p> <h2 id="原始碼分析"><a href="#原始碼分析" aria-hidden="true" class="header-anchor">#</a> 原始碼分析</h2> <blockquote><p>Source Code: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Skip.cs" target="_blank" rel="noopener noreferrer">Skip.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>、<a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Partition.cs" target="_blank" rel="noopener noreferrer">Partition.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <h3 id="skip"><a href="#skip" aria-hidden="true" class="header-anchor">#</a> Skip</h3> <p><code>Skip</code>有一個公開方法的實作如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TSource&gt; Skip&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source, int count)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (count &lt;= 0)
+    {
+        // Return source if not actually skipping, but only if it's a type from here, to avoid
+        // issues if collections are used as keys or otherwise must not be aliased.
+        if (source is Iterator&lt;TSource&gt; || source is IPartition&lt;TSource&gt;)
+        {
+            return source;
+        }
+
+        count = 0;
+    }
+
+    else if (source is IPartition&lt;TSource&gt; partition)
+    {
+        return partition.Skip(count);
+    }
+
+    if (source is IList&lt;TSource&gt; sourceList)
+    {
+        return new ListPartition&lt;TSource&gt;(sourceList, count, int.MaxValue);
+    }
+
+    return new EnumerablePartition&lt;TSource&gt;(source, count, -1);
+}
+</code></pre></div><p>此公開方法做了下面幾件事情:</p> <ul><li>判斷<code>source</code>是否為空，空的話拋出<code>ArgumentNull</code>的<strong>例外</strong></li> <li>判斷<code>count</code>是否小於<code>0</code>，小於<code>0</code>的話將<code>count</code>設成<code>0</code></li> <li>前面已經是<code>IPartition</code>型別，也就是已經有執行過LINQ了，直接call之前method實作的<code>Skip</code></li> <li>如果是<code>IList</code>就用<code>ListPartition</code>實作</li> <li>其餘的叫用<code>EnumerablePartition</code>實作</li></ul> <p>看到<code>Enumerable</code>就會想到<code>MoveNext()</code>，所以接下來會介紹<code>ListPartition</code>跟<code>EnumerablePartition</code>的定義及<code>MoveNext()</code>。</p> <h4 id="listpartition"><a href="#listpartition" aria-hidden="true" class="header-anchor">#</a> ListPartition</h4> <div class="language-C# extra-class"><pre class="language-text"><code>public ListPartition(IList&lt;TSource&gt; source, int minIndexInclusive, int maxIndexInclusive);
+</code></pre></div><p>傳入一個<code>List</code>，設好<strong>第一個</strong>元素及<strong>最後個</strong>元素的<code>index</code>，他會把這區間內的元素集合輸出。</p> <p>這裡要注意的是如果只要忽略前面的元素的話只需要設定<code>minIndexInclusive</code>，<code>maxIndexInclusive</code>設為<code>int.MaxValue</code>就好。</p> <p>下面是<code>MoveNext()</code>的實作:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public override bool MoveNext()
+{
+    // _state - 1 represents the zero-based index into the list.
+    // Having a separate field for the index would be more readable. However, we save it
+    // into _state with a bias to minimize field size of the iterator.
+    int index = _state - 1;
+    if (unchecked((uint)index &lt;= (uint)(_maxIndexInclusive - _minIndexInclusive) &amp;&amp; index &lt; _source.Count - _minIndexInclusive))
+    {
+        _current = _source[_minIndexInclusive + index];
+        ++_state;
+        return true;
+    }
+
+    Dispose();
+    return false;
+}
+</code></pre></div><p>上面的程式有幾個重點:</p> <ul><li><code>_state</code>當作索引，初始值是<code>1</code>，所以<code>index = _state - 1</code></li> <li>這裡要輸出的元素是由<code>_minIndexInclusive</code>起算，可以想成<code>_minIndexInclusive</code>是個起點，而<code>index</code>則是由這個<strong>起點數來第幾個</strong>的變數</li> <li>判斷<code>index</code>有沒有超出<strong>最大索引值</strong>及<strong>集合數量</strong></li> <li>如果超出則<code>return false</code>，結束迭代</li> <li>如果沒有超出，則把目前的元素附給<code>_current</code>，然後<code>_state</code>加<strong>1</strong>，回傳<code>true</code></li></ul> <p>這裡我們注意到一件事，因為<code>_maxIndexInclusive</code>的用法是<code>index &lt;= _maxIndexInclusive - _minIndexInclusive</code>，所以只要把<code>_maxIndexInclusive</code>設為<code>int.MaxValue</code>，<code>_maxIndexInclusive</code>就不會影響判斷，因此<code>Skip</code>才會將其設為<code>int.MaxValue</code>。</p> <h4 id="enumerablepartition"><a href="#enumerablepartition" aria-hidden="true" class="header-anchor">#</a> EnumerablePartition</h4> <div class="language-C# extra-class"><pre class="language-text"><code>internal EnumerablePartition(IEnumerable&lt;TSource&gt; source, int minIndexInclusive, int maxIndexInclusive);
+</code></pre></div><p>傳入一個<code>IEnumerable</code>，設好<strong>第一個</strong>元素及<strong>最後個</strong>元素的<code>index</code>，他會把這區間內的元素集合輸出。</p> <p>如果只要忽略由第一個數來第N個元素的話只需要設定<code>minIndexInclusive</code>，<code>maxIndexInclusive</code>設為<code>-1</code>就好。</p> <p>這裡有一個地方跟<code>ListPartition</code>不同，只要<strong>忽略前面的元素</strong>時<code>maxIndexInclusive</code>的設定一個是<code>int.MaxValue</code>，一個是<code>-1</code>，我們等下從實作上看為什麼會不同。</p> <p>下面是<code>MoveNext()</code>的實作:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public override bool MoveNext()
+{
+    // Cases where GetEnumerator has not been called or Dispose has already
+    // been called need to be handled explicitly, due to the default: clause.
+    int taken = _state - 3;
+    if (taken &lt; -2)
+    {
+        Dispose();
+        return false;
+    }
+
+    switch (_state)
+    {
+        case 1:
+            _enumerator = _source.GetEnumerator();
+            _state = 2;
+            goto case 2;
+        case 2:
+            if (!SkipBeforeFirst(_enumerator))
+            {
+                // Reached the end before we finished skipping.
+                break;
+            }
+
+            _state = 3;
+            goto default;
+        default:
+            if ((!HasLimit || taken &lt; Limit) &amp;&amp; _enumerator.MoveNext())
+            {
+                if (HasLimit)
+                {
+                    // If we are taking an unknown number of elements, it's important not to increment _state.
+                    // _state - 3 may eventually end up overflowing &amp; we'll hit the Dispose branch even though
+                    // we haven't finished enumerating.
+                    _state++;
+                }
+                _current = _enumerator.Current;
+                return true;
+            }
+
+            break;
+    }
+
+    Dispose();
+    return false;
+}
+</code></pre></div><p>這段程式碼有下面幾個重點:</p> <ul><li>這裡的<code>_state</code>回歸原本的用法: <strong>狀態的設置</strong></li> <li><code>_state=1</code>: 初始<code>_source</code>，轉為<code>Enumerator</code></li> <li><code>_state=2</code>: 判斷設置的<code>minIndexInclusive</code>是否<strong>超過集合總長度</strong>並且將<code>_enumerator</code>的<code>_current</code>推至<code>minIndexInclusive</code>的位置</li> <li><code>_state=3</code>: 判斷是否超過<strong>最大長度</strong>，沒有的話將<code>_current</code>往後<strong>再推一個至目標位置</strong>然後傳回<strong>true</strong></li></ul> <p>我們可以在<code>HasLimit</code>找到為什麼<code>maxIndexInclusive</code>要設<code>-1</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private bool HasLimit =&gt; _maxIndexInclusive != -1;
+</code></pre></div><p><code>EnumerablePartition</code>是用<code>_maxIndexInclusive != -1</code>判斷是否有設定最大值，所以如果沒有設定最大值的話要設為<code>-1</code>。</p> <h3 id="skiplast"><a href="#skiplast" aria-hidden="true" class="header-anchor">#</a> SkipLast</h3> <p><code>SkipLast</code>有一個公開方法，其實作為:</p> <ul><li>判斷參數是否為空，如果為空則拋出<code>ArgumentNull</code>例外</li> <li>參數判斷合法後叫用<code>SkipLastIterator</code></li></ul> <p>下面為<code>SkipLastIterator</code>的實作:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TSource&gt; SkipLastIterator&lt;TSource&gt;(IEnumerable&lt;TSource&gt; source, int count)
+{
+    Debug.Assert(source != null);
+    Debug.Assert(count &gt; 0);
+
+    var queue = new Queue&lt;TSource&gt;();
+
+    using (IEnumerator&lt;TSource&gt; e = source.GetEnumerator())
+    {
+        while (e.MoveNext())
+        {
+            if (queue.Count == count)
+            {
+                do
+                {
+                    yield return queue.Dequeue();
+                    queue.Enqueue(e.Current);
+                }
+                while (e.MoveNext());
+                break;
+            }
+            else
+            {
+                queue.Enqueue(e.Current);
+            }
+        }
+    }
+}
+</code></pre></div><p><code>SkipLast</code>是用<code>yield return</code>實作，有下面幾個重點:</p> <ul><li>維護一個<code>Queue</code>，用來存放集合的元素</li> <li>叫用<code>MoveNext()</code>將<code>Queue</code>的元素數量塞到跟要<code>Skip</code>的元素數量一樣為止</li> <li>當Queue的元素數量跟要<code>Skip</code>的數量相同時，做以下動作
+<ol><li>從Queue裡抓出第一個元素做<code>yield return</code></li> <li>將目前的元素在塞到Queue裡</li> <li>叫用<code>MoveNext()</code>做下一輪的判斷</li></ol></li></ul> <p>第三點的處理會讓Queue裡一直保持最後<code>count</code>數的元素，代表到巡覽結束時在Queue中的元素就不會被輸出，所以就可以做到最後<code>count</code>數的元素<code>Skip</code>的處理。</p> <h3 id="skipwhile"><a href="#skipwhile" aria-hidden="true" class="header-anchor">#</a> SkipWhile</h3> <p><code>SkipWhlie</code>有兩個公開方法，差別在<code>predicate</code>參數上:</p> <div class="language-C# extra-class"><pre class="language-text"><code>SkipWhile&lt;TSource&gt;(...Func&lt;TSource, bool&gt; predicate);
+
+SkipWhile&lt;TSource&gt;(...Func&lt;TSource, int, bool&gt; predicate);
+</code></pre></div><p>一個有傳入index的參數，另一個沒有傳入。</p> <p>兩個方法都做了以下的處理:</p> <ul><li>判斷參數是否為空，如果為空則拋出<code>ArgumentNull</code>例外</li> <li>參數判斷合法後叫用<code>SkipWhileIterator</code></li></ul> <p>我們兩種<code>Iterator</code>一起看，直接看有<code>index</code>參數的<code>predicate</code>的<code>SkipWhileIterator</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TSource&gt; SkipWhileIterator&lt;TSource&gt;(IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, bool&gt; predicate)
+{
+    using (IEnumerator&lt;TSource&gt; e = source.GetEnumerator())
+    {
+        int index = -1;
+        while (e.MoveNext())
+        {
+            checked
+            {
+                index++;
+            }
+
+            TSource element = e.Current;
+            if (!predicate(element, index))
+            {
+                yield return element;
+                while (e.MoveNext())
+                {
+                    yield return e.Current;
+                }
+
+                yield break;
+            }
+        }
+    }
+}
+</code></pre></div><p>這段有下列的重點:</p> <ul><li>每次<code>MoveNext()</code>時<code>index</code>就加<code>1</code></li> <li>判斷<code>predicate</code>的結果，如果是<code>true</code>代表要繼續<code>Skip</code></li> <li>如果是<code>false</code>的話代表要輸出<strong>這個元素之後的所有元素</strong></li></ul> <h2 id="測試案例賞析"><a href="#測試案例賞析" aria-hidden="true" class="header-anchor">#</a> 測試案例賞析</h2> <blockquote><p>Source Code: <a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/SkipTests.cs" target="_blank" rel="noopener noreferrer">SkipTests.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>、<a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/SkipLastTests.cs" target="_blank" rel="noopener noreferrer">SkipLastTests.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>、<a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/SkipWhileTests.cs" target="_blank" rel="noopener noreferrer">SkipWhileTests.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <h3 id="skiptests-cs"><a href="#skiptests-cs" aria-hidden="true" class="header-anchor">#</a> SkipTests.cs</h3> <h4 id="skipexcessive"><a href="#skipexcessive" aria-hidden="true" class="header-anchor">#</a> SkipExcessive</h4> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void SkipExcessive()
+{
+    Assert.Equal(Enumerable.Empty&lt;int&gt;(), NumberRangeGuaranteedNotCollectionType(0, 20).Skip(42));
+}
+</code></pre></div><p><code>count</code>超過元素數量的話會傳回<code>Empty</code>。</p> <h4 id="skiponempty"><a href="#skiponempty" aria-hidden="true" class="header-anchor">#</a> SkipOnEmpty</h4> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void SkipOnEmpty()
+{
+    Assert.Equal(Enumerable.Empty&lt;int&gt;(), GuaranteeNotIList(Enumerable.Empty&lt;int&gt;()).Skip(0));
+    Assert.Equal(Enumerable.Empty&lt;string&gt;(), GuaranteeNotIList(Enumerable.Empty&lt;string&gt;()).Skip(-1));
+    Assert.Equal(Enumerable.Empty&lt;double&gt;(), GuaranteeNotIList(Enumerable.Empty&lt;double&gt;()).Skip(1));
+}
+</code></pre></div><p><code>source</code>是<code>Empty</code>並不會拋出<code>ArgumentNull</code>的例外，而是回傳<code>Empty</code>的集合。</p> <h4 id="skipnegative"><a href="#skipnegative" aria-hidden="true" class="header-anchor">#</a> SkipNegative</h4> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void SkipNegative()
+{
+    Assert.Equal(Enumerable.Range(0, 20), NumberRangeGuaranteedNotCollectionType(0, 20).Skip(-42));
+}
+</code></pre></div><p><code>count</code>為<strong>負數</strong>時不會<code>Skip</code>任何元素。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>在<code>Skip</code>的原始碼中，我們可以觀察到<code>Skip</code>是用什麼方式達成目標的，其中最特別的是<code>SkipLast</code>，用了一個Queue存入跟要<code>Skip</code>數量相同的元素，在巡覽到想同數量時開始把Queue中的第一個元素吐出，最後Queue中只會剩下要<code>Skip</code>的元素，剩餘的都已經巡覽了。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/24_HowToUseSkip.html" class="prev">
+          Skip的應用
+        </a></span> <span class="next"><a href="/26_HowToUseTake.html">
+          Take的應用
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/29.6223e730.js" defer></script>
+  </body>
+</html>

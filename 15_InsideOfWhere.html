@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Where的原碼探索 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/23.ebef259f.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="active sidebar-link">Where的原碼探索</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/15_InsideOfWhere.html#原始碼分析" class="sidebar-link">原始碼分析</a></li><li class="sidebar-sub-header"><a href="/15_InsideOfWhere.html#測試案例賞析" class="sidebar-link">測試案例賞析</a></li><li class="sidebar-sub-header"><a href="/15_InsideOfWhere.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/15_InsideOfWhere.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="where的原碼探索"><a href="#where的原碼探索" aria-hidden="true" class="header-anchor">#</a> Where的原碼探索</h1> <p>前一章我們講到<code>Where</code>的使用方式，<code>Where</code>使用起來很直覺，就像用<code>if else</code>做判斷一樣，使用一個<code>bool</code>回傳型態的<code>Lambda Expression</code>就可以<strong>篩選</strong>我們所需要的資料，既然<code>Where</code>使用起來這麼單純，那我們來看看它的原始碼是不是也這麼單純吧。</p> <h2 id="原始碼分析"><a href="#原始碼分析" aria-hidden="true" class="header-anchor">#</a> 原始碼分析</h2> <ul><li>Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Where.cs</li> <li>Methods: <code>Where</code>有兩個Public Methods，我們先來看看其中一個:</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, bool&gt; predicate)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+    
+    if (predicate == null)
+    {
+        throw Error.ArgumentNull(nameof(predicate));
+    }
+
+    return WhereIterator(source, predicate);
+}
+</code></pre></div><ul><li>判斷<code>source</code>或是<code>predicate</code>是否為空，如果是空的就拋<code>ArgumentNull</code>的例外</li> <li>如果都是合法參數則回傳<code>WhereIterator(source, predicate)</code></li></ul> <p>這裡我們依然從委派方法有<code>index</code>傳入參數的方法看起，可以看到跟前面介紹的<strong>LINQ方法</strong>在架構上幾乎沒有差別，所以關鍵依然在<code>Iterator</code>上，我們來看看<code>WhereIterator</code>的實作:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TSource&gt; WhereIterator&lt;TSource&gt;(IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, bool&gt; predicate)
+{
+    int index = -1;
+    foreach (TSource element in source)
+    {
+        checked
+        {
+            index++;
+        }
+
+        if (predicate(element, index))
+        {
+            yield return element;
+        }
+    }
+}
+</code></pre></div><ul><li><code>yield</code>區塊中的<code>yield return</code>是傳回每個元素的值，而整個方法的回傳型別是<code>IEnumerable</code></li> <li>後一個元素會比前個元素多加<strong>1</strong></li> <li>用<code>if</code>接收<code>predicate</code>執行後的結果來判斷是否要將目前的元素回傳</li></ul> <p><code>Where</code>這裡毫無意外的用了<code>if</code>的判斷來決定是否要回傳此元素，整段程式的差別也只有這裡，可見只要學會了<code>Iterator</code>，大部分的<strong>LINQ方法</strong>都能夠很快的理解。</p> <p>接著我們要來看第二個Public Method了，這個是<code>predicate</code>沒有<code>index</code>傳入參數的方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, bool&gt; predicate)
+{
+    #region 判斷傳入參數合法性
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (predicate == null)
+    {
+        throw Error.ArgumentNull(nameof(predicate));
+    }
+    #endregion 判斷傳入參數合法性
+
+    #region 依據source的型別決定Iterator
+    if (source is Iterator&lt;TSource&gt; iterator)
+    {
+        return iterator.Where(predicate);
+    }
+
+    if (source is TSource[] array)
+    {
+        return array.Length == 0 ?
+            (IEnumerable&lt;TSource&gt;)EmptyPartition&lt;TSource&gt;.Instance :
+            new WhereArrayIterator&lt;TSource&gt;(array, predicate);
+    }
+
+    if (source is List&lt;TSource&gt; list)
+    {
+        return new WhereListIterator&lt;TSource&gt;(list, predicate);
+    }
+
+    return new WhereEnumerableIterator&lt;TSource&gt;(source, predicate);
+    #endregion 依據source的型別決定Iterator
+}
+</code></pre></div><ul><li>判斷傳入參數<code>source</code>及<code>predicate</code>是否為空，空的話回傳<code>ArgumentNull</code>例外</li> <li>依據<code>source</code>的型別決定<code>Iterator</code> <ul><li>已經是<code>Iterator</code>的話就直接叫用<code>Iterator</code>的<code>Where</code></li> <li>是<code>Array</code>的話回傳<code>WhereArrayIterator</code></li> <li>是<code>List</code>的話回傳<code>WhereListIterator</code></li> <li>只是<code>IEnumerable</code>的話就回傳<code>WhereEnumerableIterator</code></li></ul></li></ul> <p>每個<code>Iterator</code>的處理都大同小異，主要的差別在對於各個型別的處理而已，我們就挑<code>WhereArrayIterator</code>來說明內部運作吧:</p> <ul><li><code>MoveNext()</code>: 這是整個<code>Iterator</code>最重要的Method，來看一下<code>Where</code>是怎麼實作<code>MoveNext()</code>的</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>public override bool MoveNext()
+{
+    int index = _state - 1;
+    TSource[] source = _source;
+
+    while (unchecked((uint)index &lt; (uint)source.Length))
+    {
+        TSource item = source[index];
+        index = _state++;
+        if (_predicate(item))
+        {
+            _current = item;
+            return true;
+        }
+    }
+
+    Dispose();
+    return false;
+}
+</code></pre></div><ul><li><code>_state</code>為陣列位置的基準，在<code>GetEnumerator()</code>執行後會被設為<strong>1</strong>，所以起始的<code>index</code>是<code>_state - 1</code></li> <li>巡覽至陣列最尾端，每次都用<code>predicate</code>取得是否要回傳元素的判斷</li> <li>通過<code>predicate</code>後將<code>current</code>設為目前的元素，然後回傳<code>true</code></li> <li>如果巡覽結束則<code>Dispose()</code>跟<code>return false</code></li></ul> <p>這裡我們可以看到<code>_state</code>的用法跟前面介紹的<code>SelectMany</code>是不一樣的，<code>SelectMany</code>是用來決定是在<strong>第幾層</strong>的<code>Enumerator</code>和巡覽結束後要<strong>跳回</strong>哪層<code>Enumerator</code>，而<code>Where</code>則是完全當作<code>index</code>來使用。</p> <ul><li><code>GetCount</code>: 取得集合的元素數量</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>public int GetCount(bool onlyIfCheap)
+{
+    if (onlyIfCheap)
+    {
+        return -1;
+    }
+
+    int count = 0;
+
+    foreach (TSource item in _source)
+    {
+        if (_predicate(item))
+        {
+            checked
+            {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+</code></pre></div><ul><li>如果通過<code>predicate</code>的驗證則<code>count</code>加<strong>1</strong></li></ul> <p>之前我知道了<code>Where</code>是<strong>延遲執行</strong>後我就很好奇它的<code>GetCount()</code>是怎麼運作的，原來還是會<strong>全部執行後</strong>才取得元素<strong>數量</strong>。</p> <h2 id="測試案例賞析"><a href="#測試案例賞析" aria-hidden="true" class="header-anchor">#</a> 測試案例賞析</h2> <ul><li>Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/tests/WhereTests.cs</li></ul> <h3 id="where-sourcethrowsongetenumerator"><a href="#where-sourcethrowsongetenumerator" aria-hidden="true" class="header-anchor">#</a> Where_SourceThrowsOnGetEnumerator</h3> <p>這個案例的<code>source</code>是<code>ThrowsOnGetEnumerator()</code>，會在第一次叫用<code>GetEnumerator()</code>時丟出<code>InvalidOperationException</code>例外。</p> <div class="language-C# extra-class"><pre class="language-text"><code>protected class ThrowsOnGetEnumerator : TestEnumerator
+{
+    private int getEnumeratorCallCount;
+
+    public override IEnumerator&lt;int&gt; GetEnumerator()
+    {
+        if (getEnumeratorCallCount++ == 0)
+        {
+            throw new InvalidOperationException();
+        }
+
+        return base.GetEnumerator();
+    }
+}
+
+[Fact]
+public void Where_SourceThrowsOnGetEnumerator()
+{
+    IEnumerable&lt;int&gt; source = new ThrowsOnGetEnumerator();
+    Func&lt;int, bool&gt; truePredicate = (value) =&gt; true;
+
+    var enumerator = source.Where(truePredicate).GetEnumerator();
+
+    // Ensure the first MoveNext call throws an exception
+    Assert.Throws&lt;InvalidOperationException&gt;(() =&gt; enumerator.MoveNext());
+
+    // Ensure Current is set to the default value of type T
+    int currentValue = enumerator.Current;
+    Assert.Equal(default(int), currentValue);
+    
+    // Ensure subsequent MoveNext calls succeed
+    Assert.True(enumerator.MoveNext());
+    Assert.Equal(1, enumerator.Current);
+}
+</code></pre></div><p>要看懂這個測試案例要建立一個觀念: <code>Where</code>叫用的<code>GetEnumerator()</code>並不是<code>source</code>的<code>GetEnumerator()</code>，而是<code>Where</code>自己的<code>GetEnumerator()</code>。</p> <p>知道這觀念後我們再看測試案例，這樣也就說得通為什麼不是在<code>var enumerator = source.Where(truePredicate).GetEnumerator();</code>拋出例外，而是在<code>enumerator.MoveNext()</code>丟出例外。</p> <p>由於我們剛剛介紹<code>Where</code>的<code>MoveNext()</code>的<code>source</code>是<code>Array</code>的，所以他並沒有叫用<code>GetEnumerator()</code>，現在我們來看看<code>WhereEnumerableIterator</code>的<code>MoveNext()</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public override bool MoveNext()
+{
+    switch (_state)
+    {
+        case 1:
+            _enumerator = _source.GetEnumerator();
+            _state = 2;
+            goto case 2;
+        case 2:
+            while (_enumerator.MoveNext())
+            {
+                TSource item = _enumerator.Current;
+                if (_predicate(item))
+                {
+                    _current = item;
+                    return true;
+                }
+            }
+
+            Dispose();
+            break;
+    }
+
+    return false;
+}
+</code></pre></div><p>這裡才是<code>source.GetEnumerator()</code>叫用的地方，所以我們第一次叫用<code>source</code>的<code>GetEnumerator()</code>是在<code>MoveNext()</code>而不是在<code>Where</code>叫用<code>GetEnumerator()</code>時。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>Where語法的主要運作原理在於巡覽時使用<code>predicate</code>的結果判斷是否將此元素加入結果集合中，簡單的用<code>if</code>判斷就可以做出如此實用的方法真的是太棒了。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <p><a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/14_HowToUseWhere.html" class="prev">
+          Where的應用
+        </a></span> <span class="next"><a href="/16_HowToUseOrderBy.html">
+          LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/23.ebef259f.js" defer></script>
+  </body>
+</html>

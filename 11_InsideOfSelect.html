@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Select的原碼探險 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/21.ae691c0c.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="active sidebar-link">Select的原碼探險</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/11_InsideOfSelect.html#dotnet-corefx使用說明" class="sidebar-link">dotnet/corefx使用說明</a></li><li class="sidebar-sub-header"><a href="/11_InsideOfSelect.html#文章結構" class="sidebar-link">文章結構</a></li><li class="sidebar-sub-header"><a href="/11_InsideOfSelect.html#原始碼分析" class="sidebar-link">原始碼分析</a></li><li class="sidebar-sub-header"><a href="/11_InsideOfSelect.html#測試案例分析" class="sidebar-link">測試案例分析</a></li><li class="sidebar-sub-header"><a href="/11_InsideOfSelect.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/11_InsideOfSelect.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="select的原碼探險"><a href="#select的原碼探險" aria-hidden="true" class="header-anchor">#</a> Select的原碼探險</h1> <p>前面的章節我們提到Select的使用方式，在知道了它神奇的運作方式及效果後，是不是加深了你對其運作方式的好奇心，其實它的運作方式比我們想的都還要單純，現在讓我們來場精彩的探險吧。</p> <h2 id="dotnet-corefx使用說明"><a href="#dotnet-corefx使用說明" aria-hidden="true" class="header-anchor">#</a> dotnet/corefx使用說明</h2> <p>原碼探險的章節是以<a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>為基礎來做解說的，一般來說每次會參考兩個檔案:</p> <ul><li><em>corefx/src/System.Linq/src/System/Linq/{語法名稱}.cs</em>: 語法的原始碼檔案</li> <li><em>corefx/src/System.Linq/tests/{語法名稱}Tests.cs</em>: 語法的測試案例</li></ul> <h2 id="文章結構"><a href="#文章結構" aria-hidden="true" class="header-anchor">#</a> 文章結構</h2> <p>在原碼探險的章節中主要會有下面兩個主題:</p> <ul><li>原始碼分析: 語法的原始碼來做觀察及學習</li> <li>測試案例賞析: 從語法的測試案例挑幾個比較特別的來做介紹</li></ul> <p>我們會由兩個面相出發，先以觀察原始碼來讓自己對於語法的運作有個初步的概念，再來學習測試案例來強化觀念及增加在原碼分析中沒有注意到的細節概念。</p> <h2 id="原始碼分析"><a href="#原始碼分析" aria-hidden="true" class="header-anchor">#</a> 原始碼分析</h2> <ul><li>Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Select.cs</li> <li>Public Method</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; Select&lt;TSource, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, TResult&gt; selector);
+
+public static IEnumerable&lt;TResult&gt; Select&lt;TSource, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, TResult&gt; selector);
+</code></pre></div><p>我們先來看<code>selector</code>有<code>Index</code>參數方法的原始碼:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; Select&lt;TSource, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, TResult&gt; selector)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (selector == null)
+    {
+        throw Error.ArgumentNull(nameof(selector));
+    }
+
+    return SelectIterator(source, selector);
+}
+</code></pre></div><ul><li>在<code>source</code>或是<code>selector</code>傳入<code>null</code>時會丟出<code>ArgumentNull</code>的Exception</li> <li>回傳值為<code>SelectIterator</code></li></ul> <p>是不是很單純呢? 基本上這裡只有判斷傳入參數的合法性，確定合法後就丟給<code>SelectIterator</code>，接著來看一下<code>SelectIterator</code>的實作:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private static IEnumerable&lt;TResult&gt; SelectIterator&lt;TSource, TResult&gt;(
+    IEnumerable&lt;TSource&gt; source, Func&lt;TSource, int, TResult&gt; selector)
+{
+    int index = -1;
+    foreach (TSource element in source)
+    {
+        checked
+        {
+            index++;
+        }
+
+        yield return selector(element, index);
+    }
+}
+</code></pre></div><ul><li>這是個<code>yield</code>區塊，實作方式為<strong>Iterator Pattern</strong>，回傳的資料是<code>IEnumerable</code>型別的集合</li> <li>每一個元素會較前一個元素的<code>index</code>多加<strong>1</strong></li> <li>每個元素的資料會是執行完委派方法<code>selector</code>後的結果</li></ul> <p>到這裡就是有<code>index</code>的Select全部的原始碼了，實作主要是基於<code>yield</code>的應用，<code>yield</code>會擴展為<strong>Iterator Pattern</strong>，在巡覽時藉由叫用<code>MoveNext()</code>來對<strong>index加1</strong>以及<strong>將<code>Selector</code>執行後的值給予<code>Cuurent</code></strong>，也因為是<code>Iterator Pattern</code>所以可以知道有<code>index</code>的Select確定是擁有延遲執行的功能的。</p> <p>接著我們來觀察沒有<code>index</code>的Select原始碼如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; Select&lt;TSource, TResult&gt;(
+    this IEnumerable&lt;TSource&gt; source, Func&lt;TSource, TResult&gt; selector)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    if (selector == null)
+    {
+        throw Error.ArgumentNull(nameof(selector));
+    }
+
+    if (source is Iterator&lt;TSource&gt; iterator)
+    {
+        return iterator.Select(selector);
+    }
+
+    if (source is IList&lt;TSource&gt; ilist)
+    {
+        if (source is TSource[] array)
+        {
+            return array.Length == 0 ?
+                EmptyPartition&lt;TResult&gt;.Instance :
+                new SelectArrayIterator&lt;TSource, TResult&gt;(array, selector);
+        }
+
+        if (source is List&lt;TSource&gt; list)
+        {
+            return new SelectListIterator&lt;TSource, TResult&gt;(list, selector);
+        }
+
+        return new SelectIListIterator&lt;TSource, TResult&gt;(ilist, selector);
+    }
+
+    if (source is IPartition&lt;TSource&gt; partition)
+    {
+        return partition is EmptyPartition&lt;TSource&gt;
+            ? EmptyPartition&lt;TResult&gt;.Instance
+            : new SelectIPartitionIterator&lt;TSource, TResult&gt;(partition, selector);
+    }
+
+    return new SelectEnumerableIterator&lt;TSource, TResult&gt;(source, selector);
+}
+</code></pre></div><ul><li>在<code>source</code>或是<code>selector</code>傳入<code>null</code>時會丟出<code>ArgumentNull</code>的Exception</li> <li>判斷傳入值的型別，分別實作不同的<code>Iterator</code></li></ul> <p>之前的有<code>index</code>的Select因為是借助<code>yield</code>來實作，所以我們並不清楚它實作<code>Iterator</code>的細節，但從這個Select的原始碼我們就可以清楚的知道實作的<code>Iterator</code>長什麼樣子了。</p> <p>從這段程式中我們可以觀察到一些有趣的事實:</p> <ul><li><code>IList</code>、<code>Array</code>、<code>List</code>雖然是<code>IEnumerable</code>但並不是<code>Iterator</code></li> <li>所有型別在查詢過程中都會被轉為<code>Iterator</code></li> <li>叫用<code>Select()</code>後如果再接一個<code>Select()</code>會因為第一個<code>Select</code>已經是<code>Iterator</code>了而直接叫用<code>iterator.Select(selector)</code></li></ul> <p>接下來觀察<code>Iterator</code>的方法定義:</p> <ul><li>Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/Iterator.cs</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>internal abstract class Iterator&lt;TSource&gt; : IEnumerable&lt;TSource&gt;, IEnumerator&lt;TSource&gt;
+</code></pre></div><ul><li>同時實作了<code>IEnumerable</code>跟<code>IEnumerator</code>，這也是為什麼我們叫用了LINQ方法後都會變為<code>IEnumerable</code>的原因。</li></ul> <p>往下看到<code>GetEnumerator()</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public IEnumerator&lt;TSource&gt; GetEnumerator()
+{
+    Iterator&lt;TSource&gt; enumerator = 
+        _state == 0 &amp;&amp; _threadId == Environment.CurrentManagedThreadId ? this : Clone();
+    enumerator._state = 1;
+    return enumerator;
+}
+</code></pre></div><ul><li>除了叫用第一次<code>GetEnumerator()</code>所取得的物件為原本的物件外，其他都是複製出新的實體</li></ul> <p>最後我們來說說<code>IPartition</code>，繼承了這個介面就是要實作取得部分集合的方法，IPartition的方法定義在下面:</p> <div class="language-C# extra-class"><pre class="language-text"><code>// 忽略前{count}個元素
+IPartition&lt;TElement&gt; Skip(int count);
+
+// 拿取前{count}個元素
+IPartition&lt;TElement&gt; Take(int count);
+
+// 取得特定{index}的元素
+TElement TryGetElementAt(int index, out bool found);
+
+// 取得第一個元素
+TElement TryGetFirst(out bool found);
+
+// 取得最後一個元素
+TElement TryGetLast(out bool found);
+</code></pre></div><h2 id="測試案例分析"><a href="#測試案例分析" aria-hidden="true" class="header-anchor">#</a> 測試案例分析</h2> <p>我們剛剛自己走了一輪原碼，現在來看看別人是怎麼去觀察程式碼的，如果說自己去觀察程式碼是自己在闖關，那看測試案例就像在看精彩重播一樣，會讓人學到更多的技巧，我會挑幾個覺得有趣的案例來說明。</p> <ol><li>Select_SourceIsAnArray_ExecutionIsDeferred</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void Select_SourceIsAnArray_ExecutionIsDeferred()
+{
+    bool funcCalled = false;
+    Func&lt;int&gt;[] source = new Func&lt;int&gt;[] { () =&gt; { funcCalled = true; return 1; } };
+
+    IEnumerable&lt;int&gt; query = source.Select(d =&gt; d());
+    Assert.False(funcCalled);
+}
+</code></pre></div><p>這個案例的原由(<strong>延遲執行</strong>)相信大家應該都已經清楚了，我自己在閱覽的時候覺得<code>funcCalled</code>這個參數值得一提，就把這案例加進來討論。</p> <p>大家覺得Lambda陳述式中吃得到<code>funcCalled</code>嗎? 看碼說故事: 可以!!</p> <p>在建立委派方法時，Lambda(或是匿名方法)會擷取在方法中有使用到的外部變數(傳址)，所以可以在Lambda中使用這個外部變數，且外部程式也可以取得在Lambda中變動的變數值。</p> <ol start="2"><li>Select_SourceListGetsModifiedDuringIteration_ExceptionIsPropagated</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void Select_SourceListGetsModifiedDuringIteration_ExceptionIsPropagated()
+{
+    List&lt;int&gt; source = new List&lt;int&gt;() { 1, 2, 3, 4, 5 };
+    Func&lt;int, int&gt; selector = i =&gt; i + 1;
+
+    var result = source.Select(selector);
+    var enumerator = result.GetEnumerator();
+
+    Assert.True(enumerator.MoveNext());
+    Assert.Equal(2 /* 1 + 1 */, enumerator.Current);
+
+    source.Add(6);  // 新增元素會使Iterator拋錯誤
+    Assert.Throws&lt;InvalidOperationException&gt;(() =&gt; enumerator.MoveNext());
+}
+</code></pre></div><p>在叫用<code>foreach</code>或是<code>GetEnumerator()</code>做巡覽時不能對集合作增減元素的動作，否則會拋<code>InvalidOperationException</code>例外。</p> <ol start="3"><li>Select_GetEnumeratorCalledTwice_DifferentInstancesReturned</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void Select_GetEnumeratorCalledTwice_DifferentInstancesReturned()
+{
+    int[] source = new[] { 1, 2, 3, 4, 5 };
+    var query = source.Select(i =&gt; i + 1);
+
+    var enumerator1 = query.GetEnumerator();
+    var enumerator2 = query.GetEnumerator();
+
+    Assert.Same(query, enumerator1);    // 第一次的GetEnumerator()會是原本的
+    Assert.NotSame(enumerator1, enumerator2);   // 第二次或更多會以Clone()複製實體化
+
+    enumerator1.Dispose();
+    enumerator2.Dispose();
+}
+</code></pre></div><p>這個測試跟我們剛剛觀察<code>Iterator.GetEnumerator()</code>時得到的結論互相呼應，當你Call兩次以上的<code>GetEnumerator()</code>時就不在是原本的實體了。</p> <ol start="4"><li>ForcedToEnumeratorDoesntEnumerateIndexed</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void ForcedToEnumeratorDoesntEnumerateIndexed()
+{
+    var iterator = NumberRangeGuaranteedNotCollectionType(0, 3).Select((e, i) =&gt; i);
+    // Don't insist on this behaviour, but check it's correct if it happens
+    var en = iterator as IEnumerator&lt;int&gt;;
+    Assert.False(en != null &amp;&amp; en.MoveNext());
+}
+</code></pre></div><ul><li>雖然<strong>Iterator</strong>同時實作了<code>IEnumerable</code>跟<code>IEnumerator</code>，但在還沒叫用<code>GetEnumerator()</code>前是不能做巡覽的，原因為<code>_state</code>(控制目前巡覽的狀態(GetEnumerator(): 1、Dispose(): -1))的值在是在<code>GetEnumerator()</code>中初始，沒有狀態碼<code>MoveNext()</code>會直接判定已經巡覽結束而回傳<code>false</code>。</li></ul> <ol start="5"><li>MoveNextAfterDispose
+這個測試案例有點長，大部分是測試資料，我們擷取主要的部份:</li></ol> <div class="language-C# extra-class"><pre class="language-text"><code>IEnumerable&lt;int&gt; result = equivalentSource.Select(i =&gt; i);
+using (IEnumerator&lt;int&gt; e = result.GetEnumerator())
+{
+    while (e.MoveNext()) ; // Loop until we reach the end of the iterator, @ which pt it gets disposed.
+    Assert.False(e.MoveNext()); // MoveNext should not throw an exception after Dispose.
+}
+</code></pre></div><ul><li>這是在測試在巡覽結束後再次叫用<code>MoveNext()</code></li> <li>巡覽結束時會去叫用<code>Dispose()</code>，程式如下:</li></ul> <div class="language-C# extra-class"><pre class="language-text"><code>public virtual void Dispose()
+{
+    _current = default(TSource);
+    _state = -1;
+}
+</code></pre></div><p>可以看到<code>Dispose()</code>只有將<code>_current</code>及<code>_state</code>調回初始值，所以再次叫用<code>MoveNext()</code>時就會<code>return false</code>。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>我們自己一步一步的了解原始碼，經由對原始碼的初步了解去觀察測試案例，在觀看時又進一步的加深對原始碼的了解，有個相輔相成的效果，接下來我們都會依照這樣的方式去講解其他的LINQ方法。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">GitHub-dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/10_BuildCoreFX.html" class="prev">
+          建置dotnet/corefx
+        </a></span> <span class="next"><a href="/12_HowToUseSelectMany.html">
+          SelectMany的應用
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/21.ae691c0c.js" defer></script>
+  </body>
+</html>

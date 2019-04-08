@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OrderBy的原碼探索 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/24.372678b1.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="active sidebar-link">OrderBy的原碼探索</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/17_InsideOfOrderBy.html#原始碼分析" class="sidebar-link">原始碼分析</a></li><li class="sidebar-sub-header"><a href="/17_InsideOfOrderBy.html#測試案例賞析" class="sidebar-link">測試案例賞析</a></li><li class="sidebar-sub-header"><a href="/17_InsideOfOrderBy.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/17_InsideOfOrderBy.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="orderby的原碼探索"><a href="#orderby的原碼探索" aria-hidden="true" class="header-anchor">#</a> OrderBy的原碼探索</h1> <p>前面我們說到LINQ排序方法有四個<code>OrderBy</code>、<code>OrderByDescending</code>、<code>ThenBy</code>及<code>ThenByDescending</code>，
+<code>OrderBy</code>及<code>OrderByDescending</code>是設定<strong>第一個</strong>排序條件，而有沒有<code>Descending</code>是差在是不是<strong>遞減</strong>排序，LINQ的排序方法都會回傳<code>IOrderedEnumerable</code>型別，只有<code>ThenBy</code>及<code>ThenByDescending</code>接在它們後面才可以下<strong>複數個</strong>查詢條件，本章會聚焦在方法的原始碼說明上，讓我們來看看裡面施了什麼魔法吧。</p> <h2 id="原始碼分析"><a href="#原始碼分析" aria-hidden="true" class="header-anchor">#</a> 原始碼分析</h2> <ul><li>Source Code: https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/OrderBy.cs</li></ul> <p><code>OrderBy</code>及<code>OrderByDescending</code>都是傳回一個新的<code>IOrderedEnumerable</code>的實作，之間的差別只是在傳入的參數不同，我們以<code>OrderBy</code>講解定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IOrderedEnumerable&lt;TSource&gt; OrderBy&lt;TSource, TKey&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector) 
+    =&gt; new OrderedEnumerable&lt;TSource, TKey&gt;(source, keySelector, null, false, null);
+</code></pre></div><p>回傳的<code>OrderedEnumerable</code>有<strong>5</strong>個參數，後面的三個參數就是這幾個方法的不同之處，我們慢一點在去看<code>OrderedEnumerable</code>的建構子，現在我們先再來觀察<code>ThenBy</code>的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IOrderedEnumerable&lt;TSource&gt; ThenBy&lt;TSource, TKey&gt;(
+    this IOrderedEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector)
+{
+    if (source == null)
+    {
+        throw Error.ArgumentNull(nameof(source));
+    }
+
+    return source.CreateOrderedEnumerable(keySelector, null, false);
+}
+</code></pre></div><p>由於<code>ThenBy</code>會接在<code>OrderBy</code>後面，使用<code>OrderBy</code>已經建立好的<code>OrderedEnumerable</code>類別叫用<code>CreateOrderedEnumerable()</code>來更新<code>OrderedEnumerable</code>。</p> <p>接著我們來找找<code>CreateOrderedEnumerable()</code>做了什麼事情，在<a href="https://github.com/dotnet/corefx/blob/master/src/System.Linq/src/System/Linq/OrderedEnumerable.cs" target="_blank" rel="noopener noreferrer">OrderedEnumerable.cs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>中找到下面的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>IOrderedEnumerable&lt;TElement&gt; IOrderedEnumerable&lt;TElement&gt;.CreateOrderedEnumerable&lt;TKey&gt;(
+    Func&lt;TElement, TKey&gt; keySelector, 
+    IComparer&lt;TKey&gt; comparer, 
+    bool descending) 
+    =&gt; new OrderedEnumerable&lt;TElement, TKey&gt;(_source, keySelector, comparer, @descending, this);
+</code></pre></div><p>咦~這不是就是去新建一個新的<code>OrderedEnumerable</code>嗎? 可是仔細看好像有點不太一樣，我們把目光放在最後一個參數，這裡傳入了<code>this</code>，這裡應該藏了什麼秘密，我們來觀察<code>OrderedEnumerable</code>的建構子吧:</p> <div class="language-C# extra-class"><pre class="language-text"><code>internal OrderedEnumerable(
+    IEnumerable&lt;TElement&gt; source, 
+    Func&lt;TElement, TKey&gt; keySelector, 
+    IComparer&lt;TKey&gt; comparer, 
+    bool descending, 
+    OrderedEnumerable&lt;TElement&gt; parent)
+{
+    _source = source ?? throw Error.ArgumentNull(nameof(source));
+    _parent = parent;
+    _keySelector = keySelector ?? throw Error.ArgumentNull(nameof(keySelector));
+    _comparer = comparer ?? Comparer&lt;TKey&gt;.Default;
+    _descending = descending;
+}
+</code></pre></div><p>這個建構子有下面這些需注意的點:</p> <ul><li>跟其他方法一樣會去檢查<code>source</code>跟<code>keySelector</code>是否為空，空的話會回傳<code>ArgumentNull</code>的例外</li> <li>如果沒有設定<code>comparer</code>會使用<code>default</code>的比較器</li> <li>是否<strong>遞減</strong>由參數<code>descending</code>決定</li> <li>紀錄是誰(<code>parent</code>)<code>new</code>了這個<code>OrderedEnumerable</code></li></ul> <p>在這邊我們發現了<code>OrderBy</code>及<code>ThenBy</code>的差別就是<code>ThenBy</code>會傳入<code>this</code>當作<code>parent</code>參數，所以<code>ThenBy</code>的動作會被<strong>之前</strong>的<code>Source</code>所影響，這也是為什麼只有<code>ThenBy</code>接續增加查詢條件才會有用的原因。</p> <p>由上面的程式我們可以觀察到<code>OrderBy</code>及<code>ThenBy</code>的差別就是有沒有傳入之前的<code>Source</code>進<code>OrderedEnumerable</code>，先把這點記起來，現在我們來觀察排序的方式，我們前一章有提到<code>OrderBy</code>系列的方法也是延遲執行，代表它排序的時間點是在<code>GetEnumerator()</code>之後，我們先來看<code>GetEnumerator()</code>的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public IEnumerator&lt;TElement&gt; GetEnumerator()
+{
+    Buffer&lt;TElement&gt; buffer = new Buffer&lt;TElement&gt;(_source);
+    if (buffer._count &gt; 0)
+    {
+        int[] map = SortedMap(buffer);
+        for (int i = 0; i &lt; buffer._count; i++)
+        {
+            yield return buffer._items[map[i]];
+        }
+    }
+}
+</code></pre></div><ul><li>將<code>_source</code>轉為<code>Buffer</code></li> <li>叫用<code>SortedMap()</code>排序元素</li> <li>用<code>yield</code>依序回傳元素</li></ul> <p>之前介紹的方法的<code>GetEnumerator()</code>都只是單純的判斷是不是要給一個<strong>新的實體</strong>及設定<code>_state</code>，而<code>OrderBy</code>卻在<code>GetEnumerator()</code>時就執行完成了。</p> <p>接下來大家應該都很好奇<code>SortedMap()</code>到底做了什麼吧，在介紹<code>SortedMap()</code>之前得先了解<code>Buffer</code>這個類別，它其實是會將<code>_source</code>轉為<code>Array</code>，它有兩個屬性，一個是陣列型態的<code>_items</code>，另一個是元素總數的<code>_count</code>，下面是參數的代碼片段:</p> <div class="language-C# extra-class"><pre class="language-text"><code>/// &lt;summary&gt;
+/// The stored items.
+/// &lt;/summary&gt;
+internal readonly TElement[] _items;
+
+/// &lt;summary&gt;
+/// The number of stored items.
+/// &lt;/summary&gt;
+internal readonly int _count;
+</code></pre></div><p>接著我們來看<code>SortedMap()</code>，它會回傳<code>GetEnumerableSorter().Sort(buffer._items, buffer._count)</code>，這邊會需要分<code>GetEnumerableSorter()</code>及<code>Sort()</code>來說明，我們依序來看，先看<code>GetEnumerableSorter()</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private EnumerableSorter&lt;TElement&gt; GetEnumerableSorter() =&gt; GetEnumerableSorter(null);
+...
+internal override EnumerableSorter&lt;TElement&gt; GetEnumerableSorter(EnumerableSorter&lt;TElement&gt; next)
+{
+    EnumerableSorter&lt;TElement&gt; sorter = new EnumerableSorter&lt;TElement, TKey&gt;(_keySelector, _comparer, _descending, next);
+    if (_parent != null)
+    {
+        sorter = _parent.GetEnumerableSorter(sorter);
+    }
+
+    return sorter;
+}
+</code></pre></div><p><code>GetEnumerableSorter()</code>會建立一個<code>EnumerableSorter</code>實體，這時如果有使用<code>ThenBy()</code>的話就會有<code>_parent</code>的資料，我們就會將目前的<code>Sorter</code>放在<code>_parent</code>的<code>next</code>，用<code>_parent.GetEnumerableSorter(sorter)</code>取得<code>_parent</code>的<code>Sorter</code>。</p> <p>所以<code>GetEnumerableSorter()</code>是在取得實體化每個查詢條件的<code>Sorter</code>，並且將<strong>第一個</strong>(祖先)查詢條件回傳。</p> <p>接下來解析<code>Sort()</code>，我們上面提到的<code>Buffer</code>的兩個屬性會傳入<code>Sort()</code>中，來看一下<code>Sort()</code>的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>internal int[] Sort(TElement[] elements, int count)
+{
+    int[] map = ComputeMap(elements, count);
+    QuickSort(map, 0, count - 1);
+    return map;
+}
+</code></pre></div><p>從<code>Sort()</code>這裡只能看到叫用了<code>ComputeMap()</code>取得<code>map</code>陣列，再對陣列做<code>QuickSort()</code>，並看不出它真的做了什麼，所以我們得再往內追，先來看<code>ComputeMap()</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>private int[] ComputeMap(TElement[] elements, int count)
+{
+    ComputeKeys(elements, count);
+    int[] map = new int[count];
+    for (int i = 0; i &lt; map.Length; i++)
+    {
+        map[i] = i;
+    }
+
+    return map;
+}
+</code></pre></div><p>原來<code>map</code>根本就只是初始陣列而已，沒有做任何處理，看來真正做事的是<code>ComputeKeys()</code>，來看一下它吧:</p> <div class="language-C# extra-class"><pre class="language-text"><code>internal override void ComputeKeys(TElement[] elements, int count)
+{
+    _keys = new TKey[count];
+    for (int i = 0; i &lt; count; i++)
+    {
+        _keys[i] = _keySelector(elements[i]);
+    }
+
+    _next?.ComputeKeys(elements, count);
+}
+</code></pre></div><p>終於看到<code>Selector</code>了，這裡是把我們在<code>Selector</code>定的委派方法執行後取得查詢條件，再將條件依目前元素排序放進<code>_keys</code>裡面，後面的查詢條件也會因<code>_next?.ComputeKeys(elements, count)</code>取得它們的<code>Key</code>值。</p> <p>這裡雖然取得了查詢條件，但是還沒有做排序，所以我們接著就要來解析在<code>Sort()</code>中的<code>QuickSort()</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>protected override void QuickSort(int[] keys, int lo, int hi) =&gt;
+            Array.Sort(keys, lo, hi - lo + 1, Comparer&lt;int&gt;.Create(CompareAnyKeys));
+</code></pre></div><p>這裡是叫用<code>Array.Sort()</code>做排序，最重要的是比較器的實作，這就是排序的基準:</p> <div class="language-C# extra-class"><pre class="language-text"><code>internal override int CompareAnyKeys(int index1, int index2)
+{
+    int c = _comparer.Compare(_keys[index1], _keys[index2]);
+    if (c == 0)
+    {
+        if (_next == null)
+        {
+            return index1 - index2; // ensure stability of sort
+        }
+
+        return _next.CompareAnyKeys(index1, index2);
+    }
+
+    // -c will result in a negative value for int.MinValue (-int.MinValue == int.MinValue).
+    // Flipping keys earlier is more likely to trigger something strange in a comparer,
+    // particularly as it comes to the sort being stable.
+    return (_descending != (c &gt; 0)) ? 1 : -1;
+}
+</code></pre></div><ul><li>叫用之前設定的<strong>比較器</strong>做排序</li> <li>如果目前的排序相同的話，檢查是否有下一個排序條件</li> <li>有的話則往下一個查詢條件叫用，沒有的話則直接傳回兩個<code>index</code>的相減值，由於剛剛<code>map</code>是按照<code>index</code>排序的，所以一定會是負值，代表它依然會按照原本的順序輸出，所以會是<strong>stability of sort</strong></li> <li>如果有設定<code>_descending</code>，會將<code>comparer</code>的值相反</li> <li>回傳比較值</li></ul> <p>到這裡就是整個<strong>排序</strong>的流程了，可以看到他們將每個步驟都<strong>切分</strong>，設定<code>Sorter</code>、取得<code>Keys</code>到<code>Comparer</code>完成排序都切得很乾淨，這樣的程式碼看上去真是賞心悅目，而且又學到了很多的技巧，在理解LINQ的過程中又可以增強程式能力，真是太棒了。</p> <h2 id="測試案例賞析"><a href="#測試案例賞析" aria-hidden="true" class="header-anchor">#</a> 測試案例賞析</h2> <h3 id="sourcereverseofresultnullpassedascomparer"><a href="#sourcereverseofresultnullpassedascomparer" aria-hidden="true" class="header-anchor">#</a> SourceReverseOfResultNullPassedAsComparer</h3> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void SourceReverseOfResultNullPassedAsComparer()
+{
+    int?[] source = { 100, 30, 9, 5, 0, -50, -75, null };
+    int?[] expected = { null, -75, -50, 0, 5, 9, 30, 100 };
+
+    Assert.Equal(expected, source.OrderBy(e =&gt; e, null));
+}
+</code></pre></div><ul><li><code>Comparer</code>傳入<code>null</code>時會使用<code>Default</code>的比較器</li> <li><code>null</code>的元素會被排在<strong>第一個</strong></li></ul> <h3 id="samekeysverifysortstable"><a href="#samekeysverifysortstable" aria-hidden="true" class="header-anchor">#</a> SameKeysVerifySortStable</h3> <div class="language-C# extra-class"><pre class="language-text"><code>[Fact]
+public void SameKeysVerifySortStable()
+{
+    var source = new[]
+    {
+        new { Name = &quot;Tim&quot;, Score = 90 },
+        new { Name = &quot;Robert&quot;, Score = 90 },
+        new { Name = &quot;Prakash&quot;, Score = 90 },
+        new { Name = &quot;Jim&quot;, Score = 90 },
+        new { Name = &quot;John&quot;, Score = 90 },
+        new { Name = &quot;Albert&quot;, Score = 90 },
+    };
+    var expected = new[]
+    {
+        new { Name = &quot;Tim&quot;, Score = 90 },
+        new { Name = &quot;Robert&quot;, Score = 90 },
+        new { Name = &quot;Prakash&quot;, Score = 90 },
+        new { Name = &quot;Jim&quot;, Score = 90 },
+        new { Name = &quot;John&quot;, Score = 90 },
+        new { Name = &quot;Albert&quot;, Score = 90 },
+    };
+
+    Assert.Equal(expected, source.OrderBy(e =&gt; e.Score));
+}
+</code></pre></div><ul><li>測試排序是否為<code>Stable</code></li> <li><code>Stable Sort</code>的方式在前面的原碼探索有提到，因為是用原本的<code>index</code>去相減，所以可以維持<strong>原本的排序</strong></li></ul> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>這裡的排序方法跟前面的方法差別比較大，所以在<strong>原始碼分析</strong>上花了不少的篇幅，原始碼看得多後面的測試案例看起來就比較平常了，主要都是應證原始碼中分析出來的特性。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://github.com/dotnet/corefx" target="_blank" rel="noopener noreferrer">dotnet/corefx<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/16_HowToUseOrderBy.html" class="prev">
+          LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用
+        </a></span> <span class="next"><a href="/18_HowToUseGroupBy.html">
+          GroupBy的應用
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/24.372678b1.js" defer></script>
+  </body>
+</html>

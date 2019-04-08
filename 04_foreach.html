@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>藏在foreach下的秘密: foreach原理說明 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/3.682bb707.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="active sidebar-link">藏在foreach下的秘密: foreach原理說明</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/04_foreach.html#嘗試的第一步" class="sidebar-link">嘗試的第一步</a></li><li class="sidebar-sub-header"><a href="/04_foreach.html#從錯誤中學習" class="sidebar-link">從錯誤中學習</a></li><li class="sidebar-sub-header"><a href="/04_foreach.html#原理" class="sidebar-link">原理</a></li><li class="sidebar-sub-header"><a href="/04_foreach.html#ienumerable-and-ienumerator" class="sidebar-link">IEnumerable and IEnumerator</a></li><li class="sidebar-sub-header"><a href="/04_foreach.html#運作" class="sidebar-link">運作</a></li><li class="sidebar-sub-header"><a href="/04_foreach.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/04_foreach.html#範例程式" class="sidebar-link">範例程式</a></li><li class="sidebar-sub-header"><a href="/04_foreach.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="藏在foreach下的秘密-foreach原理說明"><a href="#藏在foreach下的秘密-foreach原理說明" aria-hidden="true" class="header-anchor">#</a> 藏在<code>foreach</code>下的秘密: <code>foreach</code>原理說明</h1> <p>在開始使用LINQ之後，以前大量使用的<code>foreach</code>已經慢慢的淡出了我的螢光幕前...，我其實一直都沒意識到這一點，直到我在構思這次的文章時，才又想起了這昔日的好戰友，究竟為什麼會因為使用了LINQ而減少了<code>foreach</code>使用的次數呢?讓我們繼續看下去。</p> <h2 id="嘗試的第一步"><a href="#嘗試的第一步" aria-hidden="true" class="header-anchor">#</a> 嘗試的第一步</h2> <p>總而言之我們先寫一個<code>foreach</code>的範例:</p> <div class="language-C# extra-class"><pre class="language-text"><code>int[] integers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+Console.WriteLine($&quot;Is Array: {integers is Array}&quot;); //Is Array: true
+
+foreach (int integer in integers)
+{
+    Console.Write($&quot;{integer} &quot;);
+} // 1 2 3 4 5 6 7 8 9 
+</code></pre></div><p>這個是巡覽一個1~9數字的陣列，然後把這些數字印到終端的範例。</p> <p>非常簡單的範例，但卻帶出了不簡單的疑問: <strong>為什麼foreach知道要怎麼做巡覽?</strong>，可能有人已經發現我有個提示在程式碼裡:</p> <div class="language-C# extra-class"><pre class="language-text"><code>Console.WriteLine($&quot;Is Array: {integerArray is Array}&quot;); //Is Array: true
+</code></pre></div><p><strong>因為<code>integers</code>是<code>Array</code>!!</strong>，嗯...這個答案是對也是不對，因為其實有其他非Array的物件也是可以用<code>foreach</code>來做巡覽的，例如我改為下面這樣子:</p> <div class="language-C# extra-class"><pre class="language-text"><code>String integers = &quot;123456789&quot;;
+
+Console.WriteLine($&quot;Is Array: {integers is Array}&quot;); //Is Array: false
+
+foreach (char integer in integers)
+{
+    Console.Write($&quot;{integer} &quot;);
+} // 1 2 3 4 5 6 7 8 9 
+</code></pre></div><p>把<code>integers</code>從<code>int[]</code>改為<code>String</code>照樣還是可以做巡覽，這是為什麼呢?</p> <h2 id="從錯誤中學習"><a href="#從錯誤中學習" aria-hidden="true" class="header-anchor">#</a> 從錯誤中學習</h2> <p><strong>失敗為成功之母</strong>這句話在寫程式時一直在應證，我們總是在<strong>Trial and error</strong>中學習，現在我們要再來嘗試這個解決之道了。</p> <p>首先要想辦法讓<code>foreach</code>出錯，我們先塞個<code>int</code>給它看看會發生什麼事:</p> <div class="language-C# extra-class"><pre class="language-text"><code>int integers = 123456789;
+
+foreach (int integer in integers)	//error
+{
+    Console.Write($&quot;{integer} &quot;);
+}
+</code></pre></div><p><img src="/assets/img/GetEnumerator.6e937847.png" alt="Get Enumerator"></p> <p><strong>YA!!</strong> 發生錯誤: <em>because 'int' does not contain a public definition for <strong>'GetEnumerator'</strong></em>，找到關鍵字，原來是沒有定義<code>GetEnumerator</code>，那我們就來加上定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public class IntegerEnum
+{
+
+}
+
+public class Integers
+{
+    private int _integers;
+
+    public Integers(int integers)
+    {
+        _integers = integers;
+    }
+
+    public IntegerEnum GetEnumerator()
+    {
+        return new IntegerEnum();
+    }
+}
+</code></pre></div><p>我們自定義一個<code>Integers</code>，有實作<code>GetEnumerator</code>，<code>GetEnumerator</code>不知道要傳回什麼，就先傳回一個什麼都沒有的<code>IntegerEnum</code>。</p> <p>接著把<code>integers</code>的型別改成我們自定義的<code>Integers</code>:</p> <div class="language-C# extra-class"><pre class="language-text"><code>//int integers = 123456789;
+Integers integers = new Integers(123456789);
+</code></pre></div><p>再來看看會發生什麼事:</p> <p><img src="/assets/img/Enumerable.8fc971b2.png" alt="Enumerable"></p> <p>又發生錯誤了: <em><strong>'UserQuery.IntegerEnum'</strong> of 'UserQuery.Integers.GetEnumerator()' must have a suitable <strong>public MoveNext method</strong> and <strong>public Current property</strong></em>。</p> <p>這回問題是發生在我們自定義的<code>IntegerEnum</code>上，它叫我們實作<code>MoveNext</code>方法跟<code>Current</code>屬性，看到這邊我突然想到了什麼，這不就是<a href="https://en.wikipedia.org/wiki/Iterator_pattern" target="_blank" rel="noopener noreferrer">Iterator Pattern<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>嗎?</p> <p>我們之後再來講解原理，先把<code>Integers</code>完成:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public class IntegerEnum
+{
+    private int _integers;
+    private int _index;
+    private int _maxDigit;
+    public int Current { get; private set; }
+
+    public IntegerEnum(int integers)
+    {
+        _integers = integers;
+        _index = 0;
+        _maxDigit = (int)Math.Log10(integers);
+    }
+
+    public bool MoveNext()
+    {
+        if (_maxDigit &lt; _index) return false;
+
+        Current = getCurrent();
+        _index++;
+
+        return true;
+    }
+
+    private int getCurrent()
+    {
+        int currentDigit = _maxDigit - _index;
+        int result = (_integers / (int)Math.Pow(10, currentDigit)) % 10;  //Get first digit
+
+        return result;
+    }
+}
+
+public class Integers
+{
+    private int _integers;
+
+    public Integers(int integers)
+    {
+        _integers = integers;
+    }
+
+    public IntegerEnum GetEnumerator()
+    {
+        return new IntegerEnum(_integers);
+    }
+}
+</code></pre></div><p>這樣一來我們就可以用<code>Integer</code>取得我們想要的資料了。</p> <h2 id="原理"><a href="#原理" aria-hidden="true" class="header-anchor">#</a> 原理</h2> <p>費了一番心力，終於把1-9的數字給印出來了，但是他是怎麼運作的呢?我們現在就來瞧瞧吧。</p> <h3 id="iterator-pattern"><a href="#iterator-pattern" aria-hidden="true" class="header-anchor">#</a> Iterator Pattern</h3> <p><code>foreach</code>的實作是<code>Iterator Pattern</code>，下圖為<strong>UML圖</strong>:</p> <p><img src="/assets/img/640px-Iterator_UML_class_diagram.svg.2ccb0307.png" alt="640px-Iterator_UML_class_diagram.svg.png"></p> <p>在範例程式中分別對應:</p> <ul><li><strong>ConcreteAggregate</strong>: <code>Integers</code> <ul><li><strong>Iterator()</strong>: <code>GetEnumerator()</code></li></ul></li> <li><strong>ConcreteIterator</strong>: <code>IntegerEnum</code> <ul><li><strong>next()</strong>: 傳回下一個元素，在C#中是以<code>Current</code>來抓出目前元素</li> <li><strong>hasNext()</strong>: 確認是否有下一個元素，在C#中是由<code>MoveNext()</code>做確認</li></ul></li></ul> <p>在<code>Iterator</code>裡有個跟C#上的實作差異:</p> <ul><li>在<code>Ierator Pattern</code>上是用<code>hasNext()</code>判斷是否有下一個元素，確定有了再Call <code>Next()</code>取得元素並更新<code>index</code></li> <li>c#裡是用<code>MoveNext()</code>判斷是否有下一個元素，確定有了之後去更新<code>Current</code>及<code>index</code></li></ul> <p>到這裡應該對<code>foreach</code>的運作上應該有個基本的認識了，但是我又會想問問題了: <strong>那UML上方的Aggregate跟Iterator呢?</strong></p> <h2 id="ienumerable-and-ienumerator"><a href="#ienumerable-and-ienumerator" aria-hidden="true" class="header-anchor">#</a> IEnumerable and IEnumerator</h2> <p>千呼萬喚始出來，我們整個主題的重點隆重登場，<strong>IEnumerable</strong>及<strong>IEnumerator</strong>，它們其實就是UML上方的那兩塊:</p> <ul><li><strong>Aggregate</strong>: IEnumerable(ConcreteAggregate的介面)</li> <li><strong>Iterator</strong>: IEnumerator(ConcreteIterator的介面)</li></ul> <p>所以我們的<code>Integers</code>其實就是實作了<code>IEnumerable</code>，而<code>IntegerEnum</code>就是實作了<code>IEnumerator</code>，現在我們來把這兩個介面加到剛剛的例子中:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public class IntegerEnum : IEnumerator
+{
+    ...
+
+    public object Current { get; private set; }
+
+    public bool MoveNext()
+    {
+        if (_maxDigit &lt; _index) return false;
+
+        Current = getCurrent();
+        _index++;
+
+        return true;
+    }
+
+    public void Reset()
+    {
+        _index = 0;
+    }
+
+    ...
+}
+
+public class Integers : IEnumerable
+{
+    ...
+
+    public IEnumerator GetEnumerator()
+    {
+        return new IntegerEnum(_integers);
+    }
+}
+</code></pre></div><p>這也是為什麼<code>String</code>、<code>Array</code>、<code>List</code>...等物件可以被foreach所解譯，因為這些物件都有繼承<code>IEnumerable</code>。</p> <h2 id="運作"><a href="#運作" aria-hidden="true" class="header-anchor">#</a> 運作</h2> <p>依照<a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/statements" target="_blank" rel="noopener noreferrer">C# Spec<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>的foreach statement說明，我們可以知道一段<code>foreach</code>的程式碼會被定義為下面這樣:</p> <div class="language-C# extra-class"><pre class="language-text"><code>foreach (V v in x) embedded_statement
+</code></pre></div><p>它會被擴充為:</p> <div class="language-C# extra-class"><pre class="language-text"><code>{
+    E e = ((C)(x)).GetEnumerator();
+    try {
+        while (e.MoveNext()) {
+            V v = (V)(T)e.Current;
+            embedded_statement
+        }
+    }
+    finally {
+        ... // Dispose e
+    }
+}
+</code></pre></div><p>跟剛剛的例子對照:</p> <ul><li><strong>V</strong>: <code>int</code></li> <li><strong>v</strong>: <code>integer</code></li> <li><strong>x</strong>: <code>integers</code></li> <li><strong>embedded_statement</strong>: <code>Console.Write($&quot;{integer} &quot;);</code></li> <li><strong>C</strong>: Collection Type: <code>Integers</code></li> <li><strong>E</strong>: Enumerator Type: <code>IntegerEnum</code></li> <li><strong>T</strong>: element Type: <code>Integer</code></li></ul> <p>從這裡就可以明顯的看出來<code>foreach</code>其實就會被轉譯為<code>Iterator Pattern</code>的場景物件(Client)。</p> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>終於把謎題解開了，為什麼我們使用了LINQ就會減少使用<code>foreach</code>，就是因為它們都是對<code>IEnumerable</code>做事情，所以本來我們需要用<code>foreach</code>處理資料集時，用LINQ也可以處理，自然而然好用的LINQ就變成我們的主角啦。</p> <h2 id="範例程式"><a href="#範例程式" aria-hidden="true" class="header-anchor">#</a> 範例程式</h2> <p><a href="https://github.com/peterhpchen/DigDeeperLINQ/tree/04_foreach/demo/04_foreach" target="_blank" rel="noopener noreferrer">GitHub<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="http://twmht.github.io/blog/posts/design-pattern/iterator.html" target="_blank" rel="noopener noreferrer">twmht-Iterator Pattern<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://en.wikipedia.org/wiki/Iterator_pattern" target="_blank" rel="noopener noreferrer">Wiki-Iterator pattern<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://msdn.microsoft.com/zh-tw/library/system.collections.ienumerable.getenumerator(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">MSDN-IEnumerable.GetEnumerator<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://stackoverflow.com/a/398996" target="_blank" rel="noopener noreferrer">StackOverflow-How do foreach loops work in C#?<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://dotblogs.com.tw/hatelove/2012/05/10/introducing-foreach-ienumerable-ienumerator-yield-iterator" target="_blank" rel="noopener noreferrer">In91-[.NET]快快樂樂學LINQ系列前哨戰－IEnumerable, IEnumerator, yield, Iterator<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/03_LINQPad.html" class="prev">
+          每個.NET工程師都要有的一隻箭: LINQPad介紹
+        </a></span> <span class="next"><a href="/05_yield.html">
+          仔細體會yield的甜美: yield介紹
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/3.682bb707.js" defer></script>
+  </body>
+</html>

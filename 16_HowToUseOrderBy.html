@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/10.178554de.js" as="script"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/12.fb752111.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="active sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/16_HowToUseOrderBy.html#功能說明" class="sidebar-link">功能說明</a></li><li class="sidebar-sub-header"><a href="/16_HowToUseOrderBy.html#方法定義" class="sidebar-link">方法定義</a></li><li class="sidebar-sub-header"><a href="/16_HowToUseOrderBy.html#查詢運算式" class="sidebar-link">查詢運算式</a></li><li class="sidebar-sub-header"><a href="/16_HowToUseOrderBy.html#方法範例" class="sidebar-link">方法範例</a></li><li class="sidebar-sub-header"><a href="/16_HowToUseOrderBy.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/16_HowToUseOrderBy.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="sidebar-link">Join的應用</a></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="linq排序語法-orderby、orderbydescending、thenby、thenbydescending-的應用"><a href="#linq排序語法-orderby、orderbydescending、thenby、thenbydescending-的應用" aria-hidden="true" class="header-anchor">#</a> LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</h1> <p>這章我們來說說要如何在LINQ中使用排序的功能整理集合，由於LINQ中的排序其實是一組的語法所組合而成的，所以今天會講到多個不同的語法，雖然說是多個語法，但是關鍵都還是圍繞在<strong>排序</strong>這個目的上，只是使用的情境會不同而已，讓我們來看看這些語法各有什麼樣的作用吧。</p> <h2 id="功能說明"><a href="#功能說明" aria-hidden="true" class="header-anchor">#</a> 功能說明</h2> <h3 id="orderby"><a href="#orderby" aria-hidden="true" class="header-anchor">#</a> <code>OrderBy</code></h3> <p>設定<strong>第一個</strong>排序條件，而且此排序條件為<strong>遞增</strong>排序。</p> <h3 id="orderbydescending"><a href="#orderbydescending" aria-hidden="true" class="header-anchor">#</a> <code>OrderByDescending</code></h3> <p>設定<strong>第一個</strong>排序條件，而且此排序條件為<strong>遞減</strong>排序。</p> <h3 id="thenby"><a href="#thenby" aria-hidden="true" class="header-anchor">#</a> <code>ThenBy</code></h3> <p>設定<strong>第二個以後</strong>的排序條件，此排序條件為<strong>遞增</strong>排序。</p> <h3 id="thenbydescending"><a href="#thenbydescending" aria-hidden="true" class="header-anchor">#</a> <code>ThenByDescending</code></h3> <p>設定<strong>第二個以後</strong>的排序條件，此排序條件為<strong>遞減</strong>排序。</p> <p>本章會講解以上四個方法，藉由說明我們可以看到它們其實只有<strong>順序</strong>及<strong>遞增遞減</strong>的差別而已，性質其實是相同的。</p> <h2 id="方法定義"><a href="#方法定義" aria-hidden="true" class="header-anchor">#</a> 方法定義</h2> <p>這組方法主要目的就是排序資料，請看下面的例子(節錄自<a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/sorting-data" target="_blank" rel="noopener noreferrer">Microsoft Docs<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>):</p> <p><img src="data:image/png;base64,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" alt="sort"></p> <div class="language-C# extra-class"><pre class="language-text"><code>char[] Source = new char[] { 'G', 'C', 'F', 'E', 'B', 'A', 'D' };
+IOrderedEnumerable&lt;char&gt; Results = Source.OrderBy(c =&gt; c);
+
+foreach(char result in Results){
+    Console.Write($&quot;{result} &quot;);
+}
+Console.WriteLine();
+
+// output: A B C D E F G
+</code></pre></div><p>由上面的例子我們知道了<code>OrdeBy</code>的作用是將資料<code>遞增排序</code>，讓我們來看看它的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IOrderedEnumerable&lt;TSource&gt; OrderBy&lt;TSource, TKey&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector);
+
+public static IOrderedEnumerable&lt;TSource&gt; OrderBy&lt;TSource, TKey&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector, 
+    IComparer&lt;TKey&gt; comparer);
+</code></pre></div><ul><li><code>keySelector</code>: 要排序的欄位</li> <li><code>comparer</code>: 客製的比較器</li> <li><code>IOrderedEnumerable</code>: <strong>LINQ排序語法</strong>都會回傳此型別</li></ul> <p><code>OrderBy</code>有兩個方法，差別在於要不要傳入<strong>客製的比較器</strong>，客製的比較器是使用在你有特別的排序方式的情況時，等下的範例程式我們做個範例。</p> <p>這裡我們會看到一個特別的回傳型別<code>IOrderedEnumerable</code>，它繼承自<code>IEnumerable</code>，會定義這個型別的目的是為了要讓<code>ThenBy</code>及<code>ThenByDescending</code>可以接續在這個排序之後再做其他的排序。</p> <p>當然，因為<code>IOrderedEnumerable</code>是繼承自<code>IEnumerable</code>，所以你要在後面用<code>OrderBy</code>也是合法的，但是這樣做會讓它忽略之前的排序，將其本身視為第一個排序條件，我們之後的範例程式再來看看。</p> <p>接下來的<code>OrderByDescending</code>的方法定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IOrderedEnumerable&lt;TSource&gt; OrderByDescending&lt;TSource, TKey&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector);
+
+public static IOrderedEnumerable&lt;TSource&gt; OrderByDescending&lt;TSource, TKey&gt;(
+    this IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector, 
+    IComparer&lt;TKey&gt; comparer);
+</code></pre></div><p>整個方法結構跟<code>OrderBy</code>完全一樣，只是差在它的結果會是<code>遞減</code>的。</p> <p>最後我們來看ThenBy這一組的方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IOrderedEnumerable&lt;TSource&gt; ThenBy&lt;TSource, TKey&gt;(
+    this IOrderedEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector)
+
+public static IOrderedEnumerable&lt;TSource&gt; ThenBy&lt;TSource, TKey&gt;(
+    this IOrderedEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector, 
+    IComparer&lt;TKey&gt; comparer)
+
+public static IOrderedEnumerable&lt;TSource&gt; ThenByDescending&lt;TSource, TKey&gt;(
+    this IOrderedEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector)
+
+public static IOrderedEnumerable&lt;TSource&gt; ThenByDescending&lt;TSource, TKey&gt;(
+    this IOrderedEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource, TKey&gt; keySelector, 
+    IComparer&lt;TKey&gt; comparer)
+</code></pre></div><p>前面有說到<code>ThenBy</code>及<code>ThenByDescending</code>是要接在其他排序的後面，現在看到定義<code>this</code>的確是需要傳入<code>IOrderedEnumerable</code>，所以代表你在一個<code>IEnumerable</code>的後面是不能接<code>ThenBy</code>的，要先接<code>OrderBy</code>才能用<code>ThenBy</code>。</p> <h2 id="查詢運算式"><a href="#查詢運算式" aria-hidden="true" class="header-anchor">#</a> 查詢運算式</h2> <p>依據<a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">C# Spec<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>可以照到下面跟<code>orderby</code>相關的定義:</p> <div class="language-C# extra-class"><pre class="language-text"><code>orderby_clause
+    : 'orderby' orderings
+    ;
+
+orderings
+    : ordering (',' ordering)*
+    ;
+
+ordering
+    : expression ordering_direction?
+    ;
+
+ordering_direction
+    : 'ascending'
+    | 'descending'
+    ;
+</code></pre></div><ul><li><code>orderby</code>查詢運算式後面可以接多個排序條件(以<code>,</code>分隔)</li> <li>每個查詢條件後可以用<code>ascending</code>或<code>descending</code>來決定要遞增還是遞減</li></ul> <p>來看一個查詢運算式的例子:</p> <div class="language-C# extra-class"><pre class="language-text"><code>string[] words = new string[] { &quot;Apple&quot;, &quot;Banana&quot;, &quot;Cherry&quot;, &quot;Donut&quot;, &quot;Eat&quot;, &quot;Football&quot; };
+IOrderedEnumerable&lt;string&gt; results = from word in words
+                                     orderby word.Substring(1 1),
+                                             word.Substring(2,1) descending
+                                     select word;
+...
+</code></pre></div><ul><li><strong>第一個</strong>排序條件為<strong>第二個字母遞增</strong></li> <li><strong>第二個</strong>排序條件為<strong>第三個字母遞減</strong></li></ul> <p>可以看到查詢運算式的排序是非常直覺的，相較於方法要用各個不同的方法來排序，運算式的語法更像是我們熟悉的<strong>SQL</strong>。</p> <p>我們可以依照<a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">C# Spec<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>的定義將下面的運算式:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x in e
+orderby k1 , k2 , ..., kn
+...
+</code></pre></div><p>轉成下面的方法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x in ( e ) . 
+OrderBy ( x =&gt; k1 ) . 
+ThenBy ( x =&gt; k2 ) .
+... .
+ThenBy ( x =&gt; kn )
+...
+</code></pre></div><p>可以看到查詢運算式所轉出來的方法是按照<code>OrderBy.ThenBy</code>的方式實作。</p> <h2 id="方法範例"><a href="#方法範例" aria-hidden="true" class="header-anchor">#</a> 方法範例</h2> <h3 id="客製比較器"><a href="#客製比較器" aria-hidden="true" class="header-anchor">#</a> 客製比較器</h3> <p>想要將偶數排在奇數之前，我們可以實作一個客製的比較器如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>int[] numbers = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+IOrderedEnumerable&lt;int&gt; results = numbers.OrderBy(x =&gt; x, newCustomComparer());
+...
+class CustomComparer : IComparer&lt;int&gt;
+{
+    public int Compare(int x, int y)
+    {
+        return x % 2 - y % 2;
+    }
+}
+// output: 0 2 4 6 8 1 3 5 7 9
+</code></pre></div><ul><li>奇數除以二的餘數一定大於偶數，所以排在偶數之後</li> <li>當比較的大小相同時，因為<code>OrderBy</code>是<strong>Stable Sort</strong>所以會依照原本的序列排序</li></ul> <h3 id="連續使用orderby"><a href="#連續使用orderby" aria-hidden="true" class="header-anchor">#</a> 連續使用<code>OrderBy</code></h3> <div class="language-C# extra-class"><pre class="language-text"><code>string[] words = new string[] { &quot;Apple&quot;, &quot;Banana&quot;, &quot;Cherry&quot;, &quot;Donut&quot;, &quot;Eat&quot;, &quot;Football&quot; };
+
+IOrderedEnumerable&lt;string&gt; results = words
+    .OrderBy(x =&gt;x.Substring(1, 1))
+    .OrderByDescending(x =&gt; x.Substring(2, 1));
+/* output: 
+ * 
+ * Eat
+ * Apple
+ * Football
+ * Banana
+ * Donut
+ * Cherry
+ */
+IOrderedEnumerable&lt;string&gt; results2 = words
+    .OrderBy(x =&gt;x.Substring(1, 1))
+    .ThenByDescending(x =&gt; x.Substring(2, 1));
+/* output: 
+ * 
+ * Eat
+ * Banana
+ * Cherry
+ * Football
+ * Donut
+ * Apple
+ */
+</code></pre></div><p>由結果可以看出不用<code>ThenBy</code>的話<strong>第一個查詢條件形同虛設</strong>，根本沒有用到。</p> <h1 id="特別之處"><a href="#特別之處" aria-hidden="true" class="header-anchor">#</a> 特別之處</h1> <ul><li>屬於延遲執行的方法，回傳的只是查詢的資訊，要等到<code>GetEnumerator()</code>或是<code>foreach</code>觸發才會做巡覽</li> <li>回傳值不是<code>IEnumerable</code>而是<code>IOrderedEnumerable</code>，目的是要讓ThenBy及ThenByDescending接續其後設定其他的排序條件</li> <li>可以是實作<code>IComparer</code>來客製比較器</li></ul> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p>這一章我們學了4個<strong>排序</strong>方法，<code>OrderBy</code>家族會排在第一個條件，而<code>ThenBy</code>家族則是排在第二到第n個條件，利用<code>Descending</code>搭配讓我們可以遞增遞減排序。</p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://docs.microsoft.com/zh-tw/dotnet/api/system.linq.enumerable.orderby?view=netframework-4.7.1" target="_blank" rel="noopener noreferrer">Microsoft Docs-OrderBy<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/api/system.collections.generic.comparer-1?view=netframework-4.7.1" target="_blank" rel="noopener noreferrer">Microsoft Docs-comparer<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">Microsoft Docs-query-expressions<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/sorting-data" target="_blank" rel="noopener noreferrer">Microsoft Docs-sorting-data<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/15_InsideOfWhere.html" class="prev">
+          Where的原碼探索
+        </a></span> <span class="next"><a href="/17_InsideOfOrderBy.html">
+          OrderBy的原碼探索
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/10.178554de.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Join的應用 | 深入探索 LINQ</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.bc72b5c6.css" as="style"><link rel="preload" href="/assets/js/app.bde1e58f.js" as="script"><link rel="preload" href="/assets/js/12.fb752111.js" as="script"><link rel="prefetch" href="/assets/js/10.178554de.js"><link rel="prefetch" href="/assets/js/11.e9f916b1.js"><link rel="prefetch" href="/assets/js/13.3492a02c.js"><link rel="prefetch" href="/assets/js/14.0e51fb07.js"><link rel="prefetch" href="/assets/js/15.eb388300.js"><link rel="prefetch" href="/assets/js/16.44a07189.js"><link rel="prefetch" href="/assets/js/17.61293ec6.js"><link rel="prefetch" href="/assets/js/18.048f10e0.js"><link rel="prefetch" href="/assets/js/19.1c4ad9e3.js"><link rel="prefetch" href="/assets/js/2.8b749ebe.js"><link rel="prefetch" href="/assets/js/20.ea312d42.js"><link rel="prefetch" href="/assets/js/21.ae691c0c.js"><link rel="prefetch" href="/assets/js/22.9295395c.js"><link rel="prefetch" href="/assets/js/23.ebef259f.js"><link rel="prefetch" href="/assets/js/24.372678b1.js"><link rel="prefetch" href="/assets/js/25.c8f41f7a.js"><link rel="prefetch" href="/assets/js/26.9fd9599e.js"><link rel="prefetch" href="/assets/js/27.9528ee7e.js"><link rel="prefetch" href="/assets/js/28.8c249b58.js"><link rel="prefetch" href="/assets/js/29.6223e730.js"><link rel="prefetch" href="/assets/js/3.682bb707.js"><link rel="prefetch" href="/assets/js/30.fb6ffd62.js"><link rel="prefetch" href="/assets/js/31.39fff360.js"><link rel="prefetch" href="/assets/js/32.27e59514.js"><link rel="prefetch" href="/assets/js/33.5a8e8dcf.js"><link rel="prefetch" href="/assets/js/34.e5b56e96.js"><link rel="prefetch" href="/assets/js/4.a84cf825.js"><link rel="prefetch" href="/assets/js/5.4acadfe9.js"><link rel="prefetch" href="/assets/js/6.31b88be0.js"><link rel="prefetch" href="/assets/js/7.9fd4082c.js"><link rel="prefetch" href="/assets/js/8.e39bbbe7.js"><link rel="prefetch" href="/assets/js/9.5ca92d35.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.bc72b5c6.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">深入探索 LINQ</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">目錄</a></li><li><a href="/01_Preface.html" class="sidebar-link">踏上探索的旅途: 前言</a></li><li><a href="/02_Prepare.html" class="sidebar-link">探索的準備: 使用工具及說明</a></li><li><a href="/03_LINQPad.html" class="sidebar-link">每個.NET工程師都要有的一隻箭: LINQPad介紹</a></li><li><a href="/04_foreach.html" class="sidebar-link">藏在foreach下的秘密: foreach原理說明</a></li><li><a href="/05_yield.html" class="sidebar-link">仔細體會yield的甜美: yield介紹</a></li><li><a href="/06_Lambda.html" class="sidebar-link">Lambda運算式介紹</a></li><li><a href="/07_Generics.html" class="sidebar-link">變來變去的Generic Type: 泛型介紹</a></li><li><a href="/08_WhatIsLINQ.html" class="sidebar-link">所以什麼是LINQ?</a></li><li><a href="/09_HowToUseSelect.html" class="sidebar-link">Select的應用</a></li><li><a href="/10_BuildCoreFX.html" class="sidebar-link">建置dotnet/corefx</a></li><li><a href="/11_InsideOfSelect.html" class="sidebar-link">Select的原碼探險</a></li><li><a href="/12_HowToUseSelectMany.html" class="sidebar-link">SelectMany的應用</a></li><li><a href="/13_InsideOfSelectMany.html" class="sidebar-link">SelectMany的原碼探險</a></li><li><a href="/14_HowToUseWhere.html" class="sidebar-link">Where的應用</a></li><li><a href="/15_InsideOfWhere.html" class="sidebar-link">Where的原碼探索</a></li><li><a href="/16_HowToUseOrderBy.html" class="sidebar-link">LINQ排序語法(OrderBy、OrderByDescending、ThenBy、ThenByDescending)的應用</a></li><li><a href="/17_InsideOfOrderBy.html" class="sidebar-link">OrderBy的原碼探索</a></li><li><a href="/18_HowToUseGroupBy.html" class="sidebar-link">GroupBy的應用</a></li><li><a href="/19_InsideOfGroupBy.html" class="sidebar-link">GroupBy的原碼探索</a></li><li><a href="/20_HowToUseJoin.html" class="active sidebar-link">Join的應用</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#功能說明" class="sidebar-link">功能說明</a></li><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#方法定義" class="sidebar-link">方法定義</a></li><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#查詢運算式" class="sidebar-link">查詢運算式</a></li><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#方法範例" class="sidebar-link">方法範例</a></li><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#特別之處" class="sidebar-link">特別之處</a></li><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#結語" class="sidebar-link">結語</a></li><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#範例程式" class="sidebar-link">範例程式</a></li><li class="sidebar-sub-header"><a href="/20_HowToUseJoin.html#參考" class="sidebar-link">參考</a></li></ul></li><li><a href="/21_InsideOfJoin.html" class="sidebar-link">Join的原碼探索</a></li><li><a href="/22_HowToUseGroupJoin.html" class="sidebar-link">GroupJoin的應用</a></li><li><a href="/23_InsideOfGroupJoin.html" class="sidebar-link">GroupJoin的原碼探索</a></li><li><a href="/24_HowToUseSkip.html" class="sidebar-link">Skip的應用</a></li><li><a href="/25_InsideOfSkip.html" class="sidebar-link">Skip的原碼探索</a></li><li><a href="/26_HowToUseTake.html" class="sidebar-link">Take的應用</a></li><li><a href="/27_InsideOfTake.html" class="sidebar-link">Take的原碼探索</a></li><li><a href="/28_HowToUseAggregate.html" class="sidebar-link">Aggregate的應用</a></li><li><a href="/29_InsideOfAggregate.html" class="sidebar-link">Aggregate的原碼探索</a></li><li><a href="/30_End.html" class="sidebar-link">旅程的結尾</a></li></ul> </div> <div class="page"> <div class="content"><h1 id="join的應用"><a href="#join的應用" aria-hidden="true" class="header-anchor">#</a> Join的應用</h1> <p>在資料表的設計中我們會將資料分門別類，例如說人的資料是一張表，電話是一張表，然後會有一個ID關聯兩張表，這時我們如果要找某個人有哪些連絡電話，就會使用到<code>Join</code>的語法來合併人及電話的資料，藉此找到此人對應的聯絡電話。</p> <p><strong>LINQ</strong>中也有<code>Join</code>這個方法，是要如何使用呢? 讓我們一起來看看吧。</p> <h2 id="功能說明"><a href="#功能說明" aria-hidden="true" class="header-anchor">#</a> 功能說明</h2> <p>設定<code>Outer</code>及<code>Inner</code>兩個資料型別物件，再將兩個型別中對應<strong>對方的屬性</strong>訂出來，最後決定輸出的資料結構，取得目標資料。</p> <h2 id="方法定義"><a href="#方法定義" aria-hidden="true" class="header-anchor">#</a> 方法定義</h2> <p><code>Join</code>有兩個公開方法如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>public static IEnumerable&lt;TResult&gt; Join&lt;TOuter, TInner, TKey, TResult&gt;(
+    this IEnumerable&lt;TOuter&gt; outer,
+    IEnumerable&lt;TInner&gt; inner,
+    Func&lt;TOuter, TKey&gt; outerKeySelector,
+    Func&lt;TInner, TKey&gt; innerKeySelector,
+    Func&lt;TOuter, TInner, TResult&gt; resultSelector);
+
+public static IEnumerable&lt;TResult&gt; Join&lt;TOuter, TInner, TKey, TResult&gt;(
+    this IEnumerable&lt;TOuter&gt; outer,
+    IEnumerable&lt;TInner&gt; inner,
+    Func&lt;TOuter, TKey&gt; outerKeySelector,
+    Func&lt;TInner, TKey&gt; innerKeySelector,
+    Func&lt;TOuter, TInner, TResult&gt; resultSelector,
+    IEqualityComparer&lt;TKey&gt; comparer);
+</code></pre></div><p>下面依序解說每個參數的意義:</p> <ul><li><code>outer</code>: 要收束的資料</li> <li><code>inner</code>: 期望<code>outer</code>要有的資料</li> <li><code>outerKeySelector</code>: 跟<code>inner</code>有關聯的屬性</li> <li><code>innerKeySelector</code>: 跟<code>outer</code>有關聯的屬性</li> <li><code>resultSelector</code>: 目標資料</li> <li><code>comparer</code>: <code>inner</code>跟<code>outer</code>關聯屬性的<strong>等值比較器</strong></li></ul> <p>我們用剛剛提到的<strong>人</strong>跟<strong>電話</strong>的例子來看，<strong>我們要找到某個人的電話</strong>，可以畫成下面的這張圖:</p> <p><img src="/assets/img/join.68df198a.png" alt="join"></p> <p>可以看到因為我們的目標是特定<strong>人</strong>的<strong>電話</strong>號碼，所以<strong>人</strong>是<code>inner</code>，而<strong>電話</strong>是<code>outer</code>，但是因為LINQ的<code>Join</code>方法是<strong>Inner Join</strong>，如果想要找的人沒有電話資訊，那個人的資料也不會出現，因此圖片的人的圓圈才會畫到外面。</p> <h2 id="查詢運算式"><a href="#查詢運算式" aria-hidden="true" class="header-anchor">#</a> 查詢運算式</h2> <p>依據<a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">C# Spec<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>，我們可以看到<code>join</code>的定義如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>join_clause
+    : 'join' type? identifier 'in' expression 'on' expression 'equals' expression
+    ;
+</code></pre></div><p>這個定義看不出個所以然，那我們用<code>Northwind</code>裡的資料來寫個例子:</p> <blockquote><p>找出所有有訂單的客戶聯絡人姓名</p></blockquote> <div class="language-C# extra-class"><pre class="language-text"><code>from c in Customers
+join o in Orders on c.CustomerID equals o.CustomerID
+select c.ContactName
+</code></pre></div><p>可以轉為下面的方法寫法:</p> <div class="language-C# extra-class"><pre class="language-text"><code>Customers
+   .Join (
+      Orders,
+      c =&gt; c.CustomerID,
+      o =&gt; o.CustomerID,
+      (c, o) =&gt; c.ContactName
+   )
+</code></pre></div><ul><li><code>outer</code>: <code>Customers</code></li> <li><code>inner</code>: <code>Orders</code></li> <li><code>outerKeySelector</code>: <code>Customers.CustomerID</code></li> <li><code>innerKeySelector</code>: <code>Orders.CustomerID</code></li> <li><code>resultSelector</code>: <code>Customers.ContactName</code></li></ul> <p>有了這個例子就清楚多了，<code>from</code>指定的是<code>outer</code>，而<code>join</code>指定的是<code>inner</code>，後面的<code>equals</code>是<code>inner</code>及<code>outer</code>關聯屬性的設定。</p> <p>接著我們就可以來看運算式及方法的轉換公式了。</p> <p>下面是運算式:</p> <div class="language-C# extra-class"><pre class="language-text"><code>from x1 in e1
+join x2 in e2 on k1 equals k2
+select v
+</code></pre></div><p>可以被轉為:</p> <div class="language-C# extra-class"><pre class="language-text"><code>( e1 ) . Join( e2 , x1 =&gt; k1 , x2 =&gt; k2 , ( x1 , x2 ) =&gt; v )
+</code></pre></div><h2 id="方法範例"><a href="#方法範例" aria-hidden="true" class="header-anchor">#</a> 方法範例</h2> <p>範例資料結構如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>class Person
+{
+    public string Name { get; set; }
+}
+
+class Phone
+{
+    public string PhoneNumber { get; set; }
+    public Person Person { get; set; }
+}
+</code></pre></div><p>範例資料如下:</p> <div class="language-C# extra-class"><pre class="language-text"><code>Person Peter = new Person() { Name = &quot;Peter&quot; };
+Person Sunny = new Person() { Name = &quot;Sunny&quot; };
+Person Tim = new Person() { Name = &quot;Tim&quot; };
+Person May = new Person() { Name = &quot;May&quot; };
+
+Phone num1 = new Phone() { PhoneNumber = &quot;01-5555555&quot;, Person = Peter };
+Phone num2 = new Phone() { PhoneNumber = &quot;02-5555555&quot;, Person = Sunny };
+Phone num3 = new Phone() { PhoneNumber = &quot;03-5555555&quot;, Person = Tim };
+Phone num4 = new Phone() { PhoneNumber = &quot;04-5555555&quot;, Person = May };
+Phone num5 = new Phone() { PhoneNumber = &quot;05-5555555&quot;, Person = Peter };
+</code></pre></div><p>下列範例採用上面資料來演繹。</p> <h3 id="找出人名跟電話號碼的對應資料"><a href="#找出人名跟電話號碼的對應資料" aria-hidden="true" class="header-anchor">#</a> 找出人名跟電話號碼的對應資料</h3> <div class="language-C# extra-class"><pre class="language-text"><code>Phone[] phones = new Phone[] { num1, num2, num3, num4, num5 };
+Person[] persons = new Person[] { Peter, Sunny, Tim, May };
+
+var results = persons.Join(
+    phones,
+    person =&gt; person,
+    phone =&gt; phone.Person,
+    (person, phone) =&gt; new { name = person.Name, phoneNumber = phone.PhoneNumber });
+
+foreach (var result in results)
+{
+    Console.WriteLine($&quot;{result.name}: {result.phoneNumber}&quot;);
+}
+
+/*
+ * output:
+ *
+ * Peter: 01-5555555
+ * Peter: 05-5555555
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ * May: 04-5555555
+ */
+</code></pre></div><p>這裡我們注意到它的順序是依照<code>outer</code>的順序排序的，如果同一個<code>outer</code>有<strong>複數</strong>個<code>inner</code>資料，才會依照<code>inner</code>順序排列。</p> <h3 id="join是inner-join"><a href="#join是inner-join" aria-hidden="true" class="header-anchor">#</a> Join是Inner Join</h3> <p>我們將<code>Person</code>及<code>Phone</code>的資料各拿掉一個，會是互相有對應到的資料才會輸出。</p> <div class="language-C# extra-class"><pre class="language-text"><code>Phone[] phones = new Phone[] { num1, num2, num3, num4, num5 };
+Person[] persons = new Person[] { Peter, Sunny, Tim, May };
+
+IEnumerable&lt;Person&gt; skipPersons = persons.Skip(1);
+var results = skipPersons.Join(phones,
+                person =&gt; person,
+                phone =&gt; phone.Person,
+                (person, phone) =&gt; new { name = person.Name, phoneNumber = phone.PhoneNumber });
+
+/*
+ * output:
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ * May: 04-5555555
+ */
+
+IEnumerable&lt;Phone&gt; skipPhones = phones.Skip(1);
+var results = persons.Join(skipPhones,
+                person =&gt; person,
+                phone =&gt; phone.Person,
+                (person, phone) =&gt; new { name = person.Name, phoneNumber = phone.PhoneNumber });
+
+/*
+ * output:
+ * Peter: 05-5555555
+ * Sunny: 02-5555555
+ * Tim: 03-5555555
+ * May: 04-5555555
+ */
+</code></pre></div><h3 id="客製比較器"><a href="#客製比較器" aria-hidden="true" class="header-anchor">#</a> 客製比較器</h3> <p>現在有一個奇怪的需求: <strong>姓名最後一個字母相同的話電話可以共用</strong>。</p> <p>我們試試用客製比較器來完成:</p> <div class="language-C# extra-class"><pre class="language-text"><code>var results = persons.Join(phones,
+                person =&gt; person,
+                phone =&gt; phone.Person,
+                (person, phone) =&gt; new { name = person.Name, phoneNumber = phone.PhoneNumber },
+                new CustomComparer());
+...
+class CustomComparer : IEqualityComparer&lt;Person&gt;
+{
+    public bool Equals(Person x, Person y)
+    {
+        return x.Name.TakeLast(1).FirstOrDefault() == y.Name.TakeLast(1).FirstOrDefault();
+    }
+    public int GetHashCode(Person obj)
+    {
+        return obj.Name.TakeLast(1).FirstOrDefault().GetHashCode();
+    }
+}
+
+/*
+ * output:
+ * Peter: 01-5555555
+ * Peter: 05-5555555
+ * Sunny: 02-5555555
+ * Sunny: 04-5555555
+ * Tim: 03-5555555
+ * May: 02-5555555
+ * May: 04-5555555
+ */
+</code></pre></div><p>我們可以看到<code>Sunny</code>跟<code>May</code>因為最後一個字母都是<code>y</code>，所以他們所對應的電話都有對方的號碼。</p> <h2 id="特別之處"><a href="#特別之處" aria-hidden="true" class="header-anchor">#</a> 特別之處</h2> <ul><li>是延遲執行的方法</li> <li>輸出資料的排序會是先<code>outer</code>再<code>inner</code></li> <li>沒有傳入客製比較器，則用<code>Default</code>比較器</li></ul> <h2 id="結語"><a href="#結語" aria-hidden="true" class="header-anchor">#</a> 結語</h2> <p><code>Join</code>因為是Inner Join，所以對於要拿取的資料來說，inner及outer是沒有差別的，但是剛剛提到的排序就會有差別，如果對排序有需求的資料還是要小心使用。</p> <h2 id="範例程式"><a href="#範例程式" aria-hidden="true" class="header-anchor">#</a> 範例程式</h2> <p><a href="https://github.com/peterhpchen/DigDeeperLINQ/tree/20_HowToUseJoin/demo/20_HowToUseJoin" target="_blank" rel="noopener noreferrer">GitHub<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <h2 id="參考"><a href="#參考" aria-hidden="true" class="header-anchor">#</a> 參考</h2> <ul><li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/programming-guide/concepts/linq/join-operations" target="_blank" rel="noopener noreferrer">Microsoft Docs-join-operations<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/api/system.linq.enumerable.join?view=netframework-4.7.1" target="_blank" rel="noopener noreferrer">Microsoft Docs-system.linq.enumerable.join<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li> <li><a href="https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/language-specification/expressions#query-expressions" target="_blank" rel="noopener noreferrer">Microsoft Docs-language-specification/expressions#query-expressions<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div> <div class="page-edit"><!----> <!----></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/19_InsideOfGroupBy.html" class="prev">
+          GroupBy的原碼探索
+        </a></span> <span class="next"><a href="/21_InsideOfJoin.html">
+          Join的原碼探索
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/assets/js/app.bde1e58f.js" defer></script><script src="/assets/js/12.fb752111.js" defer></script>
+  </body>
+</html>
